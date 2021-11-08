@@ -19,8 +19,12 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import ManageAccess from '../ManageAccess/ManageAccess';
+import SchoolAndDistrict from '../SchoolAndDistrict/SchoolAndDistrict';
+import OverviewCharts from '../OverviewCharts/OverviewCharts';
 
 import './App.css';
+import StudentList from '../SudentList/StudentList';
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +70,31 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/access"
+          >
+            <ManageAccess />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/studentList"
+          >
+            <StudentList />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/studentList"
+          >
+            <SchoolAndDistrict />
           </ProtectedRoute>
 
           <Route

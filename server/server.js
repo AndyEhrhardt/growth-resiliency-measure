@@ -9,6 +9,9 @@ const passport = require('./strategies/user.strategy');
 
 // Route includes
 const userRouter = require('./routes/user.router');
+const overviewChartsRouter = require('./routes/overviewcharts.router');
+const districtSchoolRouter = require('./routes/districtschool.router');
+const demographicsRouter = require('./routes/demographics.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -23,6 +26,9 @@ app.use(passport.session());
 
 /* Routes */
 app.use('/api/user', userRouter);
+app.use('/api/overviewcharts', overviewChartsRouter);
+app.use('/api/districtschool', districtSchoolRouter);
+app.use('/api/demographics', demographicsRouter);
 
 // Serve static files
 app.use(express.static('build'));
