@@ -22,6 +22,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import ManageAccess from '../ManageAccess/ManageAccess';
 import SchoolAndDistrict from '../SchoolAndDistrict/SchoolAndDistrict';
 import OverviewCharts from '../OverviewCharts/OverviewCharts';
+import StartAssessment from '../StartAssessment/StartAssessment';
 
 import './App.css';
 import StudentList from '../SudentList/StudentList';
@@ -92,9 +93,25 @@ function App() {
           <ProtectedRoute
             // logged in shows InfoPage else shows LoginPage
             exact
-            path="/studentList"
+            path="/SchoolDistrict"
           >
             <SchoolAndDistrict />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/assessment"
+          >
+            <StartAssessment />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/OverviewCharts"
+          >
+            <OverviewCharts />
           </ProtectedRoute>
 
           <Route

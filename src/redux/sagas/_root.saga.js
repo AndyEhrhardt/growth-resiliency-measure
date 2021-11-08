@@ -4,7 +4,9 @@ import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import overviewSaga from './overviewcharts.saga';
 import districtSchoolSaga from './districtschool.saga';
-import demographicsSaga from './districtschool.saga';
+import demographicsSaga from './demographics.saga';
+import studentReportSaga from './studentreport.saga';
+
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -20,5 +22,6 @@ export default function* rootSaga() {
     userSaga(),
     districtSchoolSaga(),
     demographicsSaga(),
+    studentReportSaga(),
   ]);
 }

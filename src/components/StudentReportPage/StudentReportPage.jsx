@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AssessmentFormPage() {
+function StudentReportPage() {
     return (
         <div>
             
@@ -8,5 +8,4 @@ function AssessmentFormPage() {
     )
 }
 
-export default AssessmentFormPage
-
+export default StudentReportPage
