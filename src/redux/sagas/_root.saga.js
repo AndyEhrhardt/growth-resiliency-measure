@@ -6,6 +6,7 @@ import overviewSaga from './overviewcharts.saga';
 import districtSchoolSaga from './districtschool.saga';
 import demographicsSaga from './demographics.saga';
 import studentReportSaga from './studentreport.saga';
+import verifyUserSaga from './verifyUser.saga';
 
 
 // rootSaga is the primary saga.
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     districtSchoolSaga(),
     demographicsSaga(),
     studentReportSaga(),
+    verifyUserSaga(),
   ]);
 }
