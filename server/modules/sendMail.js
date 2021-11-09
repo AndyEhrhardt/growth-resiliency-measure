@@ -15,7 +15,7 @@ const sendMail = (email, ranStr) => {
         from: sender,
         to: email,
         subject: "Email confirmation",
-        html: `Press <a href="http://localhost:3000/api/user/verify/${ranStr}" target="_blank"> here </a> to verify your email!`,
+        html: `Press <a href="http://localhost:3000/#/verify/${ranStr}" target="_blank"> here </a> to verify your email!`,
     };
     Transport.sendMail(mailOptions, function(error, response) {
         if (error) {
