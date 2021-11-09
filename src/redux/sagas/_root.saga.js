@@ -22,6 +22,6 @@ export default function* rootSaga() {
     userSaga(),
     districtSchoolSaga(),
     demographicsSaga(),
-    studentReportSaga(),
+    studentReportSaga(), // contains getReport and addReport
   ]);
 }
