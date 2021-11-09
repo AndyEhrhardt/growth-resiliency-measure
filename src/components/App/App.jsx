@@ -23,6 +23,7 @@ import ManageAccess from '../ManageAccess/ManageAccess';
 import SchoolAndDistrict from '../SchoolAndDistrict/SchoolAndDistrict';
 import OverviewCharts from '../OverviewCharts/OverviewCharts';
 import StartAssessment from '../StartAssessment/StartAssessment';
+import VerifyUser from '../VerifyUser/VerifyUser';
 
 import './App.css';
 import StudentList from '../SudentList/StudentList';
@@ -157,7 +158,7 @@ function App() {
           </Route>
 
           <Route path="/verify/:randomString">
-            <h3>Bananas</h3>
+            <VerifyUser />
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
