@@ -23,7 +23,7 @@ import ManageAccess from '../ManageAccess/ManageAccess';
 import SchoolAndDistrict from '../SchoolAndDistrict/SchoolAndDistrict';
 import OverviewCharts from '../OverviewCharts/OverviewCharts';
 import StartAssessment from '../StartAssessment/StartAssessment';
-
+import StudentReportPage from '../StudentReportPage/StudentReportPage';
 import './App.css';
 import StudentList from '../SudentList/StudentList';
 
@@ -63,6 +63,14 @@ function App() {
             path="/user"
           >
             <UserPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows student report else shows LoginPage
+            exact
+            path="/studentreport"
+          >
+            <StudentReportPage />
           </ProtectedRoute>
 
           <ProtectedRoute
