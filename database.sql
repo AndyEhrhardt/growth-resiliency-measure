@@ -1,3 +1,5 @@
+--name your databse in postico growth-resiliency
+
 CREATE TABLE "district" (
 	"id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
