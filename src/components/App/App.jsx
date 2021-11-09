@@ -156,6 +156,10 @@ function App() {
             }
           </Route>
 
+          <Route path="/verify/:randomString">
+            <h3>Bananas</h3>
+          </Route>
+
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
             <h1>404</h1>
