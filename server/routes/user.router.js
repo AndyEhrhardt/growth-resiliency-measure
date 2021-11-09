@@ -20,17 +20,41 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
+  const random_string = randomString();
 
-  const queryText = `INSERT INTO "user" (username, password)
-    VALUES ($1, $2) RETURNING id`;
+  const queryText = `INSERT INTO "user" ("username", "password", "verification_string")
+    VALUES ($1, $2, $3) RETURNING id`;
   pool
-    .query(queryText, [username, password])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [username, password, random_string])
+    .then(sendMail(username, random_string)).then(() => res.sendStatus(201))
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
     });
 });
+
+/* router.put('/verify/:randomString', (req, res) => {
+  const randomString = req.params;
+  const searchQuery = 'SELECT * FROM "user" WHERE "verification_string" = $1;';
+  pool.query(searchQuery, [randomString.randomString])
+      .then((result) => {
+        console.log(result.rows);
+        const verifyID = result.rows[0].id;
+        const putQuery = 'UPDATE "user" SET "email_verified" = TRUE WHERE "id" = $1;';
+        pool.query(putQuery, [verifyID])
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch((error) => {
+          console.log(error);
+          res.sendStatus(500);
+        })
+      })
+      .catch((error) => {
+        res.sendStatus(500);
+        console.log(error);
+      })
+}) */
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
