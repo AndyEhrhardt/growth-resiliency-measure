@@ -5,6 +5,8 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
+const {randomString} = require('../modules/randomString');
+const {sendMail} = require('../modules/sendMail');
 
 const router = express.Router();
 
@@ -20,12 +22,13 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
+  const random_string = randomString();
 
-  const queryText = `INSERT INTO "user" (username, password)
-    VALUES ($1, $2) RETURNING id`;
+  const queryText = `INSERT INTO "user" ("username", "password", "verification_string")
+    VALUES ($1, $2, $3) RETURNING id`;
   pool
-    .query(queryText, [username, password])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [username, password, random_string])
+    .then(sendMail(username, random_string)).then(() => res.sendStatus(201))
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
