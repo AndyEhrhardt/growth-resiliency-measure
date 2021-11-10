@@ -13,6 +13,7 @@ const overviewChartsRouter = require('./routes/overviewcharts.router');
 const districtSchoolRouter = require('./routes/districtschool.router');
 const demographicsRouter = require('./routes/demographics.router');
 const studentReportRouter = require('./routes/studentreport.router');
+const verifyUserRouter = require('./routes/verifyUser.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -31,6 +32,7 @@ app.use('/api/overviewcharts', overviewChartsRouter);
 app.use('/api/districtschool', districtSchoolRouter);
 app.use('/api/demographics', demographicsRouter);
 app.use('/api/studentreport', studentReportRouter);
+app.use('/api/verifyUser', verifyUserRouter);
 
 // Serve static files
 app.use(express.static('build'));
