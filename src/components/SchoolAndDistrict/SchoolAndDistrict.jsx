@@ -23,7 +23,7 @@ function SchoolAndDistrict() {
 
   return (
     <>
-    <Paper elavation= {12}sx ={{width: '100%'}}>
+    <Paper elavation= {12} sx ={{width: '100%'}}>
       <Button variant="contained" color="secondary">Student List</Button>
      
       <TableContainer>

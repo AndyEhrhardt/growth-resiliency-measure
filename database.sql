@@ -1,3 +1,5 @@
+--name your databse in postico growth-resiliency
+
 CREATE TABLE "district" (
 	"id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -69,9 +71,9 @@ CREATE TABLE "user" (
 	"school_id" integer,
 	"demographics_id" integer,
 	"active" BOOLEAN NOT NULL DEFAULT 'false',
-	"verification_string" varchar(255) NOT NULL,
+	"verification_string" varchar(255),
 	"email_sent" BOOLEAN NOT NULL DEFAULT 'false',
-	"assessment_completed" BOOLEAN NOT NULL,
+	"assessment_completed" BOOLEAN NOT NULL DEFAULT 'false',
 	"email_verified" BOOLEAN NOT NULL DEFAULT 'false',
 	"created_at" DATE DEFAULT CURRENT_DATE,
 	"parent_email" varchar(255),
@@ -127,3 +129,26 @@ ALTER TABLE "user" ADD CONSTRAINT "user_fk2" FOREIGN KEY ("demographics_id") REF
 
 ALTER TABLE "assessments" ADD CONSTRAINT "assessments_fk0" FOREIGN KEY ("student_id") REFERENCES "user"("id");
 ALTER TABLE "assessments" ADD CONSTRAINT "assessments_fk1" FOREIGN KEY ("entered_by_id") REFERENCES "user"("id");
+
+
+
+--insert statements to fill out tables with example data: 
+INSERT INTO "public"."school"("id","name","district_id","q1","q2","q3","q4","domain","created_at")
+VALUES
+(1,E'a school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(2,E'another school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(3,E'this school in dist one',1,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(4,E'this school in dist three',3,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10');
+
+
+INSERT INTO "public"."district"("id","name","created_at")
+VALUES
+(1,E'district one',E'2021-11-10'),
+(2,E'district 2',E'2021-11-10'),
+(3,E'yo its district 3',E'2021-11-10');
+
+INSERT INTO "public"."role"("id","name")
+VALUES
+(1,E'student'),
+(2,E'teacher'),
+(3,E'admin');

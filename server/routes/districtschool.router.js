@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     const queryText = `
-    select  school.id, school.name as School_Name, district.name
-    as District_Name, school.q1, school.q2, school.q3, school.q4 from school 
+    select  school.id as school_id, school.name as School_Name, district.name
+    as District_Name, district.id as district_id, school.q1, school.q2, school.q3, school.q4 from school 
     join district on school.district_id = district.id;`;
     pool.query(queryText)
         .then((result) => {

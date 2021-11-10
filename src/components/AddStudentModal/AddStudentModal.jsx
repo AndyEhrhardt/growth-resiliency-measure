@@ -14,9 +14,7 @@ import Select from '@mui/material/Select';
 
 
 
-function RegisterForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function AddStudentModal() {
   const [firstName, setFirstName] = useState("");
   const [lastInitial, setLastInitial] = useState("");
   const [role, setRole] = useState(true);
@@ -36,12 +34,10 @@ function RegisterForm() {
 
   const registerUser = (event) => {
     event.preventDefault();
-    console.log(username, password, firstName, lastInitial, role, school);
+    console.log(firstName, lastInitial, role, school);
     dispatch({
       type: "REGISTER",
       payload: {
-        username: username,
-        password: password,
         firstName: firstName,
         lastInitial: lastInitial,
         role: role ? 2 : 3,
@@ -64,36 +60,12 @@ function RegisterForm() {
 
   return (
     <form className="formPanel" onSubmit={registerUser}>
-      <h2>Register User</h2>
+      <h2>Add Student</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
         </h3>
       )}
-      <div>
-        <TextField
-          type="text"
-          name="username"
-          required
-          value={username}
-          variant="standard"
-          label="email"
-          id="standard-basic"
-          onChange={(event) => setUsername(event.target.value)}
-        />
-      </div>
-      <div>
-        <TextField
-          type="password"
-          name="password"
-          required
-          variant="standard"
-          label="password"
-          id="standard-basic"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </div>
       <div>
         <TextField
           type="first name"
@@ -118,13 +90,9 @@ function RegisterForm() {
           onChange={(event) => setLastInitial(event.target.value)}
         />
       </div>
-      <RadioGroup row aria-label="role" name="row-radio-buttons-group">
-        <FormControlLabel onClick={() => handleRadio(true)} checked={role} control={<Radio />} label="Teacher" />
-        <FormControlLabel onClick={() => handleRadio(false)}  checked={!role} control={<Radio />} label="Admin" />
-      </RadioGroup>
       
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">School</InputLabel>
+        <InputLabel id="demo-simple-select-label">Race</InputLabel>
         <Select
           value={school}
           label="school"
@@ -140,10 +108,10 @@ function RegisterForm() {
         onHover={"contained"}
         onClick={(event) => registerUser(event)}
       >
-        Register
+        Add Student
       </Button>
     </form>
   );
 }
 
-export default RegisterForm;
+export default AddStudentModal;
