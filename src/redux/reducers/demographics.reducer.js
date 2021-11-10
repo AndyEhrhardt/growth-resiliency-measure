@@ -1,4 +1,10 @@
-const demographicsReducer = (state = {}, action) => {
+const initialState = {
+  gender: [],
+  race: []
+}
+
+
+const demographicsReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'SET_DEMOGRAPHICS':
         return action.payload;
