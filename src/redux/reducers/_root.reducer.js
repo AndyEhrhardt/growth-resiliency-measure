@@ -4,6 +4,7 @@ import user from './user.reducer';
 import overview from './overviewcharts.reducer';
 import districtSchool from './districtschool.reducer';
 import demographics from './demographics.reducer';
+import studentReport from './studentreport.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   overview,
   districtSchool,
   demographics,
+  studentReport,
 });
 
 export default rootReducer;
