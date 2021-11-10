@@ -6,12 +6,10 @@ const {
     rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
 
-router.get('/:id', rejectUnauthenticated, (req,res) => {
-    queryText = `SELECT * FROM "assessment" WHERE "id" = $1;`;
-    pool.query(queryText, [req.params.id]).then(result => {res.send(result.rows);}).catch(error => {res.sendStatus(500);});
+router.get('/:id', (req,res) => {
+    console.log('in get student report router');
+    queryText = `SELECT * FROM assessments WHERE "student_id" = $1;`;
+    pool.query(queryText, [req.user.id]).then(result => {res.send(result.rows);}).catch(error => {res.sendStatus(500);});
 });
-
-
-
 
 module.exports = router;
