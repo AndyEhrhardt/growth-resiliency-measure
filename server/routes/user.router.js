@@ -5,6 +5,8 @@ const {
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
+const {randomString} = require('../modules/randomString');
+const {sendMail} = require('../modules/sendMail');
 
 const router = express.Router();
 

@@ -23,6 +23,7 @@ import ManageAccess from '../ManageAccess/ManageAccess';
 import SchoolAndDistrict from '../SchoolAndDistrict/SchoolAndDistrict';
 import OverviewCharts from '../OverviewCharts/OverviewCharts';
 import StartAssessment from '../StartAssessment/StartAssessment';
+import VerifyUser from '../VerifyUser/VerifyUser';
 
 import './App.css';
 import StudentList from '../SudentList/StudentList';
@@ -154,6 +155,10 @@ function App() {
               // Otherwise, show the Landing page
               <LandingPage />
             }
+          </Route>
+
+          <Route path="/verify/:randomString">
+            <VerifyUser />
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
