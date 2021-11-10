@@ -92,8 +92,6 @@ CREATE TABLE "role" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "assessments" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
@@ -111,9 +109,6 @@ CREATE TABLE "assessments" (
 ) WITH (
   OIDS=FALSE
 );
-
-
-
 
 ALTER TABLE "school" ADD CONSTRAINT "school_fk0" FOREIGN KEY ("district_id") REFERENCES "district"("id");
 
@@ -139,6 +134,34 @@ VALUES
 (2,E'another school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
 (3,E'this school in dist one',1,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
 (4,E'this school in dist three',3,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10');
+
+INSERT INTO "public"."assessments"("id","student_id","entered_by_id","grade","date","ask_help","confidence_adult","confidence_peer","succeed_pressure","persistence","express_adult","express_peer")
+VALUES
+(1,5,1,4,E'2021-11-09',1,1,1,1,1,1,1),
+(2,4,2,2,E'2021-11-09',1,1,1,2,2,3,1),
+(3,5,1,4,E'2021-11-09',2,2,2,3,3,3,3),
+(4,4,4,6,E'2021-11-09',2,2,2,4,4,5,5);
+
+INSERT INTO "public"."demographics"("id","gender_id","iep","race_id","hispanic_latino")
+VALUES
+(1,1,FALSE,1,TRUE),
+(2,2,TRUE,2,FALSE);
+
+INSERT INTO "public"."gender"("id","name")
+VALUES
+(1,E'Girl'),
+(2,E'Boy'),
+(3,E'Transgender'),
+(4,E'Not Listed'),
+(5,E'Prefer Not To Say');
+
+INSERT INTO "public"."race"("id","name")
+VALUES
+(1,E'Hispanic'),
+(2,E'Asian'),
+(3,E'Caucasian'),
+(4,E'Black'),
+(5,E'Mixed');
 
 
 INSERT INTO "public"."district"("id","name","created_at")

@@ -42,4 +42,14 @@ router.get('/', (req,res) => {
     pool.query(queryText, [req.user.id]).then(result => {res.send(result.rows);}).catch(error => {res.sendStatus(500);});
 });
 
+router.post('/', (req,res) => {
+    const assessmentData = req.body;
+    const queryText = `  INSERT INTO "assessments" ("student_id","entered_by_id","grade","date","ask_help","confidence_adult","confidence_peer","succeed_pressure","persistence","express_adult","express_peer") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);`;
+    pool.query(queryText, assessmentData.student_id,assessmentData.enteredBy,assessmentData.grade,assessmentData.date,assessmentData.askHelp,assessmentData.confidenceAdult,assessmentData.confidencePeer,assessmentData.succeedPressure,assessmentData.persistence,assessmentData.expressAdult,assessmentData.expressPeer)
+.then(result => {
+    res.sendStatus(200)
+}).catch(error => 
+    res.sendStatus(500));
+});
+
 module.exports = router;
