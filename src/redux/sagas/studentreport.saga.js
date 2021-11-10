@@ -14,8 +14,9 @@ function* getReport(action) {
 
 function* addReport(action) {
   console.log('in add report');
+  studentId = action.payload.student_id;
   const studentReport = yield axios.post('/api/studentreport');
-  yield put({ type: 'FETCH_SELECTED_REPORT', payload: studentReport });
+  yield put({ type: 'FETCH_SELECTED_REPORT', payload: studentId });
 }
 
 function* studentReportSaga() {
