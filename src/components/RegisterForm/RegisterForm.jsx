@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -7,6 +7,12 @@ import Button from "@mui/material/Button";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+
 
 function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -14,13 +20,23 @@ function RegisterForm() {
   const [firstName, setFirstName] = useState("");
   const [lastInitial, setLastInitial] = useState("");
   const [role, setRole] = useState(true);
+  const [school, setSchool] = useState('');
 
   const errors = useSelector((store) => store.errors);
+  const distAndSchool = useSelector((store) => store.districtSchool);
+
+  console.log(distAndSchool)
+
+
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch({ type: 'FETCH_DISTRICT_SCHOOL' });
+  }, [dispatch]);
 
   const registerUser = (event) => {
     event.preventDefault();
-    console.log(username, password, firstName, lastInitial, role);
+    console.log(username, password, firstName, lastInitial, role, school);
     dispatch({
       type: "REGISTER",
       payload: {
@@ -29,6 +45,7 @@ function RegisterForm() {
         firstName: firstName,
         lastInitial: lastInitial,
         role: role ? 2 : 3,
+        school: school,
       },
     });
   }; // end registerUser
@@ -36,6 +53,14 @@ function RegisterForm() {
     console.log(tOrF);
     setRole(tOrF);
   }
+  const handleSchool = (event) =>{
+    console.log(event.target.value)
+    setSchool(event.target.value);
+  }
+
+
+
+
   return (
     <form className="formPanel" onSubmit={registerUser}>
       <h2>Register User</h2>
@@ -96,6 +121,19 @@ function RegisterForm() {
         <FormControlLabel onClick={() => handleRadio(true)} checked={role} control={<Radio />} label="Teacher" />
         <FormControlLabel onClick={() => handleRadio(false)}  checked={!role} control={<Radio />} label="Admin" />
       </RadioGroup>
+      
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">School</InputLabel>
+        <Select
+          value={school}
+          label="school"
+          onChange={(event) => handleSchool(event)}
+        >
+          {distAndSchool.length === 0 ? <>loading </> : distAndSchool.map((school) => (
+            <MenuItem key={school.school_id} value={school.school_id}>{school.school_name}</MenuItem>        
+          ))}
+        </Select>
+      </FormControl>
       <Button
         variant="contained"
         onHover={"contained"}
