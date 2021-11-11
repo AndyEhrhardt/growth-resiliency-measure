@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react'
 import TableContainer from '@material-ui/core/TableContainer';
 import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
-// import { makeStyles } from '@material-ui/styles';
+// import {Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,Snackbar} from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -45,6 +45,9 @@ function SchoolAndDistrict() {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
+    dispatch({type: 'ADD_SCHOOL', payload:{school:school,district:district}})
+    // setSchool('');
+    // setDistrict('');
 
   }
 
@@ -104,6 +107,7 @@ function SchoolAndDistrict() {
                 onChange={(event) => handleChange(event)}
               >
                 {store.map((district) => (
+                 
                   <MenuItem key={district.district_name} value={district.district_id}>{district.district_name}</MenuItem>
                 ))}
               </Select>
@@ -121,6 +125,7 @@ function SchoolAndDistrict() {
 
         </form>
       }
+      {school}{district}
     </div>
   );
 }
