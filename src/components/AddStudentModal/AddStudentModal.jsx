@@ -25,7 +25,7 @@ function AddStudentModal() {
   const [iep, setIep] = useState(true);
   const [clickedOnce, setClickedOnce] = useState(false);
   const [clickedOnce2, setClickedOnce2] = useState(false);
-
+  const [email, setEmail] = useState("");
   const errors = useSelector((store) => store.errors);
   const distAndSchool = useSelector((store) => store.districtSchool);
   const demographics = useSelector((store) => store.demographics);
@@ -47,16 +47,16 @@ function AddStudentModal() {
         lastInitial: lastInitial,
         role: 1,
         school: school,
-        teacherAdmin: true,
+        teacherAdmin: false,
       },
     });
   }; // end registerUser
-  const handleRadio = (tOrF) => {
+  const handleHisp = (tOrF) => {
     console.log(tOrF)
     setClickedOnce(true);
     setLatinX(tOrF);
   }
-  const handleRadio2 = (tOrF) => {
+  const handleIep = (tOrF) => {
     console.log(tOrF)
     setClickedOnce2(true);
     setIep(tOrF);
@@ -110,7 +110,19 @@ function AddStudentModal() {
         />
       </div>
       <br/>
-
+      <div>
+        <TextField
+          type="email"
+          name="email"
+          required
+          variant="standard"
+          label="Parent's Email"
+          id="standard-basic"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+      </div>
+      <br/>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Gender</InputLabel>
         <Select
@@ -142,13 +154,13 @@ function AddStudentModal() {
       <br/>
       <p>Does this student identify as Hispanic or Latino?</p>
       <RadioGroup row aria-label="role" name="row-radio-buttons-group">
-        <FormControlLabel onClick={() => handleRadio(true)} checked={clickedOnce ? latinX : false} control={<Radio />} label="Yes" />
-        <FormControlLabel onClick={() => handleRadio(false)}  checked={!latinX} control={<Radio />} label="No" />
+        <FormControlLabel onClick={() => handleHisp(true)} checked={clickedOnce ? latinX : false} control={<Radio />} label="Yes" />
+        <FormControlLabel onClick={() => handleHisp(false)}  checked={!latinX} control={<Radio />} label="No" />
       </RadioGroup>
       <p>Is this student on an Individualized Education Plan (IEP)?</p>
       <RadioGroup row aria-label="role" name="row-radio-buttons-group">
-        <FormControlLabel onClick={() => handleRadio2(true)} checked={clickedOnce2 ? iep : false} control={<Radio />} label="Yes" />
-        <FormControlLabel onClick={() => handleRadio2(false)}  checked={!iep} control={<Radio />} label="No" />
+        <FormControlLabel onClick={() => handleIep(true)} checked={clickedOnce2 ? iep : false} control={<Radio />} label="Yes" />
+        <FormControlLabel onClick={() => handleIep(false)}  checked={!iep} control={<Radio />} label="No" />
       </RadioGroup>
       <br/>
       <Button
