@@ -26,15 +26,18 @@ router.post('/register', (req, res, next) => {
   const firstName = req.body.firstName;
   const lastInitial = req.body.lastInitial;
   const school = req.body.school;
-  console.log(req.body)
+  const ranString = randomString();
+  console.log(req.body);
 
 
-  const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id")
-  VALUES($1, $2, $3, $4, $5, $6)
+  const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id", "verification_string")
+  VALUES($1, $2, $3, $4, $5, $6, $7)
   RETURNING id`;
   pool
-    .query(queryText, [role, username, password, firstName, lastInitial, school])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [role, username, password, firstName, lastInitial, school, ranString])
+    .then(() => {
+      sendMail(username, ranString);
+      res.sendStatus(201)})
     .catch((err) => {
       console.log('User registration failed: ', err);
       res.sendStatus(500);
