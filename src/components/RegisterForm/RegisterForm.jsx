@@ -46,7 +46,6 @@ function RegisterForm() {
         lastInitial: lastInitial,
         role: role ? 2 : 3,
         school: school,
-        teacherAdmin: true,
       },
     });
   }; // end registerUser
