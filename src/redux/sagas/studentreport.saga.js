@@ -4,7 +4,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 function* fetchLoggedInUserReports(){
   const studentReports = yield axios.get(`api/studentreport`);
   console.log('in fetch logged in user reports')
-  yield put({ type: 'FETCH_SELECTED_STUDENT_REPORTS', payload: studentReports.data})
+  yield put({ type: 'SET_STUDENT_REPORT', payload: studentReports.data})
 }
 
 function* getReport(action) {
