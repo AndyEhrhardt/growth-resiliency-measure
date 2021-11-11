@@ -27,9 +27,8 @@ function AddStudentModal() {
   const [clickedOnce2, setClickedOnce2] = useState(false);
   const [email, setEmail] = useState("");
   const errors = useSelector((store) => store.errors);
-  const distAndSchool = useSelector((store) => store.districtSchool);
   const demographics = useSelector((store) => store.demographics);
-
+  const [grade, setGrade] = useState("")
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -37,17 +36,21 @@ function AddStudentModal() {
     dispatch({ type: 'FETCH_DEMOGRAPHICS' });
   }, [dispatch]);
 
-  const registerUser = (event) => {
+  const addStudent = (event) => {
     event.preventDefault();
     console.log(firstName, lastInitial, role, school);
     dispatch({
-      type: "REGISTER",
+      type: "POST_STUDENT",
       payload: {
         firstName: firstName,
         lastInitial: lastInitial,
+        email: email,
+        gender: gender,
+        race: race,
+        latinX: latinX,
+        iep: iep,
         role: 1,
-        school: school,
-        teacherAdmin: false,
+        grade: grade,
       },
     });
   }; // end registerUser
@@ -74,10 +77,13 @@ function AddStudentModal() {
     console.log(event.target.value)
     setRace(event.target.value);
   }
-
+  const handleGradeSelection = (event) => {
+    console.log(event.target.value)
+    setGrade(event.target.value);
+  }
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
+    <form className="formPanel" onSubmit={addStudent}>
       <h2>Add Student</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
@@ -124,7 +130,7 @@ function AddStudentModal() {
       </div>
       <br/>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+        <InputLabel>Gender</InputLabel>
         <Select
           value={gender}
           label="gender"
@@ -139,7 +145,7 @@ function AddStudentModal() {
       <br/>
       <br/>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Race</InputLabel>
+        <InputLabel>Race</InputLabel>
         <Select
           value={race}
           label="race"
@@ -163,10 +169,34 @@ function AddStudentModal() {
         <FormControlLabel onClick={() => handleIep(false)}  checked={!iep} control={<Radio />} label="No" />
       </RadioGroup>
       <br/>
+      <FormControl fullWidth>
+        <InputLabel>Grade</InputLabel>
+        <Select
+          value={grade}
+          label="Grade"
+          onChange={(event) => handleGradeSelection(event)}
+        >
+            <MenuItem value={0}>Kindergarten</MenuItem>
+            <MenuItem value={1}>1st</MenuItem>
+            <MenuItem value={2}>2nd</MenuItem>
+            <MenuItem value={3}>3rd</MenuItem>
+            <MenuItem value={4}>4th</MenuItem>
+            <MenuItem value={5}>5th</MenuItem>
+            <MenuItem value={6}>6th</MenuItem>
+            <MenuItem value={7}>7th</MenuItem>
+            <MenuItem value={8}>8th</MenuItem>
+            <MenuItem value={9}>9th</MenuItem>
+            <MenuItem value={10}>10th</MenuItem>
+            <MenuItem value={11}>11th</MenuItem>
+            <MenuItem value={12}>12th</MenuItem>
+        </Select>
+      </FormControl>
+      <br/>
+      <br/>
       <Button
         variant="contained"
         onHover={"contained"}
-        onClick={(event) => registerUser(event)}
+        onClick={(event) => addStudent(event)}
       >
         Add Student
       </Button>
