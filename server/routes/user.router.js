@@ -68,7 +68,6 @@ router.post("/logout", (req, res) => {
 });
 
 router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
-  const role = req.body.role;
   const firstName = req.body.firstName;
   const lastInitial = req.body.lastInitial;
   const email = req.body.email;
@@ -89,26 +88,24 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
   RETURNING id`;
   pool.query(queryText, [gender, iep, race, latinX, grade])
     .then((result) => {
-      console.log(result.rows[0].id);
-
-      res.sendStatus(201);
+      const demoId = result.rows[0].id;
+      const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id","demographics_id","verification_string","parent_email")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`;
+      pool
+        .query(queryText, [1, username, password, firstName, lastInitial, school, demoId, verification_string, email])
+        .then(() => {
+          res.sendStatus(201)
+        })
+        .catch((err) => {
+          console.log('User registration failed: ', err);
+          res.sendStatus(500);
+        });
     })
     .catch((err) => {
       console.log("User registration failed: ", err);
       res.sendStatus(500);
     });
-  // const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id", "verification_string")
-  // VALUES($1, $2, $3, $4, $5, $6, $7)
-  // RETURNING id`;
-  // pool
-  //   .query(queryText, [role, username, password, firstName, lastInitial, school, ranString])
-  //   .then(() => {
-  //     sendMail(username, ranString);
-  //     res.sendStatus(201)})
-  //   .catch((err) => {
-  //     console.log('User registration failed: ', err);
-  //     res.sendStatus(500);
-  //   });
+
 });
 
 module.exports = router;

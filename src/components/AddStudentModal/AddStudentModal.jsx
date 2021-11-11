@@ -49,7 +49,6 @@ function AddStudentModal() {
         race: race,
         latinX: latinX,
         iep: iep,
-        role: 1,
         grade: grade,
       },
     });
