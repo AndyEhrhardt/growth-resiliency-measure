@@ -11,7 +11,7 @@ function OverviewCharts() {
 
     // for search of quarter send selected parameter
     // dispatch type FETCH_PARAMETER_QUARTER
-    // pyaload: parameter, quarter
+    // payload: parameter, quarter
     // formatted as above and the quarter 
     // should be sent in format of 
     // { quarter : 1 } || { quarter : 2 }
@@ -23,8 +23,8 @@ function OverviewCharts() {
     // formatted as above and the time range
     // should be sent in format of 
     // [{start: "2021-09-10"}, {end: "2021"-12-15"}]
-    
-    return(
+
+    return (
         <>
         </>
     );
