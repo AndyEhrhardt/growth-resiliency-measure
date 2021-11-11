@@ -1,6 +1,11 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+
+
 function OverviewCharts() {
     // for parameter only 
-    // dispatch type 'FETCH_ONE_PARAMETER_RESULTS'
+    // dispatch type 'FETCH_PARAMETER_RESULTS'
     // payload: parameter
     // send in format
     // { race : "name" } || { gender: "name" } || 
@@ -24,9 +29,21 @@ function OverviewCharts() {
     // should be sent in format of 
     // [{start: "2021-09-10"}, {end: "2021"-12-15"}]
 
+  
+      // access useDispatch from react-redux
+      const dispatch = useDispatch();
+  
+      // get assessment information from the reducer
+      const filter = useSelector(store => store.overview);
+
+    useEffect(() => {
+        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: {race : "name"} })
+    }, [dispatch]);
+    
     return (
-        <>
-        </>
+        <div>
+            {JSON.stringify(filter)}
+        </div>
     );
 }
 
