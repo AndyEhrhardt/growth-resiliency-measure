@@ -18,7 +18,7 @@ function StudentReportPage() {
 
     // on page load fetch reports of student ID
     useEffect(() => {
-        dispatch({ type: 'FETCH_SELECTED_REPORT', payload: {id:logId} })
+        dispatch({ type: 'FETCH_USER_REPORTS' })
     }, [dispatch]);
 
     return (
