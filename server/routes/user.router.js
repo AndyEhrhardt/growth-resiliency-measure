@@ -80,6 +80,7 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
   const password = encryptLib.encryptPassword(randomString());
   const verification_string = randomString();
 
+  if(req.user.role_id === ADMIN || req.user.role_id === TEACHER){
   const queryText = `INSERT INTO "demographics"("gender_id","iep","race_id","hispanic_latino","grade")
   VALUES ($1, $2, $3, $4, $5)
   RETURNING id`;
@@ -102,11 +103,13 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
       console.log("User registration failed: ", err);
       res.sendStatus(500);
     });
-
+  } else {
+    console.log("User is not authorized to add student")
+  }
 });
 
 router.get("/students", rejectUnauthenticated, (req, res, next) => {
-  if (req.user.role_id === 3) {
+  if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
@@ -116,7 +119,7 @@ router.get("/students", rejectUnauthenticated, (req, res, next) => {
     .then((result) => {
       res.send(result.rows);
     }).catch((error) => console.log("error getting students", error))
-  } else if (req.user.role_id === 2){
+  } else if (req.user.role_id === TEACHER){
     console.log("level 2")
     const schoolSpecificStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
