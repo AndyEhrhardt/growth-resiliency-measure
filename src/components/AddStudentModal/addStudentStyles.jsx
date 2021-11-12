@@ -19,11 +19,8 @@ const addStudentStyles = makeStyles(() => ({
         width: '50%',
         backgroundColor: 'white',
         p: 4,
-        height: '47%',
-        minWidth: 350,
-        maxWidth: 500,
-        maxHeight: 400,
-        minHeight: 340,
+        height: 380,
+        width: 500,
         padding: 15,
     }
 }));

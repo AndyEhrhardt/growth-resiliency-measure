@@ -1,9 +1,9 @@
-const overviewReducer = (state = {}, action) => {
+const overviewReducer = (state = [], action) => {
     switch (action.type) {
       case 'SET_OVERVIEW':
         return action.payload;
       case 'UNSET_OVERVIEW':
-        return {};
+        return [];
       default:
         return state;
     }

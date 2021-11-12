@@ -1,5 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import { AlignVerticalTopSharp } from '@mui/icons-material';
 
 // worker Saga: will be fired on "REGISTER" actions
 function* registerUser(action) {
@@ -26,6 +27,7 @@ function* postStudent(action){
   console.log("in post student", action.payload);
   try {
     yield axios.post('/api/user/addstudent', action.payload);
+    yield put({type: 'FETCH_STUDENTS'});
   } catch (error){
     console.log("error in post student", error)
   }
