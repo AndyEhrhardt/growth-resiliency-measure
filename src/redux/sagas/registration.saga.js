@@ -22,8 +22,19 @@ function* registerUser(action) {
   }
 }
 
+function* postStudent(action){
+  console.log("in post student", action.payload);
+  try {
+    yield axios.post('/api/user/addstudent', action.payload);
+  } catch (error){
+    console.log("error in post student", error)
+  }
+
+}
+
 function* registrationSaga() {
   yield takeLatest('REGISTER', registerUser);
+  yield takeLatest('POST_STUDENT', postStudent);
 }
 
 export default registrationSaga;

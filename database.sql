@@ -44,6 +44,7 @@ CREATE TABLE "demographics" (
 	"iep" BOOLEAN NOT NULL,
 	"race_id" integer NOT NULL,
 	"hispanic_latino" BOOLEAN NOT NULL,
+	"grade" integer NOT NULL,
 	CONSTRAINT "demographics_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -92,6 +93,8 @@ CREATE TABLE "role" (
   OIDS=FALSE
 );
 
+
+
 CREATE TABLE "assessments" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
@@ -110,6 +113,9 @@ CREATE TABLE "assessments" (
   OIDS=FALSE
 );
 
+
+
+
 ALTER TABLE "school" ADD CONSTRAINT "school_fk0" FOREIGN KEY ("district_id") REFERENCES "district"("id");
 
 
@@ -127,13 +133,31 @@ ALTER TABLE "assessments" ADD CONSTRAINT "assessments_fk1" FOREIGN KEY ("entered
 
 
 
---insert statements to fill out tables with example data: 
+
+
+
 INSERT INTO "public"."school"("id","name","district_id","q1","q2","q3","q4","domain","created_at")
 VALUES
 (1,E'a school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
 (2,E'another school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
 (3,E'this school in dist one',1,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
 (4,E'this school in dist three',3,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10');
+
+
+INSERT INTO "public"."district"("id","name","created_at")
+VALUES
+(1,E'district one',E'2021-11-10'),
+(2,E'district 2',E'2021-11-10'),
+(3,E'yo its district 3',E'2021-11-10');
+
+INSERT INTO "public"."role"("id","name")
+VALUES
+(1,E'student'),
+(2,E'teacher'),
+(3,E'admin');
+
+
+
 
 INSERT INTO "public"."assessments"("id","student_id","entered_by_id","grade","date","ask_help","confidence_adult","confidence_peer","succeed_pressure","persistence","express_adult","express_peer")
 VALUES
@@ -162,16 +186,3 @@ VALUES
 (3,E'Caucasian'),
 (4,E'Black'),
 (5,E'Mixed');
-
-
-INSERT INTO "public"."district"("id","name","created_at")
-VALUES
-(1,E'district one',E'2021-11-10'),
-(2,E'district 2',E'2021-11-10'),
-(3,E'yo its district 3',E'2021-11-10');
-
-INSERT INTO "public"."role"("id","name")
-VALUES
-(1,E'student'),
-(2,E'teacher'),
-(3,E'admin');
