@@ -8,15 +8,15 @@ const router = express.Router();
 const acceptedInputs = ["assessments", "demographics", "district", "role","school","user","race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email", ];
 
 router.get('/range', (req, res) => {
-    const filterByType = req.query.type;
-    const filterByTarget = req.query.target;
-    const dateStart = req.query.targetStartDate;
-    const dateEnd = req.query.targetEndDate;
+    const filterBy = req.query.filterBy;
+    const searchOn = req.query.searchOn;
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
     console.log('in router range', req.query)
     
-    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget)){
+    if(acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn)){
 
-    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
+    const queryText = `SELECT ${filterBy}.${searchOn}, 
     AVG("assessments"."ask_help") AS "ask_help", 
     AVG("assessments"."confidence_adult") AS "confidence_adult", 
     AVG("assessments"."confidence_peer") AS "confidence_peer", 
@@ -32,8 +32,8 @@ router.get('/range', (req, res) => {
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     WHERE ("assessments"."date" >= $1 AND "assessments"."date" <= $2)
-    GROUP BY "${filterByType}"."${filterByTarget}";`;
-    pool.query(queryText, [dateStart,dateEnd]).then(results => {
+    GROUP BY ${filterBy}.${searchOn};`;
+    pool.query(queryText, [startDate,endDate]).then(results => {
         console.log('results', results.rows);
         
         res.send(results.rows);
@@ -50,13 +50,13 @@ router.get('/range', (req, res) => {
 router.get('/quarter', (req, res) => {
     console.log('req.query', req.query);
     // get search parameters from url
-    const filterByType = req.query.type;
-    const filterByTarget = req.query.target;
+    const filterBy = req.query.filterBy;
+    const searchOn = req.query.searchOn;
     const quarterStart = req.query.quarterStart;
     const quarterEnd = req.query.quarterEnd;
     // check that the queries are of accepted type
-    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
-    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
+    if(acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
+    const queryText = `SELECT "${filterBy}"."${searchOn}", 
     AVG("assessments"."ask_help") AS "ask_help", 
     AVG("assessments"."confidence_adult") AS "confidence_adult", 
     AVG("assessments"."confidence_peer") AS "confidence_peer", 
@@ -72,7 +72,7 @@ router.get('/quarter', (req, res) => {
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}")
-    GROUP BY "${filterByType}"."${filterByTarget}";`;
+    GROUP BY "${filterBy}"."${searchOn}";`;
     pool.query(queryText).then(results => {
         res.send(results.rows);
         console.log('results', results.rows);
@@ -94,10 +94,10 @@ router.get('/type', (req, res) => {
     // parameters are coming from an object value on
     // the overview charts page 
     console.log('in router get type', req.query);
-    const filterByType = req.query.type;
-    const filterTarget = req.query.target;
-    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterTarget)){
-    queryText = `SELECT "${filterByType}"."${filterTarget}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
+    const filterBy = req.query.filterBy;
+    const searchOn = req.query.searchOn;
+    if(acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn)){
+    queryText = `SELECT "${filterBy}"."${searchOn}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
     FROM "assessments"
     JOIN "user" on "assessments"."student_id" = "user"."id"
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
@@ -105,7 +105,7 @@ router.get('/type', (req, res) => {
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     JOIN "school" ON "user"."school_id" = "school"."id"
     JOIN "district" ON "school"."district_id" = "district"."id"
-    GROUP BY "${filterByType}"."${filterTarget}";`
+    GROUP BY "${filterBy}"."${searchOn}";`
     pool.query(queryText)
         .then(results => {
             console.log('results of get', results.rows);
