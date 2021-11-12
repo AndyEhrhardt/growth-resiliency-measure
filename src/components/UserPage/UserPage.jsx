@@ -3,6 +3,7 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 import {useSelector} from 'react-redux';
 import AddStudentModal from '../AddStudentModal/AddStudentModal'
 import Button from "@mui/material/Button";
+import StudentList from '../SudentList/StudentList'
 
 function UserPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
@@ -11,9 +12,9 @@ function UserPage() {
 
 const handleAddStudentButtonClick = (event) => {
     event.preventDefault();
-    console.log("PLZ OPEN STUDENT NOWWWW")
     setOpenAddStudent(true);
 }
+
 
   return (
     <div className="container">
@@ -27,6 +28,7 @@ const handleAddStudentButtonClick = (event) => {
       <p>Your ID is: {user.id}</p>
       <LogOutButton className="btn" />
       <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
+      <StudentList /> 
     </div>
   );
 }
