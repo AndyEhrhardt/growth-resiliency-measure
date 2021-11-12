@@ -107,26 +107,29 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 router.get("/students", rejectUnauthenticated, (req, res, next) => {
   if (req.user.role_id === 3) {
     console.log("level 3")
-    const allStudentsQuery = `SELECT * FROM "user"
-    WHERE "user"."role_id" = 1`
+    const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
+    FROM "user", "demographics"
+    WHERE "user"."role_id" = 1
+    AND "demographics"."id" = "user"."demographics_id";`
     pool.query(allStudentsQuery)
     .then((result) => {
-      console.log(result.rows)
-      res.send(result.rows)
-    })
+      res.send(result.rows);
+    }).catch((error) => console.log("error getting students", error))
   } else if (req.user.role_id === 2){
     console.log("level 2")
-    const schoolSpecificStudentsQuery = `SELECT * FROM "user"
-    WHERE "user"."role_id" = 1
-    AND "user"."school_id"= $1`
+    const schoolSpecificStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
+    FROM "user", "demographics"
+    WHERE "user"."school_id" = $1
+    AND "user"."role_id" = 1
+    AND "demographics"."id" = "user"."demographics_id";`
     pool.query(schoolSpecificStudentsQuery, [req.user.school_id])
-    .then((result) => {
-      console.log(result.rows)
-    })
+    .then((result) => { 
+      console.log(result.rows);
+      res.send(result.rows);
+    }).catch((error) => console.log("error getting students", error))
   } else {
     console.log("get outta here")
   }
-
 })
 
 

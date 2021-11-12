@@ -17,37 +17,37 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 function StudentList(){
     const dispatch = useDispatch();
+    
     useEffect(() => {
         dispatch({ type: 'FETCH_STUDENTS' });
+    }, []);
 
-    }, [dispatch]);
+    const sendEmail = (event) =>{
+        event.preventDefault();
+        console.log(event.target.value)
+    }
 
-    const rows: GridRowsProp = [
-        { id: 1, col1: 'Hello', col2: 'World' },
-        { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-        { id: 3, col1: 'MUI', col2: 'is Amazing' },
+
+
+
+    const rows = useSelector((store) => store.students);
+    const columns = [
+        { field: 'student_name', headerName: 'Name', width: 150 },
+        { field: 'grade', headerName: 'Grade', width: 150 },
+        { field: 'email_sent', headerName: 'Sent Email', width: 150, renderCell: (params) => {
+            if (params.row.email_sent){
+                return <Button disabled>Sent</Button>
+            } else {
+                return <Button value={params.row.parent_email} onClick={(event) => sendEmail(event)}>Send Email</Button>
+            }
+        } },
+        { field: 'assessment_completed', headerName: 'Completed Assessment', width: 150 },
+        { field: 'parent_email', headerName: 'Parent Email', width: 150 },
     ];
-
-    const columns: GridColDef[] = [
-        { field: 'col1', headerName: 'Column 1', width: 150 },
-        { field: 'col2', headerName: 'Column 2', width: 150 },
-        { field: 'col3', headerName: 'Button here', width: 150 },
-    ];
-
-
-
-
-
 
     return(
         <>
-
-
             <DataGrid rows={rows} columns={columns} />
-
-
-
-
         </>
     );
 }
