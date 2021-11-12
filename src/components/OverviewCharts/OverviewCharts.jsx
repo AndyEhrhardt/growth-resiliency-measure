@@ -32,7 +32,7 @@ function OverviewCharts() {
     const filter = useSelector(store => store.overview);
 
     useEffect(() => {
-        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: {filterBy : "race", searchOn: "name" }  })
+        dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: {filterBy : "race", searchOn: "name", startDate: "2020-5-2", endDate: "2021-11-12"}   })
     }, [dispatch]);
 
     return (
