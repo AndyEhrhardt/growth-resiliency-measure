@@ -1,10 +1,11 @@
 import {Radio, RadioGroup, FormControlLabel, Box} from '@material-ui/core';
 import React from 'react';
 
-function AssessmentRadioChild(quesObj, assessmentQ, setAssessmentQ) {
-    console.log(quesObj.name);
+function AssessmentRadioChild({quesObj, propertyName, updateQuestion}) {
     const handleValueChange = (event) => {
-        setAssessmentQ([...assessmentQ, assessmentQ[assessmentQ.indexOf(quesObj)].score = parseInt(event.target.value)]);  
+        //console.log(`Score ${parseInt(event.target.value)}`);
+        // setAssessmentQ(assessmentQ.map((item, i) => i === assessmentQ.indexOf(quesObj) ? {... item, score: parseInt(event.target.value)} : item));
+        updateQuestion(propertyName, `${event.target.value}`);
     }
 
     return(
