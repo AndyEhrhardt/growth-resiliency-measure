@@ -45,7 +45,6 @@ function SchoolAndDistrict() {
   }
 
   const handleChange = (event) => {
-    console.log("WHAT IS THIS PLZ TELL ME WHAT THIS IS I NEED TO KNOW NOW PLEASE", event.target.value)
     setDistrict(event.target.value);
   }
   const handleSubmit = (event) => {

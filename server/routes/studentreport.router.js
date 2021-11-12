@@ -5,6 +5,7 @@ const router = express.Router();
 const {
     rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
+const { ADMIN, TEACHER, STUDENT } = require("../modules/authLevels");
 
 // route to get reports of the user that is
 // logged in

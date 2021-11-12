@@ -1,0 +1,14 @@
+const REQUESTING_ADMIN = 5
+const REQUESTING_TEACHER = 4
+const ADMIN = 3
+const TEACHER = 2
+const STUDENT = 1
+
+
+module.exports = {
+ADMIN,
+TEACHER,
+STUDENT,
+REQUESTING_ADMIN,
+REQUESTING_TEACHER,
+}
