@@ -24,8 +24,20 @@ function* fetchUser() {
   }
 }
 
+function* fetchStudents(){
+  try {
+    const response = yield axios.get('/api/user/students');
+
+    
+    yield put({ type: 'SET_STUDENTS', payload: response.data });
+  } catch (error) {
+    console.log('User get request failed', error);
+  }
+} 
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('FETCH_STUDENTS', fetchStudents);
 }
 
 export default userSaga;
