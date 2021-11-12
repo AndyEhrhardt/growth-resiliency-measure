@@ -14,10 +14,10 @@ import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
-
 function StudentList(){
     const dispatch = useDispatch();
-    
+    const [page, setPage] = useState(0);
+    const rows = useSelector((store) => store.students)
     useEffect(() => {
         dispatch({ type: 'FETCH_STUDENTS' });
     }, []);
@@ -29,10 +29,12 @@ function StudentList(){
     const takeAssessment = (event) =>{
         console.log(event.target.id)
     }
+    const handleChangePage = (event, newPage)=> {
+        setPage(newPage)
+    }
 
 
-
-    const rows = useSelector((store) => store.students);
+    
     const columns = [
         { field: 'student_name', headerName: 'Name', width: 150 },
         { field: 'grade', headerName: 'Grade', width: 150 },
@@ -51,11 +53,17 @@ function StudentList(){
             }
         } },
         { field: 'parent_email', headerName: `Parent's Email`, width: 150 },
+        { field: 'view_assessment', headerName: `View Assessment`, width: 150, renderCell: (params) => {
+            return <Button onClick={(event) => takeAssessment(event)}>View</Button>
+        } },
     ];
 
     return(
         <>
-            <DataGrid rows={rows} columns={columns} />
+            <DataGrid 
+                rows={rows} 
+                columns={columns} 
+            />
         </>
     );
 }
