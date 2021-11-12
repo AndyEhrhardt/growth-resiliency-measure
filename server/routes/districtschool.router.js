@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const { ADMIN, TEACHER, STUDENT } = require("../modules/authLevels");
 
 //Get route for school and district data
 
