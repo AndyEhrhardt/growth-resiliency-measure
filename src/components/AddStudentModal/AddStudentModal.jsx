@@ -248,11 +248,7 @@ function AddStudentModal(props) {
       >
         Add Student
       </Button>
-
       </div>
-
-
-
     </div>
     </Typography>
     </FormControl>
