@@ -166,10 +166,10 @@ VALUES
 (3,5,1,4,E'2021-11-09',2,2,2,3,3,3,3),
 (4,4,4,6,E'2021-11-09',2,2,2,4,4,5,5);
 
-INSERT INTO "public"."demographics"("id","gender_id","iep","race_id","hispanic_latino")
+INSERT INTO "public"."demographics"("id","gender_id","iep","race_id","hispanic_latino", "grade")
 VALUES
-(1,1,FALSE,1,TRUE),
-(2,2,TRUE,2,FALSE);
+(1,1,FALSE,1,TRUE,1),
+(2,2,TRUE,2,FALSE,1);
 
 INSERT INTO "public"."gender"("id","name")
 VALUES

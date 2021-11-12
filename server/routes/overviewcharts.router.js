@@ -2,29 +2,122 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
+// all of the parameters that can be 
+// entered into queries
+// checks to make sure no malicious queries are entered
+const acceptedInputs = ["assessments", "demographics", "district", "role","school","user","race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email", ];
 
-router.get('/type/:filterBy', (req,res) => {
+router.get('/range', (req, res) => {
+    const filterByType = req.query.type;
+    const filterByTarget = req.query.target;
+    const dateStart = req.query.targetStartDate;
+    const dateEnd = req.query.targetEndDate;
+    console.log('in router range', req.query)
+    
+    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget)){
+
+    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
+    AVG("assessments"."ask_help") AS "ask_help", 
+    AVG("assessments"."confidence_adult") AS "confidence_adult", 
+    AVG("assessments"."confidence_peer") AS "confidence_peer", 
+    AVG("assessments"."succeed_pressure") AS "succeed_pressure", 
+    AVG("assessments"."persistence") AS "persistence", 
+    AVG("assessments"."express_adult") AS "express_adult", 
+    AVG("assessments"."express_peer") AS "express_peer" 
+    FROM "assessments"
+      JOIN "user" on "assessments"."student_id" = "user"."id"
+    JOIN "school" ON "user"."school_id" = "school"."id"
+    JOIN "district" ON "school"."district_id" = "district"."id"
+    JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
+    JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
+    JOIN "race" ON "race"."id" = "demographics"."race_id" 
+    WHERE ("assessments"."date" >= $1 AND "assessments"."date" <= $2)
+    GROUP BY "${filterByType}"."${filterByTarget}";`;
+    pool.query(queryText, [dateStart,dateEnd]).then(results => {
+        console.log('results', results.rows);
+        
+        res.send(results.rows);
+    }).catch(error => {
+        console.log('there was an error getting ranged data', error);
+        res.sendStatus(500);
+    })
+        // if input not accepted type do not query
+} else {
+    console.log('invalid search type');
+}
+})
+
+router.get('/quarter', (req, res) => {
+    console.log('req.query', req.query);
+    // get search parameters from url
+    const filterByType = req.query.type;
+    const filterByTarget = req.query.target;
+    const quarterStart = req.query.quarterStart;
+    const quarterEnd = req.query.quarterEnd;
+    // check that the queries are of accepted type
+    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
+    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
+    AVG("assessments"."ask_help") AS "ask_help", 
+    AVG("assessments"."confidence_adult") AS "confidence_adult", 
+    AVG("assessments"."confidence_peer") AS "confidence_peer", 
+    AVG("assessments"."succeed_pressure") AS "succeed_pressure", 
+    AVG("assessments"."persistence") AS "persistence", 
+    AVG("assessments"."express_adult") AS "express_adult", 
+    AVG("assessments"."express_peer") AS "express_peer" 
+    FROM "assessments"
+      JOIN "user" on "assessments"."student_id" = "user"."id"
+    JOIN "school" ON "user"."school_id" = "school"."id"
+    JOIN "district" ON "school"."district_id" = "district"."id"
+    JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
+    JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
+    JOIN "race" ON "race"."id" = "demographics"."race_id" 
+    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}")
+    GROUP BY "${filterByType}"."${filterByTarget}";`;
+    pool.query(queryText).then(results => {
+        res.send(results.rows);
+        console.log('results', results.rows);
+    }).catch(error => {
+        console.log('there was an error getting quarter data', error);
+        res.sendStatus(500);
+    })
+    // if input not accepted type do not query
+} else {
+    console.log('invalid search type');
+}
+})
+
+
+
+router.get('/type', (req, res) => {
     // get the average response for each question
     // based on selected demographic
-    // $1 is the parameter being searched
-    // should come from an object value on
-    // the overview charts page in format of
-    // "race"."name", "gender"."name", "demographics"."hispanic_latino"
-    const filterBy = req.params;
-    queryText=`SELECT $1, AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" FROM "assessments"
+    // parameters are coming from an object value on
+    // the overview charts page 
+    console.log('in router get type', req.query);
+    const filterByType = req.query.type;
+    const filterTarget = req.query.target;
+    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterTarget)){
+    queryText = `SELECT "${filterByType}"."${filterTarget}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
+    FROM "assessments"
     JOIN "user" on "assessments"."student_id" = "user"."id"
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     JOIN "school" ON "user"."school_id" = "school"."id"
     JOIN "district" ON "school"."district_id" = "district"."id"
-    GROUP BY $1;`
-    pool.query(queryText,[filterBy])
-    .then(results => {
-        res.send(results.rows);
-    }).catch(error => {
-        res.sendStatus(500);
-    })
+    GROUP BY "${filterByType}"."${filterTarget}";`
+    pool.query(queryText)
+        .then(results => {
+            console.log('results of get', results.rows);
+            res.send(results.rows);
+        }).catch(error => {
+            console.log('there was an error getting filtered data', error);
+            
+            res.sendStatus(500);
+        })
+    } else {
+        console.log('not verified input')
+    }
 })
 
 
