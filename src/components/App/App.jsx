@@ -25,6 +25,7 @@ import OverviewCharts from '../OverviewCharts/OverviewCharts';
 import StartAssessment from '../StartAssessment/StartAssessment';
 import StudentReportPage from '../StudentReportPage/StudentReportPage';
 import VerifyUser from '../VerifyUser/VerifyUser';
+import AssessmentFormPage from '../AssessmentFormPage/AssessmentFormPage';
 
 import './App.css';
 import StudentList from '../SudentList/StudentList';
@@ -167,6 +168,10 @@ function App() {
 
           <Route path="/verify/:randomString">
             <VerifyUser />
+          </Route>
+
+          <Route exact path="/assessmentoverview">
+            <AssessmentFormPage />
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
