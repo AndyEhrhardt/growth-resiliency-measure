@@ -37,7 +37,7 @@ function OverviewCharts() {
       const filter = useSelector(store => store.overview);
 
     useEffect(() => {
-        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: {race : "name"} })
+        dispatch({ type: 'FETCH_PARAMETER_QUARTER', payload: [{race : "name", quarter: 1}] })
     }, [dispatch]);
     
     return (
