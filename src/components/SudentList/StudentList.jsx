@@ -26,7 +26,9 @@ function StudentList(){
         event.preventDefault();
         console.log(event.target.value)
     }
-
+    const takeAssessment = (event) =>{
+        console.log(event.target.id)
+    }
 
 
 
@@ -41,8 +43,14 @@ function StudentList(){
                 return <Button value={params.row.parent_email} onClick={(event) => sendEmail(event)}>Send Email</Button>
             }
         } },
-        { field: 'assessment_completed', headerName: 'Completed Assessment', width: 150 },
-        { field: 'parent_email', headerName: 'Parent Email', width: 150 },
+        { field: 'assessment_completed', headerName: 'Take Assessment', width: 150, renderCell: (params) => {
+            if (params.row.assessment_completed){
+                return <Button disabled>Completed</Button>
+            } else {
+                return <Button value={params.row.id} onClick={(event) => takeAssessment(event)}>Take Assessment</Button>
+            }
+        } },
+        { field: 'parent_email', headerName: `Parent's Email`, width: 150 },
     ];
 
     return(
