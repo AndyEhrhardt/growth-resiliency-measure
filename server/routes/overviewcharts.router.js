@@ -39,14 +39,15 @@ router.get('/range', (req, res) => {
 })
 
 router.get('/quarter', (req, res) => {
-    const filterByType = req.query.type;
-    const filterTarget = req.query.target;
-    const quarterStart = "q" + (req.query.quarter);
-    const quarterEnd = "q" + (parseInt(quarterStart) + 1);
-    console.log('q start, q end', quarterStart, quarterEnd);
+    console.log('req.query', req.query);
     
-    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterTarget) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
-    const queryText = `SELECT "${filterByType}"."${filterTarget}", 
+    const filterByType = req.query.type;
+    const filterByTarget = req.query.target;
+    const quarterStart = req.query.quarterStart;
+    const quarterEnd = req.query.quarterEnd;
+    
+    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
+    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
     AVG("assessments"."ask_help") AS "ask_help", 
     AVG("assessments"."confidence_adult") AS "confidence_adult", 
     AVG("assessments"."confidence_peer") AS "confidence_peer", 
@@ -61,17 +62,18 @@ router.get('/quarter', (req, res) => {
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
-    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}"
-    GROUP BY "${filterByType}"."${filterTarget}";`;
-    pool.query(queryText, [type, target, quarterStart, quarterEnd]).then(results => {
+    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}")
+    GROUP BY "${filterByType}"."${filterByTarget}";`;
+    pool.query(queryText).then(results => {
         res.send(results.rows);
+        console.log('results', results.rows);
+        
     }).catch(error => {
         console.log('there was an error getting quarter data', error);
         res.sendStatus(500);
     })
 } else {
     console.log('invalid search type');
-    
 }
 })
 

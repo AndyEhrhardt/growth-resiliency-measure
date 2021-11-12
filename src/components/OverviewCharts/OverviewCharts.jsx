@@ -35,9 +35,10 @@ function OverviewCharts() {
   
       // get assessment information from the reducer
       const filter = useSelector(store => store.overview);
-
+     const filterByType = {race: "name"};
+     const filterByQuarter = {quarter: '1'}
     useEffect(() => {
-        dispatch({ type: 'FETCH_PARAMETER_QUARTER', payload: [{race : "name", quarter: 1}] })
+        dispatch({ type: 'FETCH_PARAMETER_QUARTER', payload: [filterByType,filterByQuarter] })
     }, [dispatch]);
     
     return (
