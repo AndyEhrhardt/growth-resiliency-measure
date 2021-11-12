@@ -27,8 +27,6 @@ router.post("/register", (req, res, next) => {
   const lastInitial = req.body.lastInitial;
   const school = req.body.school;
   const ranString = randomString();
-  console.log(req.body);
-
   const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id", "verification_string")
   VALUES($1, $2, $3, $4, $5, $6, $7)
   RETURNING id`;
@@ -81,8 +79,6 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
   const password = encryptLib.encryptPassword(randomString());
   const verification_string = randomString();
 
-  console.log(req.body);
-
   const queryText = `INSERT INTO "demographics"("gender_id","iep","race_id","hispanic_latino","grade")
   VALUES ($1, $2, $3, $4, $5)
   RETURNING id`;
@@ -107,5 +103,35 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
     });
 
 });
+
+router.get("/students", rejectUnauthenticated, (req, res, next) => {
+  if (req.user.role_id === 3) {
+    console.log("level 3")
+    const allStudentsQuery = `SELECT * FROM "user"
+    WHERE "user"."role_id" = 1`
+    pool.query(allStudentsQuery)
+    .then((result) => {
+      console.log(result.rows)
+      res.send(result.rows)
+    })
+  } else if (req.user.role_id === 2){
+    console.log("level 2")
+    const schoolSpecificStudentsQuery = `SELECT * FROM "user"
+    WHERE "user"."role_id" = 1
+    AND "user"."school_id"= $1`
+    pool.query(schoolSpecificStudentsQuery, [req.user.school_id])
+    .then((result) => {
+      console.log(result.rows)
+    })
+  } else {
+    console.log("get outta here")
+  }
+
+})
+
+
+
+
+
 
 module.exports = router;

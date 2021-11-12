@@ -87,7 +87,6 @@ function AddStudentModal(props) {
   
   const handleClose = () => {
     props.setOpenAddStudent(false);
-    setTimeout(() => {dispatch({ type: "CLEAR_SONG_DETAILS"})}, 450)
   }
 
 

@@ -7,12 +7,10 @@ router.get('/', (req, res) => {
     const raceQuery = `SELECT * FROM "race";`;
     pool.query(raceQuery)
         .then((result) => {
-            console.log(result.rows)
             demographics.race = result.rows;
             const genderQuery = `SELECT * FROM "gender";`;
             pool.query(genderQuery)
             .then((result) => {
-                console.log(result.rows)
                 demographics.gender = result.rows;
                 res.send(demographics)
             })
