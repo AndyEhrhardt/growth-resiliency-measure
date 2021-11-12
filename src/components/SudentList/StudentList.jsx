@@ -21,7 +21,6 @@ function StudentList(){
         dispatch({ type: 'FETCH_STUDENTS' });
 
     }, [dispatch]);
-    
 
     const rows: GridRowsProp = [
         { id: 1, col1: 'Hello', col2: 'World' },
@@ -32,6 +31,7 @@ function StudentList(){
     const columns: GridColDef[] = [
         { field: 'col1', headerName: 'Column 1', width: 150 },
         { field: 'col2', headerName: 'Column 2', width: 150 },
+        { field: 'col3', headerName: 'Button here', width: 150 },
     ];
 
 
