@@ -1,6 +1,8 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const { ADMIN, TEACHER } = require("../modules/authLevels");
+
 
 // all of the parameters that can be 
 // entered into queries

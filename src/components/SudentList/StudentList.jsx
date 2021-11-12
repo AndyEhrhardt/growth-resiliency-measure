@@ -14,12 +14,10 @@ import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
-
 function StudentList(){
     const dispatch = useDispatch();
     const [page, setPage] = useState(0);
     const rows = useSelector((store) => store.students)
-
     useEffect(() => {
         dispatch({ type: 'FETCH_STUDENTS' });
     }, []);

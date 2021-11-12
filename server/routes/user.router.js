@@ -7,6 +7,7 @@ const pool = require("../modules/pool");
 const userStrategy = require("../strategies/user.strategy");
 const { randomString } = require("../modules/randomString");
 const { sendMail } = require("../modules/sendMail");
+const { ADMIN, TEACHER, STUDENT } = require("../modules/authLevels");
 
 const router = express.Router();
 
