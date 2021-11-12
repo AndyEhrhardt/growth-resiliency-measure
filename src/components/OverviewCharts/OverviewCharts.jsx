@@ -19,15 +19,20 @@ function OverviewCharts() {
     // payload: parameter, quarter
     // formatted as above and the quarter 
     // should be sent in format of 
-    // { quarter : 1 } || { quarter : 2 }
+    // filterByQuarter = { quarter : 1 } || 
+    // { quarter : 2 }
     // { quarter : 3 } || { quarter : 4 }
+    // filterByType = { race: "name" }
+    // i.e. [filterByType, filterByQuarter]
 
     // for search of time range send selected parameter
     // dispatch type FETCH_PARAMETER_RANGE
     // payload: parameter, quarter
     // formatted as above and the time range
     // should be sent in format of 
-    // [{start: "2021-09-10"}, {end: "2021"-12-15"}]
+    // [{race: "name"}, {start: "2021-09-10"}, {end: "2021"-12-15"}]
+    // enter as
+    // [filterByType, startDate, endDate]
 
   
       // access useDispatch from react-redux
@@ -36,9 +41,10 @@ function OverviewCharts() {
       // get assessment information from the reducer
       const filter = useSelector(store => store.overview);
      const filterByType = {race: "name"};
-     const filterByQuarter = {quarter: '1'}
+     const filterStartDate = {startDate: '2020-5-2'};
+     const filterEndDate = {endDate: '2021-11-2'};
     useEffect(() => {
-        dispatch({ type: 'FETCH_PARAMETER_QUARTER', payload: [filterByType,filterByQuarter] })
+        dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: [filterByType,filterStartDate, filterEndDate] })
     }, [dispatch]);
     
     return (

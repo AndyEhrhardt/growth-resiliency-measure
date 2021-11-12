@@ -3,14 +3,19 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 
 function* getFilteredByTypeRange(action) {
-  console.log('in get filtered by range');
-  const filterBy = action.payload;
-  const param = Object.keys(filterBy);
-  const target = filterBy[Object.keys(filterBy)[0]];
-  const filterByRangeStart = action.payload.start;
-  const filterByRangeEnd = action.payload.end;
-  const filteredByRange = axios.get(`/api/overviewcharts/range/?type=${param}&target=${target}&start=${filterByRangeStart}&end=${filterByRangeEnd}`);
-  yield put({ type: 'SET_OVERVIEW', payload: filteredByRange.data });
+  console.log('in get filtered by range', action.payload[0]);
+  const targetDateStart = action.payload[1].startDate; // i.e. '2021-11-10'
+  const targetDateEnd = action.payload[2].endDate // i.e. '2021-11-12'
+  console.log('start, end', targetDateStart, targetDateEnd);
+  
+  const filterBy = action.payload[0]; // i.e. {race: 'name'}
+  const target = filterBy[Object.keys(filterBy)[0]]; // i.e. name
+  const param = Object.keys(filterBy)[0]; // i.e. race
+  console.log('target,param', target,param);
+  
+  const filteredByQuarter = yield axios.get(`/api/overviewcharts/range/?type=${param}&target=${target}&targetStartDate=${targetDateStart}&targetEndDate=${targetDateEnd}`);
+  console.log('get result', filteredByQuarter.data);
+  yield put({ type: 'SET_OVERVIEW', payload: filteredByQuarter.data });
 }
 
 function* getFilteredByTypeQuarter(action) {
@@ -39,8 +44,8 @@ function* getFilteredByType(action) {
 
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
-  yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
-  yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange)
+    yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
+    yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange)
 }
 
 export default overviewSaga;

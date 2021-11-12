@@ -5,15 +5,18 @@ const router = express.Router();
 // all of the parameters that can be 
 // entered into queries
 // checks to make sure no malicious queries are entered
-const acceptedInputs = ["assessments", "demographics", "district", "role","school","user","race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email" ];
+const acceptedInputs = ["assessments", "demographics", "district", "role","school","user","race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email", ];
 
 router.get('/range', (req, res) => {
-    const filterProps = req.query;
-    const type = Object.keys(filterProps.type);
-    const target = filterProps.type;
-    const start = filterProps.start;
-    const end = filterProps.end;
-    const queryText = `SELECT "$1"."2", 
+    const filterByType = req.query.type;
+    const filterByTarget = req.query.target;
+    const dateStart = req.query.targetStartDate;
+    const dateEnd = req.query.targetEndDate;
+    console.log('in router range', req.query)
+    
+    if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget)){
+
+    const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
     AVG("assessments"."ask_help") AS "ask_help", 
     AVG("assessments"."confidence_adult") AS "confidence_adult", 
     AVG("assessments"."confidence_peer") AS "confidence_peer", 
@@ -28,24 +31,30 @@ router.get('/range', (req, res) => {
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
-    WHERE ("assessments"."date" >= $3 AND "assessments"."date" <= $4)
-    GROUP BY "$1"."$2";`;
-    pool.query(queryText, [type, target, start, end]).then(results => {
+    WHERE ("assessments"."date" >= $1 AND "assessments"."date" <= $2)
+    GROUP BY "${filterByType}"."${filterByTarget}";`;
+    pool.query(queryText, [dateStart,dateEnd]).then(results => {
+        console.log('results', results.rows);
+        
         res.send(results.rows);
     }).catch(error => {
         console.log('there was an error getting ranged data', error);
         res.sendStatus(500);
     })
+        // if input not accepted type do not query
+} else {
+    console.log('invalid search type');
+}
 })
 
 router.get('/quarter', (req, res) => {
     console.log('req.query', req.query);
-    
+    // get search parameters from url
     const filterByType = req.query.type;
     const filterByTarget = req.query.target;
     const quarterStart = req.query.quarterStart;
     const quarterEnd = req.query.quarterEnd;
-    
+    // check that the queries are of accepted type
     if(acceptedInputs.includes(filterByType) && acceptedInputs.includes(filterByTarget) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd)){
     const queryText = `SELECT "${filterByType}"."${filterByTarget}", 
     AVG("assessments"."ask_help") AS "ask_help", 
@@ -67,11 +76,11 @@ router.get('/quarter', (req, res) => {
     pool.query(queryText).then(results => {
         res.send(results.rows);
         console.log('results', results.rows);
-        
     }).catch(error => {
         console.log('there was an error getting quarter data', error);
         res.sendStatus(500);
     })
+    // if input not accepted type do not query
 } else {
     console.log('invalid search type');
 }
