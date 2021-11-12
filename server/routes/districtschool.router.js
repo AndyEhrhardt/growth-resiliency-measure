@@ -13,12 +13,37 @@ router.get('/', (req, res) => {
         .then((result) => {
             res.send(result.rows);
         })
-        .catch((error) =>{
+        .catch((error) => {
             console.log("Error in select schooldistrict data", error);
             res.send(500);
         })
 })
 
+router.post('/', (req, res) => {
+    console.log("incoming info", req.body);
+    const schoolInfo = req.body
+    const insertDistrictQuery = `INSERT INTO "district" ("name") VALUES($1) RETURNING "id";`;
+    pool.query(insertDistrictQuery, [req.body.district])
+        .then(result => {
+            console.log('Distric id is', result.rows[0].id);
 
+            const district_id = result.rows[0].id;
+
+            const queryText = `INSERT INTO "school" ("name", "district_id", "q1", "q2","q3","q4","domain")  VALUES($1, $2, $3, $4, $5, $6, $7);`;
+            pool.query(queryText, [schoolInfo.school, district_id, '2021/03/01', '2021/05/01', '2021/05/07','2021/01/05',schoolInfo.domain])
+                .then(result => {
+                    console.log(result);
+                    res.sendStatus(201);
+                })
+                .catch(error => {
+                    console.log(error)
+                    res.sendStatus(500);
+                })
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+})
 
 module.exports = router;
