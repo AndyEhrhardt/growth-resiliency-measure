@@ -1,6 +1,7 @@
 import {React, useState} from 'react';
 import AssessmentRadioChild from '../Assessment_Radio_Child/Assessment_Radio_Child';
 import Pagination from '../Pagination/Pagination';
+import { FormControl, FormLabel, Button, Container } from '@mui/material';
 
 
 function AssessmentFormPage() {
@@ -49,15 +50,35 @@ function AssessmentFormPage() {
     const changePage = (pageNumber) => {
         setCurrentPage(pageNumber);
     }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        for (let value of Object.entries(assessmentQ)) {
+            //console.log(value[1].score);
+            if (!value[1].score) {
+                alert('Please answer all questions')
+                return;
+            }
+        }
+        alert("Submit Application");
+    }
     
     return (
         <>
-            {/* {JSON.stringify(assessmentQ)} */}
-            {currentPosts.map((propertyName, i) => {
-                const quesObj = assessmentQ[propertyName]; // This is the question object
-                return (<AssessmentRadioChild key={i} quesObj={quesObj} updateQuestion={updateQuestion} propertyName={propertyName}/>);
-            })}
-            <Pagination postsPerPage={postsPerPage} totalPosts={Object.keys(assessmentQ).length} changePage={changePage}/>
+        <Container>
+            <form onSubmit={handleSubmit}>
+                <FormControl>
+                <FormLabel>Assessment for Student</FormLabel>
+                {/* {JSON.stringify(assessmentQ)} */}
+                {currentPosts.map((propertyName, i) => {
+                    const quesObj = assessmentQ[propertyName]; // This is the question object
+                    return (<AssessmentRadioChild key={i} quesObj={quesObj} updateQuestion={updateQuestion} propertyName={propertyName}/>);
+                })}
+                </FormControl>
+                <Pagination currentPage={currentPage} postsPerPage={postsPerPage} totalPosts={Object.keys(assessmentQ).length} changePage={changePage}/>
+                <Button type="submit">Submit</Button>
+            </form>
+        </Container> 
         </>
     )
 }

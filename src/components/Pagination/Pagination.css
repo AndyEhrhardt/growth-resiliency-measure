@@ -4,3 +4,7 @@ ul > li {
     *display: inline;
     margin: 0.15em;
 }
+
+.highLight {
+    border: 2px solid blue;
+}
