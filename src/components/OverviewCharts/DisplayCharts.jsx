@@ -9,17 +9,21 @@ function DisplayCharts({ results }) {
             ticks: { beginAtZero: true },
         },
     };
-  
+
+    const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
+    
+
     let keys = [];
     let endPointLabels = [];
     let dataPoints = [];
     for (let i = 0; i < results.length; i++) {
         endPointLabels.push(results[i].name);
-        keys.push(Object.keys(results[i]));
+        keys.push(Object.keys(results[i]).slice(1));
     }
 
     for (let i = 0; i < keys.length; i++) {
         dataPoints.push(Object.values(results[i]).slice(1));
+
     }
 
     let graphData = [];
@@ -28,7 +32,7 @@ function DisplayCharts({ results }) {
             label: endPointLabels[i],
             data: dataPoints[i],
             backgroundColor: 'rgba(0, 0, 0, 0)',
-            borderColor: '#3e95cd',
+            borderColor: lineColors[i],
             borderWidth: 2,
         })
     }
@@ -40,7 +44,7 @@ function DisplayCharts({ results }) {
     console.log('object keys, vertices labels', keys);
 
     const data = {
-        labels: keys[0].slice(1),
+        labels: keys[0],
         datasets: graphData,
     };
 
