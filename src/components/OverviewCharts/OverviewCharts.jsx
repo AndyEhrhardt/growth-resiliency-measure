@@ -41,30 +41,27 @@ function OverviewCharts() {
     const schoolInfo = useSelector(store => store.districtSchool);
     const demographics = useSelector(store => store.demographics);
 
+    // once the submit button is clicked dispatch
+    // desired information to overview charts
     const fetchInfo = () => {
-        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: 'name' } });
+        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
     }
 
+    // on page load get the list of schools
+    // and demographic options to display
+    // on drop down selections
     useEffect(() => {
-        
         dispatch({ type: 'FETCH_DISTRICT_SCHOOL' });
         dispatch({ type: 'FETCH_DEMOGRAPHICS' });
-        populateSelections();
+
     }, [dispatch]);
 
+    // hooks to hold the selections to display
     const [filterValue, setFilterValue] = useState('');
-    const [searchBy, setSearchBy] = useState('');
+    const [searchBy, setSearchBy] = useState('name');
+    const defaultSelection = 'name';
     const [startTime, endStartTime] = useState('');
     const [selection, setSelection] = useState('');
-
-    const handleChange = (event) => {
-        setSelection(event.target.value);
-    };
-
-    const populateSelections = () => {
-        console.log('demographics reducer', demographics);
-    }
-
 
     return (
         <div>
@@ -74,7 +71,7 @@ function OverviewCharts() {
                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
                     <Select
-                    defaultValue = ""
+                        defaultValue="Filter By"
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         label="Filter By"
@@ -87,94 +84,45 @@ function OverviewCharts() {
                         <MenuItem value={'gender'}>Gender</MenuItem>
                     </Select>
                 </FormControl>
-                {filterValue == 'school' ?
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Filter By"
-                            onChange={event => setSearchBy(event.target.value)}
-                            width='50%'
-                        >
-                            <MenuItem>All</MenuItem>
-                            {schoolInfo.map((logs) => (
 
-                                <MenuItem value={logs.school_name}>{logs.school_name}</MenuItem>
-
-                            ))}
-                        </Select>
-                    </FormControl> : <></>
-                }
-                {filterValue == 'gender' ?
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Filter By"
-                            onChange={event => setSearchBy(event.target.value)}
-                            width='50%'
-                        >
-                            <MenuItem>All</MenuItem>
-                            {demographics.gender.map((logs) => (
-
-                                <MenuItem value={logs.name}>{logs.name}</MenuItem>
-
-                            ))}
-                        </Select>
-                    </FormControl> : <></>
-                }
-                {filterValue == 'race' ?
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Filter By"
-                            onChange={event => setSearchBy(event.target.value)}
-                            width='50%'
-                        >
-                            <MenuItem>All</MenuItem>
-                            {demographics.race.map((logs) => (
-
-                                <MenuItem value={logs.name}>{logs.name}</MenuItem>
-
-                            ))}
-                        </Select>
-                    </FormControl> : <></>
-                }
-                {filterValue == 'district' ?
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Filter By"
-                            onChange={event => setSearchBy(event.target.value)}
-                            width='50%'
-                        >
-                            <MenuItem>All</MenuItem>
-                            {schoolInfo.map((logs) => (
-                                
-                                <MenuItem value={logs.district_name}>{logs.district_name}</MenuItem>
-
-                            ))}
-                        </Select>
-                    </FormControl> : <></>
-                }
-                <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt:2 }} >
-                    Submit
-                </Button>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-label">Choose</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Filter By"
+                        onChange={event => setSearchBy(event.target.value)}
+                        width='50%'
+                        defaultValue='name'
+                    >
+                        <MenuItem value={defaultSelection}>Display All</MenuItem>
+                        {filterValue == 'school' &&
+                            schoolInfo.map((logs) => (
+                                <MenuItem key={logs.id} value={logs.school_name}>{logs.school_name}</MenuItem>
+                            ))
+                        }
+                        {filterValue == 'gender' &&
+                            demographics.gender.map((logs) => (
+                                <MenuItem key={logs.id} value={logs.name}>{logs.name}</MenuItem>
+                            ))
+                        }
+                        {filterValue == 'race' &&
+                            demographics.race.map((logs) => (
+                                <MenuItem key={logs.id} value={logs.name}>{logs.name}</MenuItem>
+                            ))
+                        }
+                        {filterValue == 'district' &&
+                            schoolInfo.map((logs) => (
+                                <MenuItem key={logs.id} value={logs.district_name}>{logs.district_name}</MenuItem>
+                            ))
+                        }
+                    </Select>
+                    <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Submit
+                    </Button>
+                </FormControl>
             </Box>
-
-
-
             <DisplayChart results={filter} />
-            {/* <Radar data={data} options={options} /> */}
-            {/* {filter.length ? <> </> : 
-                <Radar data={data} options={options} />
-            } */}
         </div>
     );
 }
