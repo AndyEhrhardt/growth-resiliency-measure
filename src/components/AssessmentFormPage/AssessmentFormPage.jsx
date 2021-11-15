@@ -4,7 +4,7 @@ import Pagination from '../Pagination/Pagination';
 import { FormControl, FormLabel, Button, Container } from '@mui/material';
 
 
-function AssessmentFormPage() {
+function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(2);
 
@@ -68,7 +68,7 @@ function AssessmentFormPage() {
         <Container>
             <form onSubmit={handleSubmit}>
                 <FormControl>
-                <FormLabel>Assessment for Student</FormLabel>
+                <FormLabel>Assessment for {userStore.first_name} {userStore.last_initial}</FormLabel>
                 {/* {JSON.stringify(assessmentQ)} */}
                 {currentPosts.map((propertyName, i) => {
                     const quesObj = assessmentQ[propertyName]; // This is the question object
@@ -83,5 +83,5 @@ function AssessmentFormPage() {
     )
 }
 
-export default AssessmentFormPage
+export default AssessmentFormPage;
  
