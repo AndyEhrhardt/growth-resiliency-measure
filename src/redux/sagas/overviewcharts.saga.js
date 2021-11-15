@@ -29,14 +29,24 @@ function* getFilteredByType(action) {
   const searchOn = action.payload.searchOn;
   const filteredData = yield axios.get(`/api/overviewcharts/type?filterBy=${filterBy}&searchOn=${searchOn}`);
   console.log('result', filteredData.data);
+  yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
+}
 
+function* getSpecificData(action){
+  console.log('in get specific data saga', action.payload);
+  
+  const filterBy = action.payload.filterBy;
+  const searchOn = action.payload.searchOn;
+  const filteredData = yield axios.get(`/api/overviewcharts/type?filterBy=${filterBy}&searchOn=${searchOn}`);
+  console.log('result', filteredData.data);
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }
 
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
     yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
-    yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange)
+    yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange),
+    yield takeLatest('FETCH_SPECIFIC_DATA', getSpecificData);
 }
 
 export default overviewSaga;

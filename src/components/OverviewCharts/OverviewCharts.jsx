@@ -44,7 +44,13 @@ function OverviewCharts() {
     // once the submit button is clicked dispatch
     // desired information to overview charts
     const fetchInfo = () => {
+        console.log("fetching info", event);
+        if (searchBy === 'name'){
         dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
+        }
+        else {
+            dispatch({type: 'FETCH_SPECIFIC_DATA', payload: {filterBy: filterValue, searchOn: searchBy }});
+        }
     }
 
     // on page load get the list of schools
@@ -62,6 +68,8 @@ function OverviewCharts() {
     const defaultSelection = 'name';
     const [startTime, endStartTime] = useState('');
     const [selection, setSelection] = useState('');
+
+
 
     return (
         <div>
@@ -98,7 +106,7 @@ function OverviewCharts() {
                         <MenuItem value={defaultSelection}>Display All</MenuItem>
                         {filterValue == 'school' &&
                             schoolInfo.map((logs) => (
-                                <MenuItem key={logs.id} value={logs.school_name}>{logs.school_name}</MenuItem>
+                                <MenuItem data='school_name' value={logs.school_name}>{logs.school_name}</MenuItem>
                             ))
                         }
                         {filterValue == 'gender' &&
