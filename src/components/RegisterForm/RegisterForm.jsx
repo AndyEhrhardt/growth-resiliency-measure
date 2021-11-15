@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+const { REQUESTING_ADMIN, REQUESTING_TEACHER } = require("../../modules/authLevels");
 
 
 function RegisterForm() {
@@ -44,7 +44,7 @@ function RegisterForm() {
         password: password,
         firstName: firstName,
         lastInitial: lastInitial,
-        role: role ? 2 : 3,
+        role: role ? REQUESTING_TEACHER : REQUESTING_ADMIN,
         school: school,
       },
     });
