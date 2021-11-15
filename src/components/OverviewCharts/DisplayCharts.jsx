@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Radar } from 'react-chartjs-2';
 
 function DisplayCharts({ results }) {
@@ -19,11 +18,12 @@ function DisplayCharts({ results }) {
     for (let i = 0; i < results.length; i++) {
         endPointLabels.push(results[i].name);
         keys.push(Object.keys(results[i]).slice(1));
+        console.log('keys in loop',Object.keys(results[i]))
     }
 
     for (let i = 0; i < keys.length; i++) {
         dataPoints.push(Object.values(results[i]).slice(1));
-
+        console.log('in loop', dataPoints)
     }
 
     let graphData = [];
@@ -50,7 +50,7 @@ function DisplayCharts({ results }) {
 
     return (
         <div>
-            {JSON.stringify(results)}
+            {/* {JSON.stringify(results)} */}
             <Radar data={data} options={options} />
         </div>
     );

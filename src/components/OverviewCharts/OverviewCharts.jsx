@@ -1,7 +1,11 @@
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Radar } from 'react-chartjs-2';
 import DisplayChart from './DisplayCharts';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 
@@ -29,23 +33,121 @@ function OverviewCharts() {
 
     // access useDispatch from react-redux
     const dispatch = useDispatch();
-  
+
     // get assessment information from the reducer
     const filter = useSelector(store => store.overview);
+    const schoolInfo = useSelector(store => store.districtSchool);
+    const demographics = useSelector(store => store.demographics);
 
     useEffect(() => {
-        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: "race", searchOn: "name" } });
+        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: "gender", searchOn: "name" } });
+        dispatch({type: 'FETCH_DISTRICT_SCHOOL'});
+        dispatch({type: 'FETCH_DEMOGRAPHICS'});
+        populateSelections();
     }, [dispatch]);
 
-  const labels = [];
+    const [filterBy, setFilterBy] = useState('');
+    const [searchOn, setSearchOn] = useState('');
+    const [startTime, endStartTime] = useState('');
+    const [selection, setSelection] = useState('');
+
+    const handleChange = (event) => {
+        setSelection(event.target.value);
+    };
+
+    const populateSelections = () => {
+        console.log('demographics reducer', demographics);
+    }
+
 
     return (
         <div>
-            {/* {JSON.stringify(dispatch)} */}
-            
-                <DisplayChart results = {filter}/>
+            {/* {JSON.stringify(schoolInfo)} */}
+            {JSON.stringify(demographics)}
+            <Box sx={{ minWidth: 120 }}>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={filterBy}
+                        label="Filter By"
+                        onChange={event => setSelection(event.target.value)}
+                        width= '50%'
+                    >
+                        <MenuItem value={'school'}>School</MenuItem>
+                        <MenuItem value={'district'}>District</MenuItem>
+                        <MenuItem value={'race'}>Race</MenuItem>
+                        <MenuItem value={'gender'}>Gender</MenuItem>
+                    </Select>
+                </FormControl>
+                {selection == 'school' ?
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filterBy}
+                    label="Filter By"
+                    onChange={event => setSearchOn(event.target.value)}
+                    width= '50%'
+                >
+                    <MenuItem>All</MenuItem>
+                    {schoolInfo.map((logs) => (
+                     
+                    <MenuItem value={'name'}>{logs.school_name}</MenuItem>
+                  
+                    ))}
+                </Select>
+            </FormControl> : <></>
+                }
+                 {selection == 'gender' ?
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filterBy}
+                    label="Filter By"
+                    onChange={event => setSearchOn(event.target.value)}
+                    width= '50%'
+                >
+                    <MenuItem>All</MenuItem>
+                    {demographics.gender.map((logs) => (
+                     
+                    <MenuItem value={'name'}>{logs.name}</MenuItem>
+                  
+                    ))}
+                </Select>
+            </FormControl> : <></>
+                }
+                   {selection == 'race' ?
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filterBy}
+                    label="Filter By"
+                    onChange={event => setSearchOn(event.target.value)}
+                    width= '50%'
+                >
+                    <MenuItem>All</MenuItem>
+                    {demographics.race.map((logs) => (
+                     
+                    <MenuItem value={'name'}>{logs.name}</MenuItem>
+                  
+                    ))}
+                </Select>
+            </FormControl> : <></>
+                }
+            </Box>
+
+
+
+            <DisplayChart results={filter} />
             {/* <Radar data={data} options={options} /> */}
-             {/* {filter.length ? <> </> : 
+            {/* {filter.length ? <> </> : 
                 <Radar data={data} options={options} />
             } */}
         </div>
