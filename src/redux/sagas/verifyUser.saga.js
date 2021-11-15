@@ -17,15 +17,19 @@ function* getStartAssessment(action){
   try {
     const ranString = action.payload;
     const response = yield axios.get(`/api/verifyUser/startAssessment/${ranString}`);
-    yield put({ type: 'SET_USER', payload: response.data });
+    yield put({ type: 'SET_USER', payload: response.data[0] });
   } catch(error) {
       console.log("Error verifying user", error);
   }
 }
 
+function* postAssessment(action){
+
+}
 function* verifyUserSaga() {
   yield takeLatest('PUT_VERIFY_USER', putVerifyUser);
   yield takeLatest('GET_START_ASSESSMENT', getStartAssessment);
+  yield takeLatest('POST_ASSESSMENT', postAssessment);
 }
 
 export default verifyUserSaga;
