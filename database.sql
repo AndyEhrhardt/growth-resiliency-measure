@@ -9,8 +9,6 @@ CREATE TABLE "district" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "school" (
 	"id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -26,8 +24,6 @@ CREATE TABLE "school" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "race" (
 	"id" serial NOT NULL,
 	"name" varchar(50) NOT NULL,
@@ -35,8 +31,6 @@ CREATE TABLE "race" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "demographics" (
 	"id" serial NOT NULL,
@@ -50,8 +44,6 @@ CREATE TABLE "demographics" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "gender" (
 	"id" serial NOT NULL,
 	"name" varchar(55) NOT NULL,
@@ -59,8 +51,6 @@ CREATE TABLE "gender" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "user" (
 	"id" serial NOT NULL,
@@ -83,8 +73,6 @@ CREATE TABLE "user" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "role" (
 	"id" serial NOT NULL,
 	"name" varchar(35) NOT NULL,
@@ -92,8 +80,6 @@ CREATE TABLE "role" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "assessments" (
 	"id" serial NOT NULL,
@@ -114,58 +100,58 @@ CREATE TABLE "assessments" (
 );
 
 
-
-
 ALTER TABLE "school" ADD CONSTRAINT "school_fk0" FOREIGN KEY ("district_id") REFERENCES "district"("id");
-
 
 ALTER TABLE "demographics" ADD CONSTRAINT "demographics_fk0" FOREIGN KEY ("gender_id") REFERENCES "gender"("id");
 ALTER TABLE "demographics" ADD CONSTRAINT "demographics_fk1" FOREIGN KEY ("race_id") REFERENCES "race"("id");
-
 
 ALTER TABLE "user" ADD CONSTRAINT "user_fk0" FOREIGN KEY ("role_id") REFERENCES "role"("id");
 ALTER TABLE "user" ADD CONSTRAINT "user_fk1" FOREIGN KEY ("school_id") REFERENCES "school"("id");
 ALTER TABLE "user" ADD CONSTRAINT "user_fk2" FOREIGN KEY ("demographics_id") REFERENCES "demographics"("id");
 
-
 ALTER TABLE "assessments" ADD CONSTRAINT "assessments_fk0" FOREIGN KEY ("student_id") REFERENCES "user"("id");
 ALTER TABLE "assessments" ADD CONSTRAINT "assessments_fk1" FOREIGN KEY ("entered_by_id") REFERENCES "user"("id");
 
+--copy everything above this line and run at the same time
+
+--everything below this line should be run individuall and in order
 
 
-INSERT INTO "public"."school"("id","name","district_id","q1","q2","q3","q4","domain","created_at")
+INSERT INTO "public"."district"("name","created_at")
 VALUES
-(1,E'School within dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
-(2,E'Another school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
-(3,E'A School in Dist one',1,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
-(4,E'A school in Dist three',3,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10');
+(E'District 1',E'2021-11-10'),
+(E'District 2',E'2021-11-10'),
+(E'District 3',E'2021-11-10');
 
-INSERT INTO "public"."district"("id","name","created_at")
-VALUES
-(1,E'District 1',E'2021-11-10'),
-(2,E'District 2',E'2021-11-10'),
-(3,E'District 3',E'2021-11-10');
 
-INSERT INTO "public"."role"("id","name")
+INSERT INTO "public"."school"("name","district_id","q1","q2","q3","q4","domain","created_at")
 VALUES
-(1,E'student'),
-(2,E'teacher'),
-(3,E'admin'),
-(4,E'requesting_teacher'),
-(5,E'requesting_admin');
+(E'School within dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(E'Another school in dist 2',2,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(E'A School in Dist one',1,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10'),
+(E'A school in Dist three',3,E'2001-01-01',E'2001-01-01',E'2001-01-01',E'2001-01-01',E'na',E'2021-11-10');
 
-INSERT INTO "public"."gender"("id","name")
-VALUES
-(1,E'Girl'),
-(2,E'Boy'),
-(3,E'Transgender'),
-(4,E'Not Listed'),
-(5,E'Prefer Not To Say');
 
-INSERT INTO "public"."race"("id","name")
+INSERT INTO "public"."role"("name")
 VALUES
-(1,E'Hispanic'),
-(2,E'Asian'),
-(3,E'Caucasian'),
-(4,E'Black'),
-(5,E'Mixed');
+(E'student'),
+(E'teacher'),
+(E'admin'),
+(E'requesting_teacher'),
+(E'requesting_admin');
+
+INSERT INTO "gender"("name")
+VALUES
+(E'Girl'),
+(E'Boy'),
+(E'Transgender'),
+(E'Not Listed'),
+(E'Prefer Not To Say');
+
+INSERT INTO "public"."race"("name")
+VALUES
+(E'Hispanic'),
+(E'Asian'),
+(E'Caucasian'),
+(E'Black'),
+(E'Mixed');

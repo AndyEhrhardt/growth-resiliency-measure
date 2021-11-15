@@ -112,7 +112,7 @@ router.get("/students", rejectUnauthenticated, (req, res, next) => {
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
-    "user"."parent_email", now()::DATE - 2 > "user"."date_assessment_email_sent" as "email_sent", 
+    "user"."parent_email", now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", 
     "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
     WHERE "user"."role_id" = 1
@@ -125,7 +125,7 @@ router.get("/students", rejectUnauthenticated, (req, res, next) => {
     console.log("level 2")
     const schoolSpecificStudentsQuery = `SELECT "user"."id", 
     concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", 
-    now()::DATE - 2 > "user"."date_assessment_email_sent" as "email_sent", "user"."assessment_completed", "demographics"."grade"
+    now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
     WHERE "user"."school_id" = $1
     AND "user"."role_id" = 1
