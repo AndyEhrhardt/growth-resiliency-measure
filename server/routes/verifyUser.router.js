@@ -4,6 +4,8 @@ const router = express.Router();
 const cron = require('node-cron');
 const {randomString} = require('../modules/randomString');
 const ranString = randomString();
+const { sendMail } = require("../modules/sendMail");
+
 const { 
   ADMIN,
   TEACHER,
@@ -12,6 +14,22 @@ const {
   REQUESTING_TEACHER, 
 } = require("../modules/authLevels");
 
+router.put('/sendassessment', (req, res) => {
+  const studentId = req.body.data.studentId;
+  const email = req.body.data.email;
+  console.log(email)
+  const newRandomString = randomString();
+  const currentDate = new Date();
+  const putQuery = 'UPDATE "user" SET "verification_string" = $1, "date_assessment_email_sent"=$2 WHERE "id" = $3;';
+  pool.query(putQuery, [newRandomString, currentDate, studentId])
+    .then((result) => {
+      console.log("verification string updated")
+      sendMail(email, newRandomString, false);
+    })
+    .catch((error) => {
+      console.log("error updating verification string", error)
+    })
+})
 
 //PUT
 router.put('/email/:randomString', (req, res) => {

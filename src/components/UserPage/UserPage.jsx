@@ -10,11 +10,15 @@ function UserPage() {
   const user = useSelector((store) => store.user);
   const [openAddStudent, setOpenAddStudent] = useState(false);
 
-const handleAddStudentButtonClick = (event) => {
-    event.preventDefault();
-    setOpenAddStudent(true);
-}
+  const handleAddStudentButtonClick = (event) => {
+      event.preventDefault();
+      setOpenAddStudent(true);
+  }
 
+  const handleSendEmailClick = (event) => {
+    event.preventDefault();
+    setOpenSendAssessment(true);
+}
 
   return (
     <div className="container">
@@ -27,8 +31,7 @@ const handleAddStudentButtonClick = (event) => {
       <h2>Welcome, {user.username}!</h2>
       <p>Your ID is: {user.id}</p>
       <LogOutButton className="btn" />
-      <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
-      <StudentList /> 
+      <StudentList/> 
     </div>
   );
 }

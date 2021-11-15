@@ -2,38 +2,39 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import SendAssessmentModal from '../SendAssessmentModal/SendAssessmentModal'
+
 
 function StudentList(){
     const dispatch = useDispatch();
     const [page, setPage] = useState(0);
+    const [openSendAssessment, setOpenSendAssessment] = useState(false);
+    const [parentsEmail, setParentsEmail] = useState('');
+    const [studentId, setStudentId] = useState(0);
+
     const rows = useSelector((store) => store.students)
+
     useEffect(() => {
         dispatch({ type: 'FETCH_STUDENTS' });
     }, []);
 
-    const sendEmail = (event) =>{
-        event.preventDefault();
-        console.log(event.target.value)
+    const sendEmail = (email, id) =>{
+        console.log(id)
+  
+        setParentsEmail(email);
+        setStudentId(id);
+        setOpenSendAssessment(true);
     }
+
+
+
+
+
     const takeAssessment = (event) =>{
         console.log(event.target.id)
     }
-    const handleChangePage = (event, newPage)=> {
-        setPage(newPage)
-    }
-
-
     
     const columns = [
         { field: 'student_name', headerName: 'Name', width: 150 },
@@ -42,7 +43,7 @@ function StudentList(){
             if (params.row.email_sent){
                 return <Button disabled>Sent</Button>
             } else {
-                return <Button value={params.row.parent_email} onClick={(event) => sendEmail(event)}>Send Email</Button>
+                return <Button onClick={() => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
             }
         } },
         { field: 'assessment_completed', headerName: 'Take Assessment', width: 150, renderCell: (params) => {
@@ -53,13 +54,14 @@ function StudentList(){
             }
         } },
         { field: 'parent_email', headerName: `Parent's Email`, width: 150 },
-        { field: 'view_assessment', headerName: `View Assessment`, width: 150, renderCell: (params) => {
+        { field: 'view_assessment', headerName: `View Report`, width: 150, renderCell: (params) => {
             return <Button onClick={(event) => takeAssessment(event)}>View</Button>
         } },
     ];
 
     return(
         <>
+            <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail} setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment} setOpenSendAssessment={setOpenSendAssessment}/>
             <DataGrid 
                 rows={rows} 
                 columns={columns} 
