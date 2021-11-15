@@ -2,11 +2,12 @@ import {React, useState} from 'react';
 import AssessmentRadioChild from '../Assessment_Radio_Child/Assessment_Radio_Child';
 import Pagination from '../Pagination/Pagination';
 import { FormControl, FormLabel, Button, Container } from '@mui/material';
-
+import { useDispatch } from "react-redux";
 
 function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(2);
+    const dispatch = useDispatch();
 
     const [assessmentQ, setAssessmentQ] = useState({
         confidence_adult_start: {name: 'How would you rate the student’s self-confidence with adults at the beginning of the semester/quarter?', score: ''},
@@ -60,13 +61,14 @@ function AssessmentFormPage({userStore}) {
                 return;
             }
         }
+        dispatch({type: 'POST_ASSESSMENT', payload: assessmentQ})
         alert("Submit Application");
     }
     
     return (
         <>
         <Container>
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={(event) => handleSubmit(event)}> */}
                 <FormControl>
                 <FormLabel>Assessment for {userStore.first_name} {userStore.last_initial}</FormLabel>
                 {/* {JSON.stringify(assessmentQ)} */}
@@ -76,8 +78,8 @@ function AssessmentFormPage({userStore}) {
                 })}
                 </FormControl>
                 <Pagination currentPage={currentPage} postsPerPage={postsPerPage} totalPosts={Object.keys(assessmentQ).length} changePage={changePage}/>
-                <Button type="submit">Submit</Button>
-            </form>
+                <Button onClick={(event) => handleSubmit(event)} name="submitButton" /* type="submit" */>Submit</Button>
+            {/* </form> */}
         </Container> 
         </>
     )
