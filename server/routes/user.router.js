@@ -28,6 +28,7 @@ router.post("/register", (req, res, next) => {
   const lastInitial = req.body.lastInitial;
   const school = req.body.school;
   const ranString = randomString();
+  console.log("incoming user info for registering",req.body);
   const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id", "verification_string")
   VALUES($1, $2, $3, $4, $5, $6, $7)
   RETURNING id`;
