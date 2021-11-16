@@ -26,10 +26,20 @@ function* getStartAssessment(action){
 function* postAssessment(action){
 
 }
+
+function* sendAssessment(action){
+  try {
+    console.log(action.payload, "in send assessment saga")
+    yield axios.put(`/api/verifyUser/sendassessment`, {data: action.payload});
+  } catch(error) {
+      console.log("Error sending assessment", error);
+  }
+}
 function* verifyUserSaga() {
   yield takeLatest('PUT_VERIFY_USER', putVerifyUser);
   yield takeLatest('GET_START_ASSESSMENT', getStartAssessment);
   yield takeLatest('POST_ASSESSMENT', postAssessment);
+  yield takeLatest('SEND_ASSESSMENT', sendAssessment);
 }
 
 export default verifyUserSaga;

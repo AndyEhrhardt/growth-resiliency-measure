@@ -43,7 +43,7 @@ router.post("/register", (req, res, next) => {
       ranString,
     ])
     .then(() => {
-      sendMail(username, ranString);
+      sendMail(username, ranString, true);
       res.sendStatus(201);
     })
     .catch((err) => {
