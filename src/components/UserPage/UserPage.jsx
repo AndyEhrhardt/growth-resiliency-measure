@@ -10,10 +10,17 @@ function UserPage() {
   const user = useSelector((store) => store.user);
   const [openAddStudent, setOpenAddStudent] = useState(false);
 
-const handleAddStudentButtonClick = (event) => {
+  const handleAddStudentButtonClick = (event) => {
+      event.preventDefault();
+      setOpenAddStudent(true);
+      console.log("in handle open")
+  }
+
+  const handleSendEmailClick = (event) => {
     event.preventDefault();
-    setOpenAddStudent(true);
+    setOpenSendAssessment(true);
 }
+
 
 
   return (
@@ -27,8 +34,8 @@ const handleAddStudentButtonClick = (event) => {
       <h2>Welcome, {user.username}!</h2>
       <p>Your ID is: {user.id}</p>
       <LogOutButton className="btn" />
+      <StudentList/> 
       <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
-      <StudentList /> 
     </div>
   );
 }
