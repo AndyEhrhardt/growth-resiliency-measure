@@ -10,7 +10,7 @@ function StartAssessment() {
     const putVerifyUser = () => {
         dispatch({type: 'GET_START_ASSESSMENT', payload: randomString});
     }
-    const userStore = useSelector(store => store.user);
+    const userStore = useSelector(store => store.assessmentUser);
 
     useEffect(() => {
         putVerifyUser();

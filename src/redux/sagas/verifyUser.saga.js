@@ -17,7 +17,7 @@ function* getStartAssessment(action){
   try {
     const ranString = action.payload;
     const response = yield axios.get(`/api/verifyUser/startAssessment/${ranString}`);
-    yield put({ type: 'SET_USER', payload: response.data[0] });
+    yield put({ type: 'SET_ASSESSMENT_USER', payload: response.data[0] });
   } catch(error) {
       console.log("Error verifying user", error);
   }
