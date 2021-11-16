@@ -52,6 +52,8 @@ function OverviewCharts() {
            let test = searchBy.split('.');
             dispatch({type: 'FETCH_SPECIFIC_DATA', payload: {filterBy: filterValue, searchOn: test[0], searchParameter: test[1] }});
         }
+        setFilterValue('');
+        setSearchBy('');
     }
 
     // on page load get the list of schools
