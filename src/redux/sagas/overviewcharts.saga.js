@@ -43,6 +43,19 @@ function* getSpecificData(action){
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }
 
+function* getSpecificDataWithDate(action){
+  console.log('in get specific data saga', action.payload);
+  
+  const filterBy = action.payload.filterBy;
+  const searchOn = action.payload.searchOn;
+  const searchParameter = action.payload.searchParameter;
+  const startDate = action.payload.startDate; // i.e. '2021-11-10'
+  const endDate = action.payload.endDate // i.e. '2021-11-12'
+  const filteredData = yield axios.get(`/api/overviewcharts/specificWithDate?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}`);
+  console.log('result', filteredData.data);
+  yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
+}
+
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
     yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),

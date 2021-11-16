@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DisplayChart from './DisplayCharts';
 import Box from '@mui/material/Box';
@@ -7,11 +7,25 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import moment from 'moment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import DateFnsAdapter from '@mui/lab/AdapterDateFns';
+import TextField from '@mui/material/TextField';
 
 
 
 function OverviewCharts() {
+
+
+
+
+    // const baseClassName = 'react-daterange-picker';
+    // const outsideActionEvents = ['mousedown', 'focusin', 'touchstart'];
+    // const allViews = ['century', 'decade', 'year', 'month'];
+    // const [value, setValue] = useState(new Date('2014-08-18T21:11:54'));
+
+   
     // for parameter only 
     // dispatch type 'FETCH_PARAMETER_RESULTS'
     // payload: parameter
@@ -44,16 +58,26 @@ function OverviewCharts() {
     // once the submit button is clicked dispatch
     // desired information to overview charts
     const fetchInfo = () => {
-        console.log("fetching info", event);
-        if (searchBy === 'name'){
-        dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
+        console.log("date info", dateRange);
+
+        if (applyDateFilter) {
+            dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: {filterBy : "race", searchOn: "name", startDate: dateRange[0], endDate: dateRange[1]}
+        })
+    }
+       else if (searchBy === 'name') {
+            dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
+        }
+        else if (searchBy !== 'name' && applyDateFilter){
+            
         }
         else {
-           let test = searchBy.split('.');
-            dispatch({type: 'FETCH_SPECIFIC_DATA', payload: {filterBy: filterValue, searchOn: test[0], searchParameter: test[1] }});
+            let test = searchBy.split('.');
+            dispatch({ type: 'FETCH_SPECIFIC_DATA', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1] } });
         }
-        setFilterValue('');
-        setSearchBy('');
+
+        console.log('value', dateRange)
+        // setFilterValue('');
+        // setSearchBy('');
     }
 
     // on page load get the list of schools
@@ -68,9 +92,13 @@ function OverviewCharts() {
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
-    const [startTime, endStartTime] = useState('');
-    const [selection, setSelection] = useState('');
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [applyDateFilter, setApplyDateFilter] = useState(false);
 
+    const handleChange = (dateRange) => {
+        setDateRange(dateRange);
+        setApplyDateFilter(!applyDateFilter);
+    };
 
 
     return (
@@ -126,7 +154,24 @@ function OverviewCharts() {
                                 <MenuItem key={logs.id} value={`${logs.district_name}.name`}>{logs.district_name}</MenuItem>
                             ))
                         }
-                    </Select>
+                        {filter == [] &&
+                            <h2>no data</h2>}
+                    </Select><br />
+                    <LocalizationProvider dateAdapter={DateFnsAdapter}>
+                        <DateRangePicker
+                            startText="From"
+                            endText="To"
+                            value={dateRange}
+                            onChange={handleChange}
+                            renderInput={(startProps, endProps) => (
+                                <React.Fragment>
+                                    <TextField {...startProps} />
+                                    <Box sx={{ mx: 2 }}> to </Box>
+                                    <TextField {...endProps} />
+                                </React.Fragment>
+                            )}
+                        />
+                    </LocalizationProvider>
                     <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Submit
                     </Button>
