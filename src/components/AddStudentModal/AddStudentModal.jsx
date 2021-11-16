@@ -112,6 +112,7 @@ function AddStudentModal(props) {
     >
     <Typography
       sx={{ fontWeight: 400, fontSize: 15, fontFamily: "roboto" }}
+      component={'span'}
     >
 
       {errors.registrationMessage && (
@@ -241,7 +242,6 @@ function AddStudentModal(props) {
       <br/>
       <Button
         variant="contained"
-        onHover="contained"
         onClick={(event) => addStudent(event)}
         sx={{minWidth: 250, minHeight: 85}}
         color={"success"}

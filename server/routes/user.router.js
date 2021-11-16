@@ -28,6 +28,7 @@ router.post("/register", (req, res, next) => {
   const lastInitial = req.body.lastInitial;
   const school = req.body.school;
   const ranString = randomString();
+  console.log("incoming user info for registering",req.body);
   const queryText = `INSERT INTO "user"("role_id","username","password","first_name","last_initial","school_id", "verification_string")
   VALUES($1, $2, $3, $4, $5, $6, $7)
   RETURNING id`;
@@ -42,7 +43,7 @@ router.post("/register", (req, res, next) => {
       ranString,
     ])
     .then(() => {
-      sendMail(username, ranString);
+      sendMail(username, ranString, true);
       res.sendStatus(201);
     })
     .catch((err) => {
@@ -109,9 +110,12 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 });
 
 router.get("/students", rejectUnauthenticated, (req, res, next) => {
+  console.log("in get students")
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
-    const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
+    const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
+    "user"."parent_email", now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", 
+    "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
     WHERE "user"."role_id" = 1
     AND "demographics"."id" = "user"."demographics_id";`
@@ -121,7 +125,9 @@ router.get("/students", rejectUnauthenticated, (req, res, next) => {
     }).catch((error) => console.log("error getting students", error))
   } else if (req.user.role_id === TEACHER){
     console.log("level 2")
-    const schoolSpecificStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", "user"."email_sent", "user"."assessment_completed", "demographics"."grade"
+    const schoolSpecificStudentsQuery = `SELECT "user"."id", 
+    concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", 
+    now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", "user"."assessment_completed", "demographics"."grade"
     FROM "user", "demographics"
     WHERE "user"."school_id" = $1
     AND "user"."role_id" = 1
