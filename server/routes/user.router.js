@@ -43,7 +43,7 @@ router.post("/register", (req, res, next) => {
       ranString,
     ])
     .then(() => {
-      sendMail(username, ranString);
+      sendMail(username, ranString, true);
       res.sendStatus(201);
     })
     .catch((err) => {
@@ -110,6 +110,7 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 });
 
 router.get("/students", rejectUnauthenticated, (req, res, next) => {
+  console.log("in get students")
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
