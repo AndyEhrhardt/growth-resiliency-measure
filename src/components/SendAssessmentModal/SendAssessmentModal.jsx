@@ -50,6 +50,7 @@ function SendAssessmentModal(props) {
         <div className={classes.innerModalWrap}>
           <Typography
             sx={{ fontWeight: 400, fontSize: 15, fontFamily: "roboto" }}
+            component={'span'}
           >
 
             <div className={classes.masterWrap}>
