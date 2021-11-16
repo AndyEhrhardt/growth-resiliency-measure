@@ -37,7 +37,8 @@ function* getSpecificData(action){
   
   const filterBy = action.payload.filterBy;
   const searchOn = action.payload.searchOn;
-  const filteredData = yield axios.get(`/api/overviewcharts/type?filterBy=${filterBy}&searchOn=${searchOn}`);
+  const searchParameter = action.payload.searchParameter;
+  const filteredData = yield axios.get(`/api/overviewcharts/specific?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}`);
   console.log('result', filteredData.data);
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }

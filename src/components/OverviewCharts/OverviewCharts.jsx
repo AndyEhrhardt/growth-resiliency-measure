@@ -49,7 +49,8 @@ function OverviewCharts() {
         dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
         }
         else {
-            dispatch({type: 'FETCH_SPECIFIC_DATA', payload: {filterBy: filterValue, searchOn: searchBy }});
+           let test = searchBy.split('.');
+            dispatch({type: 'FETCH_SPECIFIC_DATA', payload: {filterBy: filterValue, searchOn: test[0], searchParameter: test[1] }});
         }
     }
 
@@ -59,7 +60,6 @@ function OverviewCharts() {
     useEffect(() => {
         dispatch({ type: 'FETCH_DISTRICT_SCHOOL' });
         dispatch({ type: 'FETCH_DEMOGRAPHICS' });
-
     }, [dispatch]);
 
     // hooks to hold the selections to display
@@ -106,22 +106,22 @@ function OverviewCharts() {
                         <MenuItem value={defaultSelection}>Display All</MenuItem>
                         {filterValue == 'school' &&
                             schoolInfo.map((logs) => (
-                                <MenuItem data='school_name' value={logs.school_name}>{logs.school_name}</MenuItem>
+                                <MenuItem data='school_name' value={`${logs.school_name}.school_name`}>{logs.school_name}</MenuItem>
                             ))
                         }
                         {filterValue == 'gender' &&
                             demographics.gender.map((logs) => (
-                                <MenuItem key={logs.id} value={logs.name}>{logs.name}</MenuItem>
+                                <MenuItem key={logs.id} value={`${logs.name}.name`}>{logs.name}</MenuItem>
                             ))
                         }
                         {filterValue == 'race' &&
                             demographics.race.map((logs) => (
-                                <MenuItem key={logs.id} value={logs.name}>{logs.name}</MenuItem>
+                                <MenuItem key={logs.id} value={`${logs.name}.name`}>{logs.name}</MenuItem>
                             ))
                         }
                         {filterValue == 'district' &&
                             schoolInfo.map((logs) => (
-                                <MenuItem key={logs.id} value={logs.district_name}>{logs.district_name}</MenuItem>
+                                <MenuItem key={logs.id} value={`${logs.district_name}.name`}>{logs.district_name}</MenuItem>
                             ))
                         }
                     </Select>
