@@ -1,4 +1,4 @@
---name your databse in postico growth-resiliency
+--name your databse in postico growth_resiliency
 
 CREATE TABLE "district" (
 	"id" serial NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE "user" (
 	"created_at" DATE DEFAULT CURRENT_DATE,
 	"parent_email" varchar(255),
 	"verification_string" varchar(255),
-	"date_assessment_email_sent" DATE DEFAULT 2021-01-01
+	"date_assessment_email_sent" DATE DEFAULT '2021-01-01',
 	CONSTRAINT "user_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

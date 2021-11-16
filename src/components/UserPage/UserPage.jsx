@@ -13,12 +13,15 @@ function UserPage() {
   const handleAddStudentButtonClick = (event) => {
       event.preventDefault();
       setOpenAddStudent(true);
+      console.log("in handle open")
   }
 
   const handleSendEmailClick = (event) => {
     event.preventDefault();
     setOpenSendAssessment(true);
 }
+
+
 
   return (
     <div className="container">
@@ -32,6 +35,7 @@ function UserPage() {
       <p>Your ID is: {user.id}</p>
       <LogOutButton className="btn" />
       <StudentList/> 
+      <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
     </div>
   );
 }
