@@ -62,12 +62,12 @@ CREATE TABLE "user" (
 	"school_id" integer,
 	"demographics_id" integer,
 	"active" BOOLEAN NOT NULL DEFAULT 'false',
-	"verification_string" varchar(255),
-	"email_sent" BOOLEAN NOT NULL DEFAULT 'false',
 	"assessment_completed" BOOLEAN NOT NULL DEFAULT 'false',
 	"email_verified" BOOLEAN NOT NULL DEFAULT 'false',
 	"created_at" DATE DEFAULT CURRENT_DATE,
 	"parent_email" varchar(255),
+	"verification_string" varchar(255),
+	"date_assessment_email_sent" DATE DEFAULT 2021-01-01
 	CONSTRAINT "user_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
