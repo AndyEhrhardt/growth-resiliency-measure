@@ -59,16 +59,24 @@ function OverviewCharts() {
     // desired information to overview charts
     const fetchInfo = () => {
         console.log("date info", dateRange);
+        console.log("search by", searchBy);
+        console.log('apply date filter', applyDateFilter);
 
-        if (applyDateFilter) {
-            dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: {filterBy : "race", searchOn: "name", startDate: dateRange[0], endDate: dateRange[1]}
+        if (applyDateFilter && searchBy === "name") {
+            let beginDate = moment(dateRange[0]).format("YYYY MM DD");
+            let endingDate = moment(dateRange[1]).format("YYYY MM DD");
+            console.log("begin date", beginDate);
+            dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: {filterBy : filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate}
         })
     }
        else if (searchBy === 'name') {
             dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
         }
         else if (searchBy !== 'name' && applyDateFilter){
-            
+            let beginDate = moment(dateRange[0]).format("YYYY MM DD");
+            let endingDate = moment(dateRange[1]).format("YYYY MM DD");
+            let test = searchBy.split('.');
+            dispatch({type: 'FETCH_SPECIFIC_DATA_WITH_DATE', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], startDate: beginDate, endDate: endingDate }})
         }
         else {
             let test = searchBy.split('.');
@@ -97,7 +105,7 @@ function OverviewCharts() {
 
     const handleChange = (dateRange) => {
         setDateRange(dateRange);
-        setApplyDateFilter(!applyDateFilter);
+        setApplyDateFilter(true);
     };
 
 
