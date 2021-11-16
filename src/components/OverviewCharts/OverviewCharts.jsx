@@ -12,6 +12,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import DateFnsAdapter from '@mui/lab/AdapterDateFns';
 import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 
 
@@ -25,7 +26,7 @@ function OverviewCharts() {
     // const allViews = ['century', 'decade', 'year', 'month'];
     // const [value, setValue] = useState(new Date('2014-08-18T21:11:54'));
 
-   
+
     // for parameter only 
     // dispatch type 'FETCH_PARAMETER_RESULTS'
     // payload: parameter
@@ -66,17 +67,18 @@ function OverviewCharts() {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
             console.log("begin date", beginDate);
-            dispatch({ type: 'FETCH_PARAMETER_RANGE', payload: {filterBy : filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate}
-        })
-    }
-       else if (searchBy === 'name') {
+            dispatch({
+                type: 'FETCH_PARAMETER_RANGE', payload: { filterBy: filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate }
+            })
+        }
+        else if (searchBy === 'name') {
             dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
         }
-        else if (searchBy !== 'name' && applyDateFilter){
+        else if (searchBy !== 'name' && applyDateFilter) {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
             let test = searchBy.split('.');
-            dispatch({type: 'FETCH_SPECIFIC_DATA_WITH_DATE', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], startDate: beginDate, endDate: endingDate }})
+            dispatch({ type: 'FETCH_SPECIFIC_DATA_WITH_DATE', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], startDate: beginDate, endDate: endingDate } })
         }
         else {
             let test = searchBy.split('.');
@@ -84,8 +86,7 @@ function OverviewCharts() {
         }
 
         console.log('value', dateRange)
-        // setFilterValue('');
-        // setSearchBy('');
+  
     }
 
     // on page load get the list of schools
@@ -100,8 +101,10 @@ function OverviewCharts() {
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
+    const defaultFilter = 'school';
     const [dateRange, setDateRange] = useState([null, null]);
     const [applyDateFilter, setApplyDateFilter] = useState(false);
+    const [displayTimePicker, setDisplayTimePicker] = useState(false);
 
     const handleChange = (dateRange) => {
         setDateRange(dateRange);
@@ -140,6 +143,7 @@ function OverviewCharts() {
                         onChange={event => setSearchBy(event.target.value)}
                         width='50%'
                         defaultValue='name'
+                      
                     >
                         <MenuItem value={defaultSelection}>Display All</MenuItem>
                         {filterValue == 'school' &&
@@ -165,24 +169,32 @@ function OverviewCharts() {
                         {filter == [] &&
                             <h2>no data</h2>}
                     </Select><br />
-                    <LocalizationProvider dateAdapter={DateFnsAdapter}>
-                        <DateRangePicker
-                            startText="From"
-                            endText="To"
-                            value={dateRange}
-                            onChange={handleChange}
-                            renderInput={(startProps, endProps) => (
-                                <React.Fragment>
-                                    <TextField {...startProps} />
-                                    <Box sx={{ mx: 2 }}> to </Box>
-                                    <TextField {...endProps} />
-                                </React.Fragment>
-                            )}
-                        />
-                    </LocalizationProvider>
+                    
+                    {displayTimePicker &&
+                        <LocalizationProvider dateAdapter={DateFnsAdapter}>
+                            <DateRangePicker
+                                startText="From"
+                                endText="To"
+                                value={dateRange}
+                                onChange={handleChange}
+                                renderInput={(startProps, endProps) => (
+                                    <React.Fragment>
+                                        <TextField {...startProps} />
+                                        <Box sx={{ mx: 2 }}> to </Box>
+                                        <TextField {...endProps} />
+                                    </React.Fragment>
+                                )}
+                            />
+                        </LocalizationProvider>
+                    }
+                    <Stack direction="row">
+                    <Button variant="outlined" onClick={event => setDisplayTimePicker(true)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Select Date Range
+                    </Button>
                     <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Submit
                     </Button>
+                    </Stack>
                 </FormControl>
             </Box>
             <DisplayChart results={filter} />
