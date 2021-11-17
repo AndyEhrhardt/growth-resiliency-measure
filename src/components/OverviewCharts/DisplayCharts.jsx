@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
 
-function DisplayCharts({ results }) {
+function DisplayCharts({ results, dateRange, applyDateFilter }) {
 
     // graph will start at 0
     // end at 5 and have
     // step size of 1
     const options = {
+        maintainAspectRatio: false,
         scale: {
             min: 0,
             max: 5,
@@ -65,10 +66,15 @@ function DisplayCharts({ results }) {
     };
 
     return (
-        <div>
-            {/* {JSON.stringify(results)} */}
-            <Radar data={data} options={options} />
-        </div>
+        <>
+            {JSON.stringify(results)}
+            {JSON.stringify(dateRange)}
+            <div className="chart-container">
+            <Radar data={data}  options={options} />
+            </div>
+            {applyDateFilter &&
+            <p>display line graph</p>}
+            </>
     );
 }
 
