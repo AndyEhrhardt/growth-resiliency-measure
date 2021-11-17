@@ -111,22 +111,12 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 
 router.get("/students", rejectUnauthenticated, async (req, res, next) => {
   console.log("in get students")
-  const checkForAssessmentThisQuarterQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "assessment_completed"
-  FROM "user", "assessments"
-  WHERE "user"."id" = $1
-  AND "user"."id" = "assessments"."student_id"
-  ORDER BY DATE DESC
-  LIMIT 1;`
-  const checkForRecentAssessment = await pool.query(checkForAssessmentThisQuarterQuery, [studentId]);
-  if(preventDuplicateEntryCheck.rows.length === 0){
-    preventDuplicateEntryCheck.rows.push({assessment_completed: true})
-  }
-
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
     "user"."parent_email", now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", 
-    "user"."assessment_completed", "demographics"."grade"
+    now()::DATE - 40 < "user"."last_assessment_taken" as "assessment_completed", 
+    "demographics"."grade"
     FROM "user", "demographics"
     WHERE "user"."role_id" = 1
     AND "demographics"."id" = "user"."demographics_id";`
