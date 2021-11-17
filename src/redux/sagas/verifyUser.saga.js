@@ -17,14 +17,23 @@ function* getStartAssessment(action){
   try {
     const ranString = action.payload;
     const response = yield axios.get(`/api/verifyUser/startAssessment/${ranString}`);
-    yield put({ type: 'SET_USER', payload: response.data[0] });
+    yield put({ type: 'SET_ASSESSMENT_USER', payload: response.data[0] });
   } catch(error) {
       console.log("Error verifying user", error);
   }
 }
 
 function* postAssessment(action){
+  console.log("in post assessment", action.payload);
+  try {
+    console.log("in post assessment", action.payload);
 
+
+    yield axios.post(`/api/verifyUser/postassessment`, action.payload);
+
+  } catch(error) {
+      console.log("Error posting assessment", error);
+  }
 }
 
 function* sendAssessment(action){
