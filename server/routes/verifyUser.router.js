@@ -55,19 +55,19 @@ router.put('/email/:randomString', (req, res) => {
       })
 })
 
-router.get('/startAssessment/:randomString', async (req, res) => {
-  const verification_string = req.params.randomString;
-
-  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
-  WHERE "user"."verification_string" = $1
-  AND "user"."role_id" = 1
-  AND "user"."demographics_id" = "demographics"."id";`;
-  const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
+const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
   FROM "user", "assessments"
   WHERE "user"."id" = $1
   AND "user"."id" = "assessments"."student_id"
   ORDER BY DATE DESC
   LIMIT 1;`
+
+router.get('/startAssessment/:randomString', async (req, res) => {
+  const verification_string = req.params.randomString;
+  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
+  WHERE "user"."verification_string" = $1
+  AND "user"."role_id" = 1
+  AND "user"."demographics_id" = "demographics"."id";`;
   try {
     const studentInfo = await pool.query(studentInfoQuery, [verification_string]);
     const userId = studentInfo.rows[0].id;
@@ -133,7 +133,7 @@ router.post('/postassessment', async (req, res) => {
     console.log("previous assessment posted successfully")
     await pool.query(postAssessment, [studentId, grade, currentAssessment.ask_help, currentAssessment.confidence_adult, currentAssessment.confidence_peer,
     currentAssessment.succeed_pressure, currentAssessment.persistence, currentAssessment.express_adult, currentAssessment.express_peer, true])
-    res.send(200);
+    res.sendStatus(200);
     } else {
       console.log("email was not sent within the last two days, verification code expired")
       res.sendStatus(500);
