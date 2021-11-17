@@ -13,9 +13,21 @@ function* getUserHasAccess() {
 }
 }
 
+function* deleteUserAccess(action) {
+    console.log("in deleting a user with access", action.payload)
+    try{
+        yield axios.delete(`/api/verifyUser/hasaccess/${action.payload}`);
+        yield put({type:'FETCH_HAS_ACCESS'})
+
+    }catch(error){
+        console.log("Error in deleting a user with access", error);
+    }
+}
+
 
 function* hasAccessSaga() {
     yield takeLatest('FETCH_HAS_ACCESS', getUserHasAccess);
+    yield takeLatest('REMOVE_USER',deleteUserAccess)
    
   }
   
