@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import demographicsModalStyles from './DemographicsModalStyle.js';
 
-function AddStudentModal({ userStore }) {
+function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     const errors = useSelector((store) => store.errors);
     const demographics = useSelector((store) => store.demographics);
     const dispatch = useDispatch();
@@ -23,21 +23,8 @@ function AddStudentModal({ userStore }) {
         dispatch({ type: 'FETCH_DEMOGRAPHICS' });
     }, [dispatch]);
 
-    const addStudent = (event) => {
-        event.preventDefault();
-        /* dispatch({
-          type: "POST_STUDENT",
-          payload: {
-            firstName: firstName,
-            lastInitial: lastInitial,
-            email: email,
-            gender: gender,
-            race: race,
-            latinX: latinX,
-            iep: iep,
-            grade: grade,
-          },
-        }); */
+    const addStudent = () => {
+        alert('POST DEMOGRAPHICS');
     };
     const handleHispLat = (event) => {
         console.log(event.target.value);
@@ -202,7 +189,7 @@ function AddStudentModal({ userStore }) {
                             <br />
                             <Button
                                 variant="contained"
-                                onClick={(event) => addStudent(event)}
+                                onClick={() => addStudent}
                                 sx={{ minWidth: 250, minHeight: 85 }}
                                 color={"success"}
                             >

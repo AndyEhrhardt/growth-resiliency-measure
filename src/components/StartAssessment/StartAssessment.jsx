@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AssessmentFormPage from "../AssessmentFormPage/AssessmentFormPage";
 import DemographicsModal from '../DemographicsModal/DemographicsModal';
 import './StartAssessment';
@@ -13,6 +13,7 @@ function StartAssessment() {
         dispatch({type: 'GET_START_ASSESSMENT', payload: randomString});
     }
     const userStore = useSelector(store => store.assessmentUser);
+    const [demoPosted, setDemoPosted] = useState(false);
 
     useEffect(() => {
         putVerifyUser();
@@ -23,8 +24,8 @@ function StartAssessment() {
         <>
             <div className="assessment-Body">
                 {/* JSON.stringify(userStore) */}
-                {userStore.first_name ? <DemographicsModal userStore={userStore}/> : 'Loading'}
-                {userStore.first_name ? <AssessmentFormPage userStore={userStore}/> : 'Loading'}
+                {userStore.first_name ? <DemographicsModal demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
+                {userStore.first_name ? <AssessmentFormPage demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
             </div>
         </>
     );

@@ -55,28 +55,41 @@ router.put('/email/:randomString', (req, res) => {
       })
 })
 
-router.get('/startAssessment/:randomString', (req, res) => {
+router.get('/startAssessment/:randomString', async (req, res) => {
   const verification_string = req.params.randomString;
-  const searchQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
+
+  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
   WHERE "user"."verification_string" = $1
   AND "user"."role_id" = 1
   AND "user"."demographics_id" = "demographics"."id";`;
-  pool.query(searchQuery, [verification_string])
-      .then((result) => {
-        const userId = result.rows[0].id;
-        if(result.rows[0].email_sent_recently){
-          console.log("email sent recently",result.rows[0].email_sent_recently)
-          res.send(result.rows);
-        } else {
-          console.log("email was not sent within the last two days, verification code expired")
-          res.send(500);
-        }
-        
-      })
-      .catch((error) => {
-        res.sendStatus(500);
-        console.log(error);
-      })
+  const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
+  FROM "user", "assessments"
+  WHERE "user"."id" = $1
+  AND "user"."id" = "assessments"."student_id"
+  ORDER BY DATE DESC
+  LIMIT 1;`
+  try {
+    const studentInfo = await pool.query(studentInfoQuery, [verification_string]);
+    const userId = studentInfo.rows[0].id;
+    console.log(studentInfo.rows)
+    const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [userId]);
+    console.log(preventDuplicateEntryCheck.rows)
+    console.log()
+    if(preventDuplicateEntryCheck.rows.length === 0){
+      preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
+    }
+    if(studentInfo.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
+      console.log("email sent recently", studentInfo.rows[0].email_sent_recently)
+      console.log("no assessment taken this quarter", preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter)
+      res.send(studentInfo.rows);
+    } else {
+      console.log("email was not sent within the last two days, verification code expired")
+      res.sendStatus(500);
+    }
+    } catch (error){
+    console.log("error verifying student", error)
+    res.send(500);
+    }
 })
 
 router.post('/postassessment', async (req, res) => {
@@ -107,6 +120,11 @@ router.post('/postassessment', async (req, res) => {
     AND "user"."verification_string" = $2
     AND "user"."role_id" = 1`
     const confirmStudentResponse = await pool.query(confirmStudentQuery, [studentId, verification_string])
+    const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
+    console.log(preventDuplicateEntryCheck.rows)
+    if(preventDuplicateEntryCheck.rows.length === 0){
+      preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
+    }
     if(confirmStudentResponse.rows[0].email_sent_recently){
     const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult","confidence_peer","succeed_pressure","persistence","express_adult","express_peer","current")
     VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`
@@ -115,13 +133,6 @@ router.post('/postassessment', async (req, res) => {
     console.log("previous assessment posted successfully")
     await pool.query(postAssessment, [studentId, grade, currentAssessment.ask_help, currentAssessment.confidence_adult, currentAssessment.confidence_peer,
     currentAssessment.succeed_pressure, currentAssessment.persistence, currentAssessment.express_adult, currentAssessment.express_peer, true])
-    console.log("current assessment posted successfully")
-    const newVerificationString = randomString();
-    const resetVerificationStringQuery = `UPDATE "user"
-    SET "verification_string" = $1
-    WHERE "id" = $2`
-    await pool.query(resetVerificationStringQuery, [newVerificationString, studentId])
-    console.log("verification string reset")
     res.send(200);
     } else {
       console.log("email was not sent within the last two days, verification code expired")

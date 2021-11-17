@@ -30,6 +30,7 @@ function* postAssessment(action){
 
 
     yield axios.post(`/api/verifyUser/postassessment`, action.payload);
+
   } catch(error) {
       console.log("Error posting assessment", error);
   }

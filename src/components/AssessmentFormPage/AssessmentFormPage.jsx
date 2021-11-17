@@ -4,7 +4,7 @@ import Pagination from '../Pagination/Pagination';
 import { FormControl, FormLabel, Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 
-function AssessmentFormPage({userStore}) {
+function AssessmentFormPage({userStore, demoPosted, setDemoPosted}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(2);
     const dispatch = useDispatch();
