@@ -15,25 +15,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function ManageAccess() {
     // accept or reject access request
     // change user roles
-    const [open, setOpen] = useState(true);
+    // const [open, setOpen] = useState(true);
     const history = useHistory();
     const dispatch = useDispatch();
 
     const store = useSelector(store => store.manageAccess);
 
     useEffect(() => {
-        dispatch({ type: 'FETCH_HAS_ACCESS' })
+        dispatch({ type: 'FETCH_HAS_ACCESS' }
+
+
+        )
+    }, [])
+
+    useEffect(() => {
+        dispatch({ type: 'FETCH_REQUESTING_ACCESS' })
+
     }, [])
 
 
-    const handleDelete = (userId) =>{
-    
-        dispatch({type: 'REMOVE_USER', payload: userId})
+    const handleDelete = (userId) => {
+
+        dispatch({ type: 'REMOVE_USER', payload: userId })
 
     }
     return (
         <div className="manage_access">
-            <Button variant="contained" color="secondary">Student List</Button>
+            <Button onClick={() => history.push('/studentList')} variant="contained" color="secondary">Student List</Button>
             <Paper elevation={12} sx={{ width: '100%' }}>
 
                 <TableContainer>
@@ -46,13 +54,11 @@ function ManageAccess() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-
-
                             {store.map(user => (
                                 <TableRow className="users_has_access" key={user.id}>
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.access_level}</TableCell>
-                                    <Button onClick={() =>handleDelete(user.id)}><DeleteIcon /></Button>
+                                    <Button onClick={() => handleDelete(user.id)}><DeleteIcon /></Button>
 
                                 </TableRow>
                             ))}

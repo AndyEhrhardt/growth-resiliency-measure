@@ -122,5 +122,17 @@ router.delete('/hasaccess/:userId', (req, res) => {
 
 })
 
+router.get('/hasaccess', (req, res) => {
+  const queryText = ``;
+  pool.query(queryText)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log("Error in select user access", error);
+      res.send(500);
+    })
+})
+
 
 module.exports = router;
