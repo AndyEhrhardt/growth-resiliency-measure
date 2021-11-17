@@ -68,6 +68,7 @@ CREATE TABLE "user" (
 	"parent_email" varchar(255),
 	"verification_string" varchar(255),
 	"date_assessment_email_sent" DATE DEFAULT '2021-01-01',
+	"last_assessment_taken" DATE DEFAULT '2000-01-01',
 	CONSTRAINT "user_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

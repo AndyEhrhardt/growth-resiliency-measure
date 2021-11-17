@@ -40,6 +40,7 @@ function* sendAssessment(action){
   try {
     console.log(action.payload, "in send assessment saga")
     yield axios.put(`/api/verifyUser/sendassessment`, {data: action.payload});
+    yield put({type: 'FETCH_STUDENTS'});
   } catch(error) {
       console.log("Error sending assessment", error);
   }

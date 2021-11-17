@@ -25,6 +25,7 @@ router.put('/sendassessment', (req, res) => {
     .then((result) => {
       console.log("verification string updated")
       sendMail(email, newRandomString, false);
+      res.sendStatus(200);
     })
     .catch((error) => {
       console.log("error updating verification string", error)
@@ -55,24 +56,24 @@ router.put('/email/:randomString', (req, res) => {
       })
 })
 
-router.get('/startAssessment/:randomString', async (req, res) => {
-  const verification_string = req.params.randomString;
-
-  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
-  WHERE "user"."verification_string" = $1
-  AND "user"."role_id" = 1
-  AND "user"."demographics_id" = "demographics"."id";`;
-  const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
+const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
   FROM "user", "assessments"
   WHERE "user"."id" = $1
   AND "user"."id" = "assessments"."student_id"
   ORDER BY DATE DESC
   LIMIT 1;`
+
+router.get('/startAssessment/:randomString', async (req, res) => {
+  const verification_string = req.params.randomString;
+  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
+  WHERE "user"."verification_string" = $1
+  AND "user"."role_id" = 1
+  AND "user"."demographics_id" = "demographics"."id";`;
   try {
     const studentInfo = await pool.query(studentInfoQuery, [verification_string]);
-    const userId = studentInfo.rows[0].id;
+    const studentId = studentInfo.rows[0].student_id;
     console.log(studentInfo.rows)
-    const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [userId]);
+    const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
     console.log(preventDuplicateEntryCheck.rows)
     console.log()
     if(preventDuplicateEntryCheck.rows.length === 0){
@@ -83,7 +84,7 @@ router.get('/startAssessment/:randomString', async (req, res) => {
       console.log("no assessment taken this quarter", preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter)
       res.send(studentInfo.rows);
     } else {
-      console.log("email was not sent within the last two days, verification code expired")
+      console.log("email was not sent within the last two days, or student already has an assessment for this quarter")
       res.sendStatus(500);
     }
     } catch (error){
@@ -125,17 +126,23 @@ router.post('/postassessment', async (req, res) => {
     if(preventDuplicateEntryCheck.rows.length === 0){
       preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
     }
-    if(confirmStudentResponse.rows[0].email_sent_recently){
-    const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult","confidence_peer","succeed_pressure","persistence","express_adult","express_peer","current")
-    VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`
+    if(confirmStudentResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
+    const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult",
+    "confidence_peer","succeed_pressure","persistence","express_adult","express_peer","current")
+    VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`  
     await pool.query(postAssessment, [studentId, grade, previousAssessment.ask_help, previousAssessment.confidence_adult, previousAssessment.confidence_peer,
     previousAssessment.succeed_pressure, previousAssessment.persistence, previousAssessment.express_adult, previousAssessment.express_peer, false])
     console.log("previous assessment posted successfully")
     await pool.query(postAssessment, [studentId, grade, currentAssessment.ask_help, currentAssessment.confidence_adult, currentAssessment.confidence_peer,
     currentAssessment.succeed_pressure, currentAssessment.persistence, currentAssessment.express_adult, currentAssessment.express_peer, true])
-    res.send(200);
+    console.log("current assessment posted successfully")
+    const currentDate = new Date();
+    const updateLastAssessmentTakenDateQuery = `UPDATE "user" SET "last_assessment_taken" = $1 WHERE "user"."id" = $2`
+    await pool.query(updateLastAssessmentTakenDateQuery, [currentDate, studentId])
+    console.log("last_assessment_taken date updated")
+    res.sendStatus(200);
     } else {
-      console.log("email was not sent within the last two days, verification code expired")
+      console.log("email was not sent within the last two days, or student already has an assessment for this quarter")
       res.sendStatus(500);
     }
   } catch (error){
@@ -144,9 +151,6 @@ router.post('/postassessment', async (req, res) => {
   }
 })
 
-const resetRandomString = () => {
-
-}
 
 
 
