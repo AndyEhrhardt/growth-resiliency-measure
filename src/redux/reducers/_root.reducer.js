@@ -6,6 +6,8 @@ import districtSchool from './districtschool.reducer';
 import demographics from './demographics.reducer';
 import studentReport from './studentreport.reducer';
 import students from './students.reducer'
+import assessmentUser from './assessmentuser.reducer'
+
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
 // This is imported in index.js as rootSaga
@@ -20,6 +22,7 @@ const rootReducer = combineReducers({
   demographics,
   studentReport,
   students,
+  assessmentUser,
 });
 
 export default rootReducer;
