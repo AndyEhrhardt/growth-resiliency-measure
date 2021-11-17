@@ -128,7 +128,8 @@ router.get("/students", rejectUnauthenticated, async (req, res, next) => {
     console.log("level 2")
     const schoolSpecificStudentsQuery = `SELECT "user"."id", 
     concat("user"."first_name", ' ', "user"."last_initial") as "student_name", "user"."parent_email", 
-    now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", "demographics"."grade"
+    now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", "demographics"."grade",
+    now()::DATE - 40 < "user"."last_assessment_taken" as "assessment_completed"
     FROM "user", "demographics"
     WHERE "user"."school_id" = $1
     AND "user"."role_id" = 1
