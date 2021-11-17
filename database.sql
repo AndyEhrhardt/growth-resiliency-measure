@@ -94,6 +94,7 @@ CREATE TABLE "assessments" (
 	"persistence" integer NOT NULL,
 	"express_adult" integer NOT NULL,
 	"express_peer" integer NOT NULL,
+	"current" BOOLEAN,
 	CONSTRAINT "assessments_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

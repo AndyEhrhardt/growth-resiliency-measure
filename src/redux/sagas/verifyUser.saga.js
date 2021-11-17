@@ -24,7 +24,15 @@ function* getStartAssessment(action){
 }
 
 function* postAssessment(action){
+  console.log("in post assessment", action.payload);
+  try {
+    console.log("in post assessment", action.payload);
 
+
+    yield axios.post(`/api/verifyUser/postassessment`, action.payload);
+  } catch(error) {
+      console.log("Error posting assessment", error);
+  }
 }
 
 function* sendAssessment(action){

@@ -2,12 +2,13 @@ import {React, useState} from 'react';
 import AssessmentRadioChild from '../Assessment_Radio_Child/Assessment_Radio_Child';
 import Pagination from '../Pagination/Pagination';
 import { FormControl, FormLabel, Button, Container } from '@mui/material';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(2);
     const dispatch = useDispatch();
+    const student = useSelector((store) => store.assessmentUser);
 
     const [assessmentQ, setAssessmentQ] = useState({
         confidence_adult_start: {name: 'How would you rate the student’s self-confidence with adults at the beginning of the semester/quarter?', score: ''},
@@ -61,7 +62,7 @@ function AssessmentFormPage({userStore}) {
                 return;
             }
         }
-        dispatch({type: 'POST_ASSESSMENT', payload: assessmentQ})
+        dispatch({type: 'POST_ASSESSMENT', payload: {assessment: assessmentQ, student: student}});
         alert("Submit Application");
     }
     
