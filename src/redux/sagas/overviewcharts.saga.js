@@ -29,14 +29,38 @@ function* getFilteredByType(action) {
   const searchOn = action.payload.searchOn;
   const filteredData = yield axios.get(`/api/overviewcharts/type?filterBy=${filterBy}&searchOn=${searchOn}`);
   console.log('result', filteredData.data);
+  yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
+}
 
+function* getSpecificData(action){
+  console.log('in get specific data saga', action.payload);
+  
+  const filterBy = action.payload.filterBy;
+  const searchOn = action.payload.searchOn;
+  const searchParameter = action.payload.searchParameter;
+  const filteredData = yield axios.get(`/api/overviewcharts/specific?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}`);
+  console.log('result', filteredData.data);
+  yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
+}
+
+function* getSpecificDataWithDate(action){
+  console.log('in get specific data with date saga', action.payload);
+  const filterBy = action.payload.filterBy;
+  const searchOn = action.payload.searchOn;
+  const searchParameter = action.payload.searchParameter;
+  const startDate = action.payload.startDate; // i.e. '2021-11-10'
+  const endDate = action.payload.endDate // i.e. '2021-11-12'
+  const filteredData = yield axios.get(`/api/overviewcharts/specificWithDate?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}&startDate=${startDate}&endDate=${endDate}`);
+  console.log('result', filteredData.data);
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }
 
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
     yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
-    yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange)
+    yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange),
+    yield takeLatest('FETCH_SPECIFIC_DATA', getSpecificData);
+    yield takeLatest('FETCH_SPECIFIC_DATA_WITH_DATE', getSpecificDataWithDate);
 }
 
 export default overviewSaga;
