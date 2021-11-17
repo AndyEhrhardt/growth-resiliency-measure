@@ -93,6 +93,21 @@ const resetRandomString = (id) => {
   });
 }
 
+router.get('/hasaccess', (req, res) =>{
+  const queryText = `SELECT CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
+  "role".name AS "access_level"
+  FROM "user" 
+  JOIN "role" ON "role".id = "user".role_id
+  WHERE "user".role_id BETWEEN 2 AND 3;`;
+    pool.query(queryText)
+        .then((result) => {
+            res.send(result.rows);
+        })
+        .catch((error) => {
+            console.log("Error in select user access", error);
+            res.send(500);
+        })
+})
 
 
 
