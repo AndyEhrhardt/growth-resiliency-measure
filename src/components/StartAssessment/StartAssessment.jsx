@@ -24,8 +24,8 @@ function StartAssessment() {
         <>
             <div className="assessment-Body">
                 {JSON.stringify(userStore)}
-                {userStore.first_name ? <DemographicsModal demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
-                {userStore.first_name ? <AssessmentFormPage demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
+                {(userStore.first_name && !demoPosted) ? <DemographicsModal demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : ''}
+                {(userStore.first_name && demoPosted) ? <AssessmentFormPage userStore={userStore}/> : ''}
             </div>
         </>
     );
