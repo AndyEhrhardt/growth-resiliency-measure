@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
 
-function DisplayCharts({ results, dateRange, applyDateFilter }) {
+function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
 
     // graph will start at 0
     // end at 5 and have
@@ -94,10 +94,6 @@ function DisplayCharts({ results, dateRange, applyDateFilter }) {
 
     return (
         <>
-            {JSON.stringify(results)}
-            {JSON.stringify(dateRange)}
-            {JSON.stringify(dataPoints)}
-            {JSON.stringify(keys)}
             <div className="chart-container">
             <Radar data={data}  options={options} />
             </div>
@@ -109,4 +105,4 @@ function DisplayCharts({ results, dateRange, applyDateFilter }) {
     );
 }
 
-export default DisplayCharts;
+export default DisplayRadarChart;
