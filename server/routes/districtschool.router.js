@@ -8,9 +8,6 @@ const {
 //Get route for school and district data
 
 router.get('/', (req, res) => {
-
-    
-
     const queryText = `
     select  school.id as school_id, school.name as School_Name, district.name
     as District_Name, district.id as district_id, school.q1, school.q2, school.q3, school.q4 from school 
@@ -21,17 +18,11 @@ router.get('/', (req, res) => {
         })
         .catch((error) => {
             console.log("Error in select schooldistrict data", error);
-            res.send(500);
+            res.sendStatus(500);
         })
 })
 
-<<<<<<< HEAD
-
-router.post('/', rejectUnauthenticated, (req, res) => {
-    console.log("incoming info", req.body);
-=======
 router.post('/', (req, res) => {
->>>>>>> master
     const schoolInfo = req.body
     const insertDistrictQuery = `INSERT INTO "district" ("name") VALUES($1) RETURNING "id";`;
         console.log("user role", req.user.role_id)
