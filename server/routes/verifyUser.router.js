@@ -2,19 +2,26 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const cron = require('node-cron');
-const {randomString} = require('../modules/randomString');
+const { randomString } = require('../modules/randomString');
 const ranString = randomString();
 const { sendMail } = require("../modules/sendMail");
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
-const { 
+const {
   ADMIN,
   TEACHER,
   STUDENT,
   REQUESTING_ADMIN,
-  REQUESTING_TEACHER, 
+  REQUESTING_TEACHER,
 } = require("../modules/authLevels");
 
-router.put('/sendassessment', (req, res) => {
+router.put('/sendassessment', rejectUnauthenticated,  (req, res) => {
+  if(req.user.role_id != ADMIN && req.user.role_id != TEACHER){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
   const studentId = req.body.data.studentId;
   const email = req.body.data.email;
   console.log(email)
@@ -37,11 +44,11 @@ router.put('/email/:randomString', (req, res) => {
   const randomString = req.params.randomString;
   const searchQuery = 'SELECT * FROM "user" WHERE "verification_string" = $1;';
   pool.query(searchQuery, [randomString])
-      .then((result) => {
-        console.log(result.rows);
-        const verifyID = result.rows[0].id;
-        const putQuery = 'UPDATE "user" SET "email_verified" = TRUE WHERE "id" = $1;';
-        pool.query(putQuery, [verifyID])
+    .then((result) => {
+      console.log(result.rows);
+      const verifyID = result.rows[0].id;
+      const putQuery = 'UPDATE "user" SET "email_verified" = TRUE WHERE "id" = $1;';
+      pool.query(putQuery, [verifyID])
         .then(() => {
           res.sendStatus(200);
         })
@@ -49,13 +56,28 @@ router.put('/email/:randomString', (req, res) => {
           console.log(error);
           res.sendStatus(500);
         })
-      })
-      .catch((error) => {
-        res.sendStatus(500);
-        console.log(error);
-      })
+    })
+    .catch((error) => {
+      res.sendStatus(500);
+      console.log(error);
+    })
 })
 
+router.delete('/hasaccess/:userId', rejectUnauthenticated, (req, res) => {
+  console.log(req.params.userId);
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
+  const queryText = ` DELETE from "user" WHERE "user"."id" = $1;`
+  pool.query(queryText, [req.params.userId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log("Error in deleting a user", error);
+    })
+})
 const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."date" as "no_assessment_taken_this_quarter"
   FROM "user", "assessments"
   WHERE "user"."id" = $1
@@ -115,18 +137,17 @@ router.post('/postassessment', async (req, res) => {
     express_peer: req.body.assessment.express_peer_start.score,
     ask_help: req.body.assessment.ask_help_start.score}
   try{
-    const confirmStudentQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently"
+    const confirmEmailRecencyQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently"
     FROM "user"
     WHERE "user"."id" = $1
     AND "user"."verification_string" = $2
     AND "user"."role_id" = 1`
-    const confirmStudentResponse = await pool.query(confirmStudentQuery, [studentId, verification_string])
+    const confirmEmailRecencyResponse = await pool.query(confirmEmailRecencyQuery, [studentId, verification_string])
     const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
-    console.log(preventDuplicateEntryCheck.rows)
     if(preventDuplicateEntryCheck.rows.length === 0){
       preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
     }
-    if(confirmStudentResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
+    if(confirmEmailRecencyResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
     const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult",
     "confidence_peer","succeed_pressure","persistence","express_adult","express_peer","current")
     VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`  
@@ -153,6 +174,63 @@ router.post('/postassessment', async (req, res) => {
 
 
 
+router.get('/request', rejectUnauthenticated, (req, res) => {
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+    return res.sendStatus(500);
+  } 
+  const requestingAndHasAccess = {}
+  const requestingQueryText = `SELECT "user".id, CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
+  "role".name AS "access_level", "role"."id" as "role_number"
+  FROM "user" 
+  JOIN "role" ON "role".id = "user".role_id
+  WHERE "user".role_id BETWEEN 4 AND 5;`;
+  pool.query(requestingQueryText)
+    .then((result) => {
+      requestingAndHasAccess.requesting = result.rows;
+      const hasAccessQueryText = `SELECT "user".id, CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
+      "role".name AS "access_level", "role"."id" as "role_number"
+      FROM "user" 
+      JOIN "role" ON "role".id = "user".role_id
+      WHERE "user".role_id BETWEEN 2 AND 3;`;
+      pool.query(hasAccessQueryText)
+      .then((result) => {
+        requestingAndHasAccess.hasAccess = result.rows;
+        res.send(requestingAndHasAccess);
+      })
+      .catch((error) => {
+        console.log("Error in select user access", error);
+        res.send(500);
+      })   
+    })
+    .catch((error) => {
+      console.log("Error in select user access", error);
+      res.send(500);
+    })
+})
+router.put('/addAccessUser/:userId', (req, res) =>{
+  console.log("user ID", req.params.userId)
+  console.log(req.body)
+  console.log("role number", req.body.roleId)
+  let newRole;
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
+  if (req.body.roleId === REQUESTING_TEACHER){
+    newRole = TEACHER;
+  } else if (req.body.roleId === REQUESTING_ADMIN){
+    newRole = ADMIN;
+  }
+  const queryText = `UPDATE "user" SET role_id = $1 where id= $2; `;
+  pool.query(queryText, [newRole, req.params.userId])
+  .then((result) =>{
+    res.sendStatus(200)
+  })
+  .catch((error) =>{
+    console.log("There was an error in changing the user status", error)
+  })
+})
 
 
 module.exports = router;

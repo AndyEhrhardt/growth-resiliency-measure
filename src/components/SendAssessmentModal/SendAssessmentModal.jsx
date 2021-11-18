@@ -28,6 +28,7 @@ function SendAssessmentModal(props) {
     console.log(props.parentsEmail)
     console.log(props.studentId)
     dispatch({type: 'SEND_ASSESSMENT', payload: {email: props.parentsEmail, studentId: props.studentId}})
+    props.setOpenSendAssessment(false);
   }
 
 
@@ -52,7 +53,6 @@ function SendAssessmentModal(props) {
             sx={{ fontWeight: 400, fontSize: 15, fontFamily: "roboto" }}
             component={'span'}
           >
-
             <div className={classes.masterWrap}>
               <Typography
                 sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", paddingBottom: .5 }}
@@ -64,7 +64,7 @@ function SendAssessmentModal(props) {
                   type="email"
                   name="email"
                   required
-                  sx={{ maxHeight: 40, paddingBottom: 3 }}
+                  sx={{ maxHeight: 40, paddingBottom: 3, minWidth: 300 }}
                   variant="standard"
                   label="Parent's Email"
                   id="standard-basic"
