@@ -7,7 +7,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 
-function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, fetchInfo }) {
+function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, fetchInfo, filter }) {
+     // for search of quarter send selected parameter
+    // dispatch type FETCH_PARAMETER_QUARTER
+    // payload: parameter, quarter
+    // formatted as above and the quarter 
+    // should be sent in format of 
+    // i.e. payload: {filterBy : "race", searchOn: "name", quarter: 1} 
 
     const assessmentYears = useSelector(store => store.overview.yearReducer);
     console.log('assessment years', assessmentYears);
@@ -23,13 +29,11 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
         dispatch({ type: 'FETCH_PARAMETER_QUARTER', payload: { filterBy: "race", searchOn: "name", quarter: 1 } })
     }
 
-
-
-
     return (
         <>
             {displayGainsView &&
                 <>
+                <h3>Display Gains Data on Line Chart</h3>
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
                         <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
                         <Select

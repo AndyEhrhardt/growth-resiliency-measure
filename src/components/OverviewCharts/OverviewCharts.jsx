@@ -21,36 +21,6 @@ import SelectRadarWithTime from './SelectRadarWithTime';
 
 function OverviewCharts() {
 
-
-
-
-    // const baseClassName = 'react-daterange-picker';
-    // const outsideActionEvents = ['mousedown', 'focusin', 'touchstart'];
-    // const allViews = ['century', 'decade', 'year', 'month'];
-    // const [value, setValue] = useState(new Date('2014-08-18T21:11:54'));
-
-
-    // for parameter only 
-    // dispatch type 'FETCH_PARAMETER_RESULTS'
-    // payload: parameter
-    // send in format
-    //  payload: {filterBy : "race", searchOn: "name" }
-
-    // for search of quarter send selected parameter
-    // dispatch type FETCH_PARAMETER_QUARTER
-    // payload: parameter, quarter
-    // formatted as above and the quarter 
-    // should be sent in format of 
-    // i.e. payload: {filterBy : "race", searchOn: "name", quarter: 1} 
-
-    // for search of time range send selected parameter
-    // dispatch type FETCH_PARAMETER_RANGE
-    // payload: parameter, quarter
-    // formatted as above and the time range
-    // should be sent in format of 
-    // payload: {filterBy : "race", searchOn: "name", startDate: "2020-5-2", endDate: "2021-11-12"} 
-
-
     // access useDispatch from react-redux
     const dispatch = useDispatch();
 
@@ -58,21 +28,6 @@ function OverviewCharts() {
     const filter = useSelector(store => store.overview.overviewReducer);
     const schoolInfo = useSelector(store => store.districtSchool);
     const demographics = useSelector(store => store.demographics);
-
-
-    // once the submit button is clicked dispatch
-    // desired information to overview charts
-
-
-    
-        // else {
-        //     let test = searchBy.split('.');
-        //     dispatch({ type: 'FETCH_SPECIFIC_DATA', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1] } });
-        // }
-
-    //     console.log('value', dateRange)
-
-    // }
 
     // on page load get the list of schools
     // and demographic options to display
@@ -88,13 +43,11 @@ function OverviewCharts() {
     const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
     const defaultFilter = 'school';
- 
+
     const [applyDateFilter, setApplyDateFilter] = useState(false);
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
     const [displayMainFilter, setDisplayMainFilter] = useState(true);
-
- 
 
     const changeTimeRangeDisplay = () => {
         setDisplayTimePicker(!displayTimePicker);
@@ -114,53 +67,49 @@ function OverviewCharts() {
         setDisplayGainsView(false);
     }
 
-
     return (
         <div>
-            {/* {JSON.stringify(schoolInfo)} */}
-            {/* {JSON.stringify(demographics)} */}
             <Box sx={{ minWidth: 120 }}>
-                
                 <SelectRadarChart displayMainFilter={displayMainFilter}
                     defaultSelection={defaultSelection}
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
-                     />
+                />
                 <br />
                 <DisplayGainsFilters displayGainsView={displayGainsView}
                     defaultSelection={defaultSelection}
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
-                    />
-                      <SelectRadarWithTime 
-                      displayTimePicker={displayTimePicker}
+                />
+                <SelectRadarWithTime
+                    displayTimePicker={displayTimePicker}
                     defaultSelection={defaultSelection}
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
-                    />
-               
-
+                />
                 <Stack direction="row">
-                {/* <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                        Select Radar Chart
-                    </Button> */}
+                
+                        <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                            Select Radar Chart
+                        </Button>
+                    
                     <Button variant="outlined" onClick={changeTimeRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Radar Chart With Time
                     </Button>
                     <Button variant="outlined" onClick={changeQuarterRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Select Gains Over Time
                     </Button>
-                    
-                   
+                  
                 </Stack>
-
             </Box>
-            <DisplayRadarChart results={filter} />
+            {displayTimePicker || displayMainFilter &&
+                <DisplayRadarChart results={filter} />
+            }
         </div>
-);
-    }
+    );
+}
 
 export default OverviewCharts;

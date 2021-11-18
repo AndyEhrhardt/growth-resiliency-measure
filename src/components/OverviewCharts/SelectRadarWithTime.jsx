@@ -11,7 +11,14 @@ import DateFnsAdapter from '@mui/lab/AdapterDateFns';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 
-function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, demographics}) {
+function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, demographics, filter}) {
+        // for search of time range send selected parameter
+    // dispatch type FETCH_PARAMETER_RANGE
+    // payload: parameter, quarter
+    // formatted as above and the time range
+    // should be sent in format of 
+    // payload: {filterBy : "race", searchOn: "name", startDate: "2020-5-2", endDate: "2021-11-12"} 
+
 
     const fetchInfo = () => {
         if (applyDateFilter && searchBy === "name") {
@@ -43,8 +50,10 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
 
     return (
         <>
+       
             {displayTimePicker &&
                 <>
+                 <h3>Display Data in Time Range on Radar Chart</h3>
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
                         <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
                         <Select
