@@ -29,7 +29,7 @@ export default function* rootSaga() {
     verifyUserSaga(),
     overviewSaga(),
     hasAccessSaga(),
-    requestingAccessSaga()
+
     
   ]);
 }

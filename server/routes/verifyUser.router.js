@@ -5,6 +5,9 @@ const cron = require('node-cron');
 const { randomString } = require('../modules/randomString');
 const ranString = randomString();
 const { sendMail } = require("../modules/sendMail");
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
 const {
   ADMIN,
@@ -93,25 +96,14 @@ const resetRandomString = (id) => {
   });
 }
 
-router.get('/hasaccess', (req, res) => {
-  const queryText = `SELECT "user".id, CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
-  "role".name AS "access_level"
-  FROM "user" 
-  JOIN "role" ON "role".id = "user".role_id
-  WHERE "user".role_id BETWEEN 2 AND 3;`;
-  pool.query(queryText)
-    .then((result) => {
-      res.send(result.rows);
-    })
-    .catch((error) => {
-      console.log("Error in select user access", error);
-      res.send(500);
-    })
-})
 
-router.delete('/hasaccess/:userId', (req, res) => {
+router.delete('/hasaccess/:userId', rejectUnauthenticated, (req, res) => {
   console.log(req.params.userId);
-  const queryText = ` DELETE from "user" WHERE "user".role_id = $1;`
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
+  const queryText = ` DELETE from "user" WHERE "user"."id" = $1;`
   pool.query(queryText, [req.params.userId])
     .then((result) => {
       res.send(result.rows);
@@ -119,19 +111,64 @@ router.delete('/hasaccess/:userId', (req, res) => {
     .catch((error) => {
       console.log("Error in deleting a user", error);
     })
-
 })
 
-router.get('/hasaccess', (req, res) => {
-  const queryText = ``;
-  pool.query(queryText)
+router.get('/request', rejectUnauthenticated, (req, res) => {
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+    return res.sendStatus(500);
+  } 
+  const requestingAndHasAccess = {}
+  const requestingQueryText = `SELECT "user".id, CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
+  "role".name AS "access_level", "role"."id" as "role_number"
+  FROM "user" 
+  JOIN "role" ON "role".id = "user".role_id
+  WHERE "user".role_id BETWEEN 4 AND 5;`;
+  pool.query(requestingQueryText)
     .then((result) => {
-      res.send(result.rows);
+      requestingAndHasAccess.requesting = result.rows;
+      const hasAccessQueryText = `SELECT "user".id, CONCAT_WS(' ', "user".first_name, "user".last_initial) AS Name,
+      "role".name AS "access_level", "role"."id" as "role_number"
+      FROM "user" 
+      JOIN "role" ON "role".id = "user".role_id
+      WHERE "user".role_id BETWEEN 2 AND 3;`;
+      pool.query(hasAccessQueryText)
+      .then((result) => {
+        requestingAndHasAccess.hasAccess = result.rows;
+        res.send(requestingAndHasAccess);
+      })
+      .catch((error) => {
+        console.log("Error in select user access", error);
+        res.send(500);
+      })   
     })
     .catch((error) => {
       console.log("Error in select user access", error);
       res.send(500);
     })
+})
+router.put('/addAccessUser/:userId', (req, res) =>{
+  console.log("user ID", req.params.userId)
+  console.log(req.body)
+  console.log("role number", req.body.roleId)
+  let newRole;
+  if(req.user.role_id != ADMIN ){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
+  if (req.body.roleId === REQUESTING_TEACHER){
+    newRole = TEACHER;
+  } else if (req.body.roleId === REQUESTING_ADMIN){
+    newRole = ADMIN;
+  }
+  const queryText = `UPDATE "user" SET role_id = $1 where id= $2; `;
+  pool.query(queryText, [newRole, req.params.userId])
+  .then((result) =>{
+    res.sendStatus(200)
+  })
+  .catch((error) =>{
+    console.log("There was an error in changing the user status", error)
+  })
 })
 
 

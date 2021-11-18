@@ -1,4 +1,10 @@
-const manageAccessReducer = (state = [], action) => {
+const initialState = {
+  hasAccess: [],
+  requesting: []
+}
+
+
+const manageAccessReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'SET_MANAGE_ACCESS':
         return action.payload;
