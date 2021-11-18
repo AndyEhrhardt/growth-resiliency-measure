@@ -23,7 +23,7 @@ function StartAssessment() {
     return (
         <>
             <div className="assessment-Body">
-                {/* JSON.stringify(userStore) */}
+                {JSON.stringify(userStore)}
                 {userStore.first_name ? <DemographicsModal demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
                 {userStore.first_name ? <AssessmentFormPage demoPosted={demoPosted} setDemoPosted={setDemoPosted} userStore={userStore}/> : 'Loading'}
             </div>
