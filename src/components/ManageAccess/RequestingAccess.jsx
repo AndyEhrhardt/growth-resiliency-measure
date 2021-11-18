@@ -37,8 +37,6 @@ function RequestingAccess({ store }) {
 
     return (
         <div>
-          
-            <Button onClick={() => history.push('/studentList')} variant="contained" color="secondary"><ArrowBack />Student List</Button>
             <h2>Users With Access</h2>
             <Paper elevation={12} sx={{ width: '100%' }}>
 

@@ -4,6 +4,8 @@ import {useSelector} from 'react-redux';
 import AddStudentModal from '../AddStudentModal/AddStudentModal'
 import Button from "@mui/material/Button";
 import StudentList from '../SudentList/StudentList'
+import Typography from "@mui/material/Typography";
+import Paper from '@mui/material/Paper';
 
 function UserPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
@@ -21,19 +23,24 @@ function UserPage() {
     setOpenSendAssessment(true);
 }
 
-
+console.log(user)
 
   return (
     <div className="container">
+      <Typography
+        sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", paddingBottom: .5}}
+      >
+        Welcome, {user.first_name} {user.last_initial}
+      </Typography>
       <Button 
         onClick={(event) => handleAddStudentButtonClick(event)}
         variant="contained"
       >
         Add Student
       </Button>
-      <h2>Welcome, {user.username}!</h2>
-      <p>Your ID is: {user.id}</p>
-      <LogOutButton className="btn" />
+      
+      
+      
       <StudentList/> 
       <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
     </div>

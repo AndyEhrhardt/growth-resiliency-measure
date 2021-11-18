@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 function LoginForm() {
   const [username, setUsername] = useState('');
@@ -26,7 +29,11 @@ function LoginForm() {
 
   return (
     <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
+      <Typography
+        sx={{ fontWeight: 400, fontSize: 40, fontFamily: "roboto", paddingBottom: .5}}
+      >
+        Login
+      </Typography>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}
@@ -34,30 +41,43 @@ function LoginForm() {
       )}
       <div>
         <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            required
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
+          <TextField
+          type="text"
+          name="username"
+          required
+          value={username}
+          variant="standard"
+          label="email"
+          id="standard-basic"
+          onChange={(event) => setUsername(event.target.value)}
+        />
         </label>
       </div>
+      <br/>
       <div>
         <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+          <TextField
+          type="password"
+          name="password"
+          required
+          variant="standard"
+          label="password"
+          id="standard-basic"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          sx={{paddingBottom: 2}}
           />
         </label>
       </div>
       <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
+        <Button
+          type="submit"
+          variant="contained"
+          onHover={"contained"}
+          sx={{ height: 40, width: 110 }}
+        >
+          Login
+        </Button>
       </div>
     </form>
   );

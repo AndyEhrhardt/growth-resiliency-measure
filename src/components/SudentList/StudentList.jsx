@@ -69,9 +69,9 @@ function StudentList() {
         {
             field: 'assessment_completed', headerName: 'Assessment', width: 140, renderCell: (params) => {
                 if (params.row.assessment_completed) {
-                    return <p>Needed</p>
-                } else {
                     return <p>Completed</p>
+                } else {
+                    return <p>Needed</p>
                 }
             }
         },

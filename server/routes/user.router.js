@@ -111,6 +111,7 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 
 router.get("/students", rejectUnauthenticated, async (req, res, next) => {
   console.log("in get students")
+  console.log(req.user.role_id)
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
