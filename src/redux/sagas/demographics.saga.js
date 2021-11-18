@@ -13,8 +13,19 @@ function* getDemographics() {
   }
 }
 
+function* putDemographics(action) {
+  try {
+    const userID = action.payload.student_id;
+    const editObject = action.payload;
+    yield axios.put(`/api/demographics/demo/${userID}`, editObject);
+  } catch(error) {
+    console.log('Error updating user demographics', error);
+  }
+}
+
 function* demographicsSaga() {
   yield takeLatest('FETCH_DEMOGRAPHICS', getDemographics);
+  yield takeLatest('PUT_USER_DEMOGRAPHICS', putDemographics);
 }
 
 export default demographicsSaga;
