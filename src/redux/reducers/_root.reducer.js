@@ -6,6 +6,7 @@ import districtSchool from './districtschool.reducer';
 import demographics from './demographics.reducer';
 import studentReport from './studentreport.reducer';
 import students from './students.reducer'
+import manageAccess from './manageaccess.reducer';
 import assessmentUser from './assessmentuser.reducer'
 
 // rootReducer is the primary reducer for our entire project
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   demographics,
   studentReport,
   students,
+  manageAccess,
   assessmentUser,
 });
 

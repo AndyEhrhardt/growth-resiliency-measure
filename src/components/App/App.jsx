@@ -172,6 +172,9 @@ function App() {
           <Route exact path="/assessmentoverview">
             <AssessmentFormPage />
           </Route>
+          <Route exact path="/manageaccess">
+            <ManageAccess />
+          </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>

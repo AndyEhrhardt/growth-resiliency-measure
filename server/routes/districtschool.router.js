@@ -2,10 +2,15 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 const { ADMIN, TEACHER, STUDENT } = require("../modules/authLevels");
-
+const {
+    rejectUnauthenticated,
+  } = require("../modules/authentication-middleware");
 //Get route for school and district data
 
 router.get('/', (req, res) => {
+
+    
+
     const queryText = `
     select  school.id as school_id, school.name as School_Name, district.name
     as District_Name, district.id as district_id, school.q1, school.q2, school.q3, school.q4 from school 
@@ -20,9 +25,17 @@ router.get('/', (req, res) => {
         })
 })
 
+<<<<<<< HEAD
+
+router.post('/', rejectUnauthenticated, (req, res) => {
+    console.log("incoming info", req.body);
+=======
 router.post('/', (req, res) => {
+>>>>>>> master
     const schoolInfo = req.body
     const insertDistrictQuery = `INSERT INTO "district" ("name") VALUES($1) RETURNING "id";`;
+        console.log("user role", req.user.role_id)
+    if(req.user.role_id === ADMIN) {
     pool.query(insertDistrictQuery, [req.body.district])
         .then(result => {
             const district_id = result.rows[0].id;
@@ -40,6 +53,9 @@ router.post('/', (req, res) => {
         .catch(error => {
             console.log(error)
         })
+    } else {
+        console.log("not authorized")
+    }
 
 })
 
