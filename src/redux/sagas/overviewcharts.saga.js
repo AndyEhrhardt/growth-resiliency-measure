@@ -24,6 +24,20 @@ function* getFilteredByTypeQuarter(action) {
   yield put({ type: 'SET_OVERVIEW', payload: filteredByQuarter.data });
 }
 
+function* getGainsByQuarter(action){
+  const beginQ1 = action.payload.beginQ1;
+  const endQ1 = action.payload.endQ1; // i.e. q2
+  const beginQ2 = action.payload.beginQ2 // i.e. q3
+  const endQ2 = action.payload.endQ2; // i.e. q4
+  const filterBy = action.payload.filterBy; // i.e. race
+  const searchOn = action.payload.searchOn; // i.e. name
+  const searchParameter = action.payload.searchParameter;
+  console.log('in get gains saga', beginQ1)
+  const gainsByQuarter = yield axios.get(`/api/overviewcharts/gains/?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}&q1Start=${beginQ1}&q1End=${endQ1}&q2Start=${beginQ2}&q2End=${endQ2}`);
+  console.log('get result', getGainsByQuarter.data);
+  yield put({ type: 'SET_OVERVIEW', payload: gainsByQuarter.data });
+}
+
 function* getFilteredByType(action) {
   const filterBy = action.payload.filterBy;
   const searchOn = action.payload.searchOn;
@@ -55,12 +69,20 @@ function* getSpecificDataWithDate(action){
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }
 
+function* getAssessmentYears(){
+  const assessmentYears = yield axios.get(`/api/overviewcharts/assessmentYears`);
+  console.log('result', assessmentYears.data);
+  yield put({ type: 'SET_ASSESSMENT_YEARS', payload: assessmentYears.data });
+}
+
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
     yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
     yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange),
     yield takeLatest('FETCH_SPECIFIC_DATA', getSpecificData);
     yield takeLatest('FETCH_SPECIFIC_DATA_WITH_DATE', getSpecificDataWithDate);
+    yield takeLatest('GET_YEARS_FROM_ASSESSMENTS', getAssessmentYears);
+    yield takeLatest('GET_GAINS_BY_QUARTER', getGainsByQuarter)
 }
 
 export default overviewSaga;
