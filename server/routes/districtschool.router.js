@@ -25,13 +25,8 @@ router.get('/', (req, res) => {
         })
 })
 
-<<<<<<< HEAD
 
 router.post('/', rejectUnauthenticated, (req, res) => {
-    console.log("incoming info", req.body);
-=======
-router.post('/', (req, res) => {
->>>>>>> master
     const schoolInfo = req.body
     const insertDistrictQuery = `INSERT INTO "district" ("name") VALUES($1) RETURNING "id";`;
         console.log("user role", req.user.role_id)
