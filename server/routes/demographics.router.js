@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
         })
 })
 
-router.put('/demo/:id'. rejectUnauthenticated, async (req, res) => {
+router.put('/demo/:id', rejectUnauthenticated, async (req, res) => {
     const idToUpdate = req.params.id;
     try {
         const searchQuery = `SELECT * FROM "demographics" WHERE ("gender_id" = $1 AND "iep" = $2 AND "race_id" = $3 AND "hispanic_latino" = $4 AND "grade" = $5);`;
@@ -42,7 +42,8 @@ router.put('/demo/:id'. rejectUnauthenticated, async (req, res) => {
                 break;
             case true:
                 const demoCodeID2 = searchResult.rows[0].id;
-                const putResult2 = await pool.query(putDemoCode1, [demoCodeID2, idToUpdate]);
+                const putDemoCode2 = `UPDATE "user" SET "demographics_id" = $1 WHERE "id" = $2;`;
+                const putResult2 = await pool.query(putDemoCode2, [demoCodeID2, idToUpdate]);
                 break;
         }
         res.sendStatus(201);
