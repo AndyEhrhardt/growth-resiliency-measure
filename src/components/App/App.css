@@ -110,3 +110,12 @@ input {
   margin: 5px;
   margin-bottom: 10px;
 }
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 46vh; 
+  width: 66vw;
+  background-color: white;
+  border: 3px solid black;
+}
