@@ -14,6 +14,7 @@ import DateFnsAdapter from '@mui/lab/AdapterDateFns';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import DisplayGainsFilters from './DisplayGainsFilters';
+import SelectRadarChart from './SelectRadarChart';
 
 
 
@@ -73,9 +74,6 @@ function OverviewCharts() {
             dispatch({
                 type: 'FETCH_PARAMETER_RANGE', payload: { filterBy: filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate }
             })
-        }
-        else if (searchBy === 'name') {
-            dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
         }
         else if (searchBy !== 'name' && applyDateFilter) {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
@@ -142,61 +140,13 @@ function OverviewCharts() {
             {/* {JSON.stringify(schoolInfo)} */}
             {/* {JSON.stringify(demographics)} */}
             <Box sx={{ minWidth: 120 }}>
-                {displayMainFilter &&
-                <>
-                <FormControl sx={{ m: 1, minWidth: 100 }}>
-                    <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
-                    <Select
-                        defaultValue="Filter By"
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Filter By"
-                        onChange={event => setFilterValue(event.target.value)}
-                        width='50%'
-                    >
-                        <MenuItem value={'school'}>School</MenuItem>
-                        <MenuItem value={'district'}>District</MenuItem>
-                        <MenuItem value={'race'}>Race</MenuItem>
-                        <MenuItem value={'gender'}>Gender</MenuItem>
-                    </Select>
-                </FormControl>
-
-                <FormControl sx={{ m: 1, minWidth: 100 }}>
-                    <InputLabel id="demo-simple-select-label">Choose</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Filter By"
-                        onChange={event => setSearchBy(event.target.value)}
-                        width='20%'
-                        defaultValue='name'
-
-                    >
-                        <MenuItem value={defaultSelection}>Display All</MenuItem>
-                        {filterValue == 'school' &&
-                            schoolInfo.map((logs) => (
-                                <MenuItem data='school_name' value={`${logs.school_name}.school_name`}>{logs.school_name}</MenuItem>
-                            ))
-                        }
-                        {filterValue == 'gender' &&
-                            demographics.gender.map((logs) => (
-                                <MenuItem key={logs.id} value={`${logs.name}.name`}>{logs.name}</MenuItem>
-                            ))
-                        }
-                        {filterValue == 'race' &&
-                            demographics.race.map((logs) => (
-                                <MenuItem key={logs.id} value={`${logs.name}.name`}>{logs.name}</MenuItem>
-                            ))
-                        }
-                        {filterValue == 'district' &&
-                            schoolInfo.map((logs) => (
-                                <MenuItem key={logs.id} value={`${logs.district_name}.name`}>{logs.district_name}</MenuItem>
-                            ))
-                        }
-                    </Select>
-                </FormControl>
-                </>
-                }
+                
+                <SelectRadarChart displayMainFilter={displayMainFilter}
+                    defaultSelection={defaultSelection}
+                    schoolInfo={schoolInfo}
+                    demographics={demographics}
+                    filterValue={filterValue}
+                    fetchInfo={fetchInfo} />
                 <br />
                 <DisplayGainsFilters displayGainsView={displayGainsView}
                     defaultSelection={defaultSelection}
