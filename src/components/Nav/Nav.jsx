@@ -3,16 +3,21 @@ import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
 import { useSelector } from 'react-redux';
+import Typography from "@mui/material/Typography";
 
 function Nav() {
   const user = useSelector((store) => store.user);
 
   return (
     <div className="nav">
+      <div className="innerNav">
       <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
+      <Typography
+        sx={{ maxHeight: 50, fontWeight: 400, fontSize: 30, fontFamily: "roboto", paddingBottom: .5, paddingLeft: 2, color: 'black'}}
+      >
+        Growth Resiliency Measure
+      </Typography>
       </Link>
-      <div>
         {/* If no user is logged in, show these links */}
         {user.id === null &&
           // If there's no user, show login/registration links
@@ -23,23 +28,28 @@ function Nav() {
 
         {/* If a user is logged in, show these links */}
         {user.id && (
-          <>
-            <Link className="navLink" to="/user">
-              Home
-            </Link>
+          <div className="navigation-links">
 
-            <Link className="navLink" to="/info">
-              Info Page
+            {user.role_id === 3 &&
+            <>
+            <Link className="navLink" to="/access">
+              Manage Access
             </Link>
-
+            <Link className="navLink" to="/SchoolDistrict">
+              Manage Schools/Districts
+            </Link>
+            <Link className="navLink" to="/OverviewCharts">
+              Overview Charts
+            </Link>
+            </>
+            } 
+            <Link className="navLink" to="/studentList">
+              Student List
+            </Link>
             <LogOutButton className="navLink" />
-          </>
+          </div>
         )}
-
-        <Link className="navLink" to="/about">
-          About
-        </Link>
-      </div>
+        </div>
     </div>
   );
 }
