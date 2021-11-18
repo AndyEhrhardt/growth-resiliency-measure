@@ -17,7 +17,11 @@ const {
   REQUESTING_TEACHER,
 } = require("../modules/authLevels");
 
-router.put('/sendassessment', (req, res) => {
+router.put('/sendassessment', rejectUnauthenticated,  (req, res) => {
+  if(req.user.role_id != ADMIN && req.user.role_id != TEACHER){
+    console.log("user does not have access")
+     return res.sendStatus(500);
+  } 
   const studentId = req.body.data.studentId;
   const email = req.body.data.email;
   console.log(email)
@@ -58,44 +62,6 @@ router.put('/email/:randomString', (req, res) => {
       console.log(error);
     })
 })
-
-router.get('/startAssessment/:randomString', (req, res) => {
-  const randomString = req.params.randomString;
-  const searchQuery = `SELECT * FROM "user" 
-  WHERE "verification_string" = $1
-  AND "role_id" = 1;`;
-  pool.query(searchQuery, [randomString])
-    .then((result) => {
-      console.log('YO TJ WHAT IS THIS PLZ TELL ME', result.rows[0].id);
-      const userId = result.rows[0].id;
-      resetRandomString(userId);
-      res.send(result.rows);
-    })
-    .catch((error) => {
-      res.sendStatus(500);
-      console.log(error);
-    })
-})
-
-const resetRandomString = (id) => {
-  console.log("IN RESET RANDOM STRING, SHOULD BE ANOTHER 1 MINUTE(S) UNTIL ANOTHER CONSOLE LOG");
-  cron.schedule('* * * * *', () => {
-    console.log("starting process of reseting random string");
-    const newString = ranString();
-    const resetQuery = `UPDATE "user"
-    SET "verification_string" = $1
-    WHERE "id" = $1`;
-    pool.query(resetQuery, [newString, id])
-      .then((result) => {
-        console.log("THE USERS VERIFICATION STRING SHOULD BE RESET");
-
-      })
-      .catch((error) => {
-        res.sendStatus(500);
-        console.log(error);
-      })
-  });
-}
 
 router.delete('/hasaccess/:userId', rejectUnauthenticated, (req, res) => {
   console.log(req.params.userId);
@@ -171,18 +137,17 @@ router.post('/postassessment', async (req, res) => {
     express_peer: req.body.assessment.express_peer_start.score,
     ask_help: req.body.assessment.ask_help_start.score}
   try{
-    const confirmStudentQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently"
+    const confirmEmailRecencyQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently"
     FROM "user"
     WHERE "user"."id" = $1
     AND "user"."verification_string" = $2
     AND "user"."role_id" = 1`
-    const confirmStudentResponse = await pool.query(confirmStudentQuery, [studentId, verification_string])
+    const confirmEmailRecencyResponse = await pool.query(confirmEmailRecencyQuery, [studentId, verification_string])
     const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
-    console.log(preventDuplicateEntryCheck.rows)
     if(preventDuplicateEntryCheck.rows.length === 0){
       preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
     }
-    if(confirmStudentResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
+    if(confirmEmailRecencyResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
     const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult",
     "confidence_peer","succeed_pressure","persistence","express_adult","express_peer","current")
     VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`  

@@ -8,9 +8,6 @@ const {
 //Get route for school and district data
 
 router.get('/', (req, res) => {
-
-    
-
     const queryText = `
     select  school.id as school_id, school.name as School_Name, district.name
     as District_Name, district.id as district_id, school.q1, school.q2, school.q3, school.q4 from school 
@@ -21,7 +18,7 @@ router.get('/', (req, res) => {
         })
         .catch((error) => {
             console.log("Error in select schooldistrict data", error);
-            res.send(500);
+            res.sendStatus(500);
         })
 })
 

@@ -4,8 +4,7 @@ const sendAssessmentStyles = makeStyles(() => ({
     masterWrap:{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        backgroundColo: 'red',
+        alignItems: 'center',
     },
     splitInputWrap: {
         minWidth: '44%',
@@ -19,8 +18,8 @@ const sendAssessmentStyles = makeStyles(() => ({
         width: '50%',
         backgroundColor: 'white',
         p: 4,
-        height: 380,
-        width: 500,
+        height: 150,
+        width: 300,
         padding: 15,
     }
 }));
