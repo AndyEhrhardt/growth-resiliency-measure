@@ -16,8 +16,16 @@ import Stack from '@mui/material/Stack';
 
 
 
-
 function OverviewCharts() {
+
+
+
+
+    // const baseClassName = 'react-daterange-picker';
+    // const outsideActionEvents = ['mousedown', 'focusin', 'touchstart'];
+    // const allViews = ['century', 'decade', 'year', 'month'];
+    // const [value, setValue] = useState(new Date('2014-08-18T21:11:54'));
+
 
     // for parameter only 
     // dispatch type 'FETCH_PARAMETER_RESULTS'
@@ -39,30 +47,36 @@ function OverviewCharts() {
     // should be sent in format of 
     // payload: {filterBy : "race", searchOn: "name", startDate: "2020-5-2", endDate: "2021-11-12"} 
 
+
     // access useDispatch from react-redux
     const dispatch = useDispatch();
 
     // get assessment information from the reducer
-    const filter = useSelector(store => store.overview);
+    const filter = useSelector(store => store.overview.overviewReducer);
     const schoolInfo = useSelector(store => store.districtSchool);
     const demographics = useSelector(store => store.demographics);
+    const assessmentYears = useSelector(store => store.overview.yearReducer);
+    console.log('assessment years', assessmentYears);
 
     // once the submit button is clicked dispatch
     // desired information to overview charts
     const fetchInfo = () => {
-        // if date range and one filter is selected
+        console.log("date info", dateRange);
+        console.log("search by", searchBy);
+        console.log('apply date filter', applyDateFilter);
+
+
         if (applyDateFilter && searchBy === "name") {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
+            console.log("begin date", beginDate);
             dispatch({
                 type: 'FETCH_PARAMETER_RANGE', payload: { filterBy: filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate }
             })
         }
-        // if no date range and one filter is selected
         else if (searchBy === 'name') {
             dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
         }
-        // if date range, filter, and subsection is selected
         else if (searchBy !== 'name' && applyDateFilter) {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
@@ -70,7 +84,6 @@ function OverviewCharts() {
             dispatch({ type: 'FETCH_SPECIFIC_DATA_WITH_DATE', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], startDate: beginDate, endDate: endingDate } })
         }
         else {
-            // if no date range, one filter, and one subsection is selected
             let test = searchBy.split('.');
             dispatch({ type: 'FETCH_SPECIFIC_DATA', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1] } });
         }
@@ -85,6 +98,7 @@ function OverviewCharts() {
     useEffect(() => {
         dispatch({ type: 'FETCH_DISTRICT_SCHOOL' });
         dispatch({ type: 'FETCH_DEMOGRAPHICS' });
+        dispatch({ type: 'GET_YEARS_FROM_ASSESSMENTS' });
     }, [dispatch]);
 
     // hooks to hold the selections to display
@@ -95,6 +109,7 @@ function OverviewCharts() {
     const [dateRange, setDateRange] = useState([null, null]);
     const [applyDateFilter, setApplyDateFilter] = useState(false);
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
+    const [displayGainsView, setDisplayGainsView] = useState(false);
 
     const handleChange = (dateRange) => {
         setDateRange(dateRange);
@@ -107,7 +122,7 @@ function OverviewCharts() {
             {/* {JSON.stringify(schoolInfo)} */}
             {/* {JSON.stringify(demographics)} */}
             <Box sx={{ minWidth: 120 }}>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
                     <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
                     <Select
                         defaultValue="Filter By"
@@ -124,14 +139,14 @@ function OverviewCharts() {
                     </Select>
                 </FormControl>
 
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <FormControl sx={{ m: 1, minWidth: 100 }}>
                     <InputLabel id="demo-simple-select-label">Choose</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         label="Filter By"
                         onChange={event => setSearchBy(event.target.value)}
-                        width='50%'
+                        width='20%'
                         defaultValue='name'
 
                     >
@@ -156,61 +171,115 @@ function OverviewCharts() {
                                 <MenuItem key={logs.id} value={`${logs.district_name}.name`}>{logs.district_name}</MenuItem>
                             ))
                         }
-                        {filter == [] &&
-                            <h2>no data</h2>}
-                    </Select><br />
+
+                    </Select>
+
+
+                    <br />
+                    {displayGainsView &&
+                    <div className = 'main-selection'>
+                         <FormControl sx={{ m: 1, minWidth: 100 }}>
+                             
+                         <InputLabel id="demo-simple-select-label">Year:</InputLabel>
+                         <Select
+                             
+                             labelId="demo-simple-select-label"
+                             id="demo-simple-select"
+                             label="Year"
+                             onChange={event}
+                             width='50%'
+                         >
+                             {assessmentYears.map((logs) => (
+                             <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
+                             ))
+                             }
+                         </Select>
+                     </FormControl>
+                         <FormControl sx={{ m: 1, minWidth: 100 }}>
+                         <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
+                         <Select
+                             
+                             labelId="demo-simple-select-label"
+                             id="demo-simple-select"
+                             label="Quarter"
+                             onChange={event}
+                             width='50%'
+                         >
+                             <MenuItem value={'q1'}>Quarter 1</MenuItem>
+                             <MenuItem value={'q2'}>Quarter 2</MenuItem>
+                             <MenuItem value={'q3'}>Quarter 3</MenuItem>
+                             <MenuItem value={'q4'}>Quarter 4</MenuItem>
+                         </Select>
+                     </FormControl>
+                     to
+                     <FormControl sx={{ m: 1, minWidth: 100 }}>
+                             
+                             <InputLabel id="demo-simple-select-label">Year:</InputLabel>
+                             <Select
+                                 
+                                 labelId="demo-simple-select-label"
+                                 id="demo-simple-select"
+                                 label="Year"
+                                 onChange={event}
+                                 width='50%'
+                             >
+                                 {assessmentYears.map((logs) => (
+                                 <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
+                                 ))
+                                 }
+                             </Select>
+                         </FormControl>
+                         <FormControl sx={{ m: 1, minWidth: 100 }}>
+                         <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
+                         <Select
+                             
+                             labelId="demo-simple-select-label"
+                             id="demo-simple-select"
+                             label="Quarter"
+                             onChange={event}
+                             width='50%'
+                         >
+                             <MenuItem value={'q1'}>Quarter 1</MenuItem>
+                             <MenuItem value={'q2'}>Quarter 2</MenuItem>
+                             <MenuItem value={'q3'}>Quarter 3</MenuItem>
+                             <MenuItem value={'q4'}>Quarter 4</MenuItem>
+                         </Select>
+                     </FormControl>
+                     </div>
+                    }
 
                     {displayTimePicker &&
-                        <div>
-
-                            <Stack direction="row">
-                                <LocalizationProvider dateAdapter={DateFnsAdapter}>
-                                    <DateRangePicker
-                                        startText="From"
-                                        endText="To"
-                                        value={dateRange}
-                                        onChange={handleChange}
-                                        renderInput={(startProps, endProps) => (
-                                            <React.Fragment>
-                                                <TextField {...startProps} />
-                                                <Box sx={{ mx: 2 }}> to </Box>
-                                                <TextField {...endProps} />
-                                            </React.Fragment>
-                                        )}
-                                    />
-                                </LocalizationProvider>
-                            </Stack>
-                            <Stack direction="row">
-                                <Button variant="outlined" onClick={event => setDisplayTimePicker(!displayTimePicker)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                                    Cancel Date Range
-                                </Button>
-                                <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                                    Submit
-                                </Button>
-
-                            </Stack>
-                        </div>
+                        <LocalizationProvider dateAdapter={DateFnsAdapter}>
+                            <DateRangePicker
+                                startText="From"
+                                endText="To"
+                                value={dateRange}
+                                onChange={handleChange}
+                                renderInput={(startProps, endProps) => (
+                                    <React.Fragment>
+                                        <TextField {...startProps} />
+                                        <Box sx={{ mx: 2 }}> to </Box>
+                                        <TextField {...endProps} />
+                                    </React.Fragment>
+                                )}
+                            />
+                        </LocalizationProvider>
                     }
+
                     <Stack direction="row">
-
-                        {!displayTimePicker &&
-                            <Stack direction="row">
-                                <Button variant="outlined" onClick={event => setDisplayTimePicker(!displayTimePicker)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                                    Select Date Range
-                                </Button>
-                                <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                                    Submit
-                                </Button>
-
-                            </Stack>
-                        }
-
+                        <Button variant="outlined" onClick={event => setDisplayGainsView(!displayGainsView)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                            Select Gains Over Time
+                        </Button>
+                        <Button variant="outlined" onClick={event => setDisplayTimePicker(!displayTimePicker)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                            Select Date Range
+                        </Button>
+                        <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                            Submit
+                        </Button>
                     </Stack>
                 </FormControl>
             </Box>
-
-            <DisplayChart results={filter} dateRange={dateRange} applyDateFilter={applyDateFilter} />
-
+            <DisplayChart results={filter} />
         </div>
     );
 }

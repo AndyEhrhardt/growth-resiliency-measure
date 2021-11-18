@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Radar } from 'react-chartjs-2';
+import { Radar, Line } from 'react-chartjs-2';
 
 function DisplayCharts({ results, dateRange, applyDateFilter }) {
 
@@ -57,6 +57,33 @@ function DisplayCharts({ results, dateRange, applyDateFilter }) {
             borderWidth: 2,
         })
     }
+    console.log('parameter label', parameterLabel);
+    console.log('data points', dataPoints);
+    console.log('keys', keys)
+    
+
+    // line chart data
+    const lineData = [];
+
+    for (let i = 0; i < dataPoints.length; i++) {
+        console.log('line data', lineData);
+        console.log('keys in loop,', keys[i]);
+        lineData.push({
+            label: keys[i],
+            data: dataPoints[i],
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: lineColors[i],
+            borderWidth: 2,
+        })
+    }
+//  labels: ['November', 'January'], {data: [1,2], label: ask_help}
+
+    const lineChartData = {
+       
+        labels: dateRange,
+        datasets: lineData,
+    }
+
 
     // data is what will be displayed on
     // radar graph
@@ -69,11 +96,15 @@ function DisplayCharts({ results, dateRange, applyDateFilter }) {
         <>
             {JSON.stringify(results)}
             {JSON.stringify(dateRange)}
+            {JSON.stringify(dataPoints)}
+            {JSON.stringify(keys)}
             <div className="chart-container">
             <Radar data={data}  options={options} />
             </div>
             {applyDateFilter &&
-            <p>display line graph</p>}
+            <div >
+            <Line data={lineChartData}  options={options} />
+            </div>}
             </>
     );
 }

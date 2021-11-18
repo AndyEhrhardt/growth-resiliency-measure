@@ -55,12 +55,19 @@ function* getSpecificDataWithDate(action){
   yield put({ type: 'SET_OVERVIEW', payload: filteredData.data });
 }
 
+function* getAssessmentYears(){
+  const assessmentYears = yield axios.get(`/api/overviewcharts/assessmentYears`);
+  console.log('result', assessmentYears.data);
+  yield put({ type: 'SET_ASSESSMENT_YEARS', payload: assessmentYears.data });
+}
+
 function* overviewSaga() {
   yield takeLatest('FETCH_PARAMETER_RESULTS', getFilteredByType),
     yield takeLatest('FETCH_PARAMETER_QUARTER', getFilteredByTypeQuarter),
     yield takeLatest('FETCH_PARAMETER_RANGE', getFilteredByTypeRange),
     yield takeLatest('FETCH_SPECIFIC_DATA', getSpecificData);
     yield takeLatest('FETCH_SPECIFIC_DATA_WITH_DATE', getSpecificDataWithDate);
+    yield takeLatest('GET_YEARS_FROM_ASSESSMENTS', getAssessmentYears);
 }
 
 export default overviewSaga;

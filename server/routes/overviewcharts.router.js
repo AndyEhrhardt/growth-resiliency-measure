@@ -190,6 +190,16 @@ router.get('/specificWithDate', (req, res) => {
     }
 })
 
+router.get('/assessmentYears', (req,res) => {
+    queryText = `SELECT DISTINCT EXTRACT(YEAR from date) from "assessments";`
+    pool.query(queryText).then(results => {
+        res.send(results.rows);})
+        .catch(error => {
+            console.log('there was an error getting assessment years');
+        })
+        })
+
+
 
 
 module.exports = router;

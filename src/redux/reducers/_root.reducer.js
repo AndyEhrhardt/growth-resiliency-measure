@@ -17,7 +17,7 @@ import assessmentUser from './assessmentuser.reducer'
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // will have an id and username if someone is logged in
-  overview,
+  overview, //overviewReducer and yearReducer
   districtSchool,
   demographics,
   studentReport,
