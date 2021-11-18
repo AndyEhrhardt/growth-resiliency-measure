@@ -10,6 +10,7 @@ import DateRangePicker from '@mui/lab/DateRangePicker';
 import DateFnsAdapter from '@mui/lab/AdapterDateFns';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import moment from 'moment';
 
 function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, demographics, filter}) {
         // for search of time range send selected parameter
@@ -40,6 +41,8 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
     const dispatch = useDispatch();
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
+    const [dateFilter, setDateFilter] = useState('');
+    const [applyDateFilter, setApplyDateFilter] = useState('');
     
     const [dateRange, setDateRange] = useState([null, null]);
 

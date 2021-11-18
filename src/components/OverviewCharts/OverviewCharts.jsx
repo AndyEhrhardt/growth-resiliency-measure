@@ -82,6 +82,7 @@ function OverviewCharts() {
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
+                    filter={filter}
                 />
                 <SelectRadarWithTime
                     displayTimePicker={displayTimePicker}

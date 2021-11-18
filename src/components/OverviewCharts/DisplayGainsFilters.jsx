@@ -6,8 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import DisplayGainsChart from './DisplayGainsChart';
 
-function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, fetchInfo, filter }) {
+function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, filter }) {
     // for search of quarter send selected parameter
     // dispatch type FETCH_PARAMETER_QUARTER
     // payload: parameter, quarter
@@ -195,8 +196,10 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             Submit
                         </Button>
                     </div>
+                    <DisplayGainsChart filter={filter}/>
                 </>
             }
+           
         </>
     )
 }
