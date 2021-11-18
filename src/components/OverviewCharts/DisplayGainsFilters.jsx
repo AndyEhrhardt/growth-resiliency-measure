@@ -150,6 +150,9 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                                 <MenuItem value={'q4'}>Quarter 4</MenuItem>
                             </Select>
                         </FormControl>
+                        <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Submit
+                    </Button>
                     </div>
                 </>
             }

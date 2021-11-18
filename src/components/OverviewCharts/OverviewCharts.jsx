@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import DisplayGainsFilters from './DisplayGainsFilters';
 import SelectRadarChart from './SelectRadarChart';
+import SelectRadarWithTime from './SelectRadarWithTime';
 
 
 
@@ -61,35 +62,17 @@ function OverviewCharts() {
 
     // once the submit button is clicked dispatch
     // desired information to overview charts
-    const fetchInfo = () => {
-        console.log("date info", dateRange);
-        console.log("search by", searchBy);
-        console.log('apply date filter', applyDateFilter);
 
 
-        if (applyDateFilter && searchBy === "name") {
-            let beginDate = moment(dateRange[0]).format("YYYY MM DD");
-            let endingDate = moment(dateRange[1]).format("YYYY MM DD");
-            console.log("begin date", beginDate);
-            dispatch({
-                type: 'FETCH_PARAMETER_RANGE', payload: { filterBy: filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate }
-            })
-        }
-        else if (searchBy !== 'name' && applyDateFilter) {
-            let beginDate = moment(dateRange[0]).format("YYYY MM DD");
-            let endingDate = moment(dateRange[1]).format("YYYY MM DD");
-            let test = searchBy.split('.');
-            dispatch({ type: 'FETCH_SPECIFIC_DATA_WITH_DATE', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], startDate: beginDate, endDate: endingDate } })
-        }
     
-        else {
-            let test = searchBy.split('.');
-            dispatch({ type: 'FETCH_SPECIFIC_DATA', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1] } });
-        }
+        // else {
+        //     let test = searchBy.split('.');
+        //     dispatch({ type: 'FETCH_SPECIFIC_DATA', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1] } });
+        // }
 
-        console.log('value', dateRange)
+    //     console.log('value', dateRange)
 
-    }
+    // }
 
     // on page load get the list of schools
     // and demographic options to display
@@ -105,21 +88,18 @@ function OverviewCharts() {
     const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
     const defaultFilter = 'school';
-    const [dateRange, setDateRange] = useState([null, null]);
+ 
     const [applyDateFilter, setApplyDateFilter] = useState(false);
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
-    const [displayMainFilter, setDisplayMainFilter] = useState(false);
+    const [displayMainFilter, setDisplayMainFilter] = useState(true);
 
-    const handleChange = (dateRange) => {
-        setDateRange(dateRange);
-        setApplyDateFilter(true);
-    };
+ 
 
     const changeTimeRangeDisplay = () => {
         setDisplayTimePicker(!displayTimePicker);
         setDisplayGainsView(false);
-        setMainFilter(false);
+        setDisplayMainFilter(false);
     }
 
     const changeQuarterRangeDisplay = () => {
@@ -146,51 +126,41 @@ function OverviewCharts() {
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
-                    fetchInfo={fetchInfo} />
+                     />
                 <br />
                 <DisplayGainsFilters displayGainsView={displayGainsView}
                     defaultSelection={defaultSelection}
                     schoolInfo={schoolInfo}
                     demographics={demographics}
                     filterValue={filterValue}
-                    fetchInfo={fetchInfo} />
-                {displayTimePicker &&
-                    <LocalizationProvider dateAdapter={DateFnsAdapter}>
-                        <DateRangePicker
-                            startText="From"
-                            endText="To"
-                            value={dateRange}
-                            onChange={handleChange}
-                            renderInput={(startProps, endProps) => (
-                                <React.Fragment>
-                                    <TextField {...startProps} />
-                                    <Box sx={{ mx: 2 }}> to </Box>
-                                    <TextField {...endProps} />
-                                </React.Fragment>
-                            )}
-                        />
-                    </LocalizationProvider>
-                }
+                    />
+                      <SelectRadarWithTime 
+                      displayTimePicker={displayTimePicker}
+                    defaultSelection={defaultSelection}
+                    schoolInfo={schoolInfo}
+                    demographics={demographics}
+                    filterValue={filterValue}
+                    />
+               
 
                 <Stack direction="row">
-                <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                {/* <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Select Radar Chart
+                    </Button> */}
+                    <Button variant="outlined" onClick={changeTimeRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Radar Chart With Time
                     </Button>
                     <Button variant="outlined" onClick={changeQuarterRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Select Gains Over Time
                     </Button>
-                    <Button variant="outlined" onClick={changeTimeRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                        Select Radar Chart With Time
-                    </Button>
-                    <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                        Submit
-                    </Button>
+                    
+                   
                 </Stack>
 
             </Box>
             <DisplayRadarChart results={filter} />
         </div>
-    );
-}
+);
+    }
 
 export default OverviewCharts;
