@@ -110,11 +110,22 @@ function OverviewCharts() {
     const [applyDateFilter, setApplyDateFilter] = useState(false);
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
+    const [displayMainFilter, setDisplayMainFilter] = useState(true);
 
     const handleChange = (dateRange) => {
         setDateRange(dateRange);
         setApplyDateFilter(true);
     };
+
+    const changeTimeRangeDisplay = () => {
+        setDisplayTimePicker(!displayTimePicker);
+        setDisplayGainsView(false);
+    }
+
+    const changeQuarterRangeDisplay = () => {
+        setDisplayGainsView(!displayGainsView);
+        setDisplayTimePicker(false);
+    }
 
 
     return (
@@ -122,6 +133,7 @@ function OverviewCharts() {
             {/* {JSON.stringify(schoolInfo)} */}
             {/* {JSON.stringify(demographics)} */}
             <Box sx={{ minWidth: 120 }}>
+                
                 <FormControl sx={{ m: 1, minWidth: 100 }}>
                     <InputLabel id="demo-simple-select-label">Filter By:</InputLabel>
                     <Select
@@ -173,111 +185,111 @@ function OverviewCharts() {
                         }
 
                     </Select>
-
-
-                    <br />
-                    {displayGainsView &&
-                    <div className = 'main-selection'>
-                         <FormControl sx={{ m: 1, minWidth: 100 }}>
-                             
-                         <InputLabel id="demo-simple-select-label">Year:</InputLabel>
-                         <Select
-                             
-                             labelId="demo-simple-select-label"
-                             id="demo-simple-select"
-                             label="Year"
-                             onChange={event}
-                             width='50%'
-                         >
-                             {assessmentYears.map((logs) => (
-                             <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
-                             ))
-                             }
-                         </Select>
-                     </FormControl>
-                         <FormControl sx={{ m: 1, minWidth: 100 }}>
-                         <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
-                         <Select
-                             
-                             labelId="demo-simple-select-label"
-                             id="demo-simple-select"
-                             label="Quarter"
-                             onChange={event}
-                             width='50%'
-                         >
-                             <MenuItem value={'q1'}>Quarter 1</MenuItem>
-                             <MenuItem value={'q2'}>Quarter 2</MenuItem>
-                             <MenuItem value={'q3'}>Quarter 3</MenuItem>
-                             <MenuItem value={'q4'}>Quarter 4</MenuItem>
-                         </Select>
-                     </FormControl>
-                     to
-                     <FormControl sx={{ m: 1, minWidth: 100 }}>
-                             
-                             <InputLabel id="demo-simple-select-label">Year:</InputLabel>
-                             <Select
-                                 
-                                 labelId="demo-simple-select-label"
-                                 id="demo-simple-select"
-                                 label="Year"
-                                 onChange={event}
-                                 width='50%'
-                             >
-                                 {assessmentYears.map((logs) => (
-                                 <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
-                                 ))
-                                 }
-                             </Select>
-                         </FormControl>
-                         <FormControl sx={{ m: 1, minWidth: 100 }}>
-                         <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
-                         <Select
-                             
-                             labelId="demo-simple-select-label"
-                             id="demo-simple-select"
-                             label="Quarter"
-                             onChange={event}
-                             width='50%'
-                         >
-                             <MenuItem value={'q1'}>Quarter 1</MenuItem>
-                             <MenuItem value={'q2'}>Quarter 2</MenuItem>
-                             <MenuItem value={'q3'}>Quarter 3</MenuItem>
-                             <MenuItem value={'q4'}>Quarter 4</MenuItem>
-                         </Select>
-                     </FormControl>
-                     </div>
-                    }
-
-                    {displayTimePicker &&
-                        <LocalizationProvider dateAdapter={DateFnsAdapter}>
-                            <DateRangePicker
-                                startText="From"
-                                endText="To"
-                                value={dateRange}
-                                onChange={handleChange}
-                                renderInput={(startProps, endProps) => (
-                                    <React.Fragment>
-                                        <TextField {...startProps} />
-                                        <Box sx={{ mx: 2 }}> to </Box>
-                                        <TextField {...endProps} />
-                                    </React.Fragment>
-                                )}
-                            />
-                        </LocalizationProvider>
-                    }
-
-                    <Stack direction="row">
-                        <Button variant="outlined" onClick={event => setDisplayGainsView(!displayGainsView)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                            Select Gains Over Time
-                        </Button>
-                        <Button variant="outlined" onClick={event => setDisplayTimePicker(!displayTimePicker)} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                            Select Date Range
-                        </Button>
-                        <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                            Submit
-                        </Button>
-                    </Stack>
                 </FormControl>
+
+                <br />
+                {displayGainsView &&
+                    <div className='main-selection'>
+                        <FormControl sx={{ m: 1, minWidth: 100 }}>
+
+                            <InputLabel id="demo-simple-select-label">Year:</InputLabel>
+                            <Select
+
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Year"
+                                onChange={event}
+                                width='50%'
+                            >
+                                {assessmentYears.map((logs) => (
+                                    <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
+                                ))
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ m: 1, minWidth: 100 }}>
+                            <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
+                            <Select
+
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Quarter"
+                                onChange={event}
+                                width='50%'
+                            >
+                                <MenuItem value={'q1'}>Quarter 1</MenuItem>
+                                <MenuItem value={'q2'}>Quarter 2</MenuItem>
+                                <MenuItem value={'q3'}>Quarter 3</MenuItem>
+                                <MenuItem value={'q4'}>Quarter 4</MenuItem>
+                            </Select>
+                        </FormControl>
+                        to
+                        <FormControl sx={{ m: 1, minWidth: 100 }}>
+
+                            <InputLabel id="demo-simple-select-label">Year:</InputLabel>
+                            <Select
+
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Year"
+                                onChange={event}
+                                width='50%'
+                            >
+                                {assessmentYears.map((logs) => (
+                                    <MenuItem value={logs.date_part}> {logs.date_part}</MenuItem>
+                                ))
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ m: 1, minWidth: 100 }}>
+                            <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
+                            <Select
+
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Quarter"
+                                onChange={event}
+                                width='50%'
+                            >
+                                <MenuItem value={'q1'}>Quarter 1</MenuItem>
+                                <MenuItem value={'q2'}>Quarter 2</MenuItem>
+                                <MenuItem value={'q3'}>Quarter 3</MenuItem>
+                                <MenuItem value={'q4'}>Quarter 4</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                }
+
+                {displayTimePicker &&
+                    <LocalizationProvider dateAdapter={DateFnsAdapter}>
+                        <DateRangePicker
+                            startText="From"
+                            endText="To"
+                            value={dateRange}
+                            onChange={handleChange}
+                            renderInput={(startProps, endProps) => (
+                                <React.Fragment>
+                                    <TextField {...startProps} />
+                                    <Box sx={{ mx: 2 }}> to </Box>
+                                    <TextField {...endProps} />
+                                </React.Fragment>
+                            )}
+                        />
+                    </LocalizationProvider>
+                }
+
+                <Stack direction="row">
+                    <Button variant="outlined" onClick={changeQuarterRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Select Gains Over Time
+                    </Button>
+                    <Button variant="outlined" onClick={changeTimeRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Select Date Range
+                    </Button>
+                    <Button type="submit" variant="outlined" onClick={fetchInfo} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Submit
+                    </Button>
+                </Stack>
+
             </Box>
             <DisplayChart results={filter} />
         </div>
