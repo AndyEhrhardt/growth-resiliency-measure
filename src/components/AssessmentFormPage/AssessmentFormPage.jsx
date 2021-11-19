@@ -72,7 +72,7 @@ function AssessmentFormPage({userStore}) {
             {/* <form onSubmit={(event) => handleSubmit(event)}> */}
                 <FormControl>
                 <FormLabel>Assessment for {userStore.first_name} {userStore.last_initial}</FormLabel>
-                {/* {JSON.stringify(assessmentQ)} */}
+                
                 {currentPosts.map((propertyName, i) => {
                     const quesObj = assessmentQ[propertyName]; // This is the question object
                     return (<AssessmentRadioChild key={i} quesObj={quesObj} updateQuestion={updateQuestion} propertyName={propertyName}/>);
