@@ -39,9 +39,12 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
     const [secondQuarterSelected, setSecondQuarterSelected] = useState();
     const adjustedFirstYear = firstYearSelected+1;
     const adjustedSecondYear = secondYearSelected+1;
+    const selectedDatesToDisplay = [firstQuarterSelected, ];
     // hooks for storing selected data filters
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
+    
+
 
     // object for quarter dates and selected yeaer
     // 2021-2021 year
@@ -196,7 +199,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             Submit
                         </Button>
                     </div>
-                    <DisplayGainsChart filter={filter}/>
+                    
                 </>
             }
            

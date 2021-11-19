@@ -227,7 +227,7 @@ router.get('/gains', async (req, res) => {
             console.log('first range in router', firstRange)
             const secondRange = await pool.query(queryText, [searchOn, q2Start, q2End])
             console.log('second range in router', secondRange)
-            const rangeData = [firstRange.rows, secondRange.rows]
+            const rangeData = [firstRange.rows, secondRange.rows, q1Start, q2End]
             res.send(rangeData);
         } catch (error) {
             console.log('ROLLBACK', error);
