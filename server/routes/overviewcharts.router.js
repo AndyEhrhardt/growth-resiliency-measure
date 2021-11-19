@@ -33,7 +33,7 @@ router.get('/range', (req, res) => {
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
-    WHERE ("assessments"."date" >= $1 AND "assessments"."date" <= $2)
+    WHERE ("assessments"."date" >= $1 AND "assessments"."date" <= $2 AND "assessments"."current" = TRUE)
     GROUP BY ${filterBy}.${searchOn};`;
         pool.query(queryText, [startDate, endDate]).then(results => {
             console.log('results', results.rows);
@@ -73,7 +73,7 @@ router.get('/quarter', (req, res) => {
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
-    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}")
+    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}" AND "assessments"."current" = TRUE)
     GROUP BY "${filterBy}"."${searchOn}";`;
         pool.query(queryText).then(results => {
             res.send(results.rows);
@@ -139,7 +139,7 @@ router.get('/specific', (req, res) => {
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     JOIN "school" ON "user"."school_id" = "school"."id"
-    JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1)
+    JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1 AND "assessments"."current" = TRUE)
     GROUP BY "${filterBy}"."${searchParameter}";`
         pool.query(queryText, [searchOn])
             .then(results => {
@@ -174,7 +174,7 @@ router.get('/specificWithDate', (req, res) => {
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
     JOIN "school" ON "user"."school_id" = "school"."id"
-    JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1 AND "assessments"."date" >= $2 AND "assessments"."date" <= $3)
+    JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1 AND "assessments"."date" >= $2 AND "assessments"."date" <= $3 AND "assessments"."current" = TRUE)
     GROUP BY "${filterBy}"."${searchParameter}";`
         pool.query(queryText, [searchOn, startDate, endDate])
             .then(results => {
@@ -221,7 +221,7 @@ router.get('/gains', async (req, res) => {
             JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
             JOIN "race" ON "race"."id" = "demographics"."race_id" 
             JOIN "school" ON "user"."school_id" = "school"."id"
-            JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1 AND "assessments"."date" >= $2 AND "assessments"."date" <= $3)
+            JOIN "district" ON "school"."district_id" = "district"."id" WHERE("${filterBy}"."${searchParameter}"=$1 AND "assessments"."date" >= $2 AND "assessments"."date" <= $3 AND "assessments"."current" = TRUE)
             GROUP BY "${filterBy}"."${searchParameter}";`;
             const firstRange = await pool.query(queryText, [searchOn, q1Start, q1End])
             console.log('first range in router', firstRange)
