@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import ViewStudentReport from './ViewStudentReport.jsx';
 
 
 function StudentReportPage() {
 
     // matches parameters of current route
-    const allParams = useParams();
+    const {verification_string} = useParams();
     // selects the id from the parameters
-    const logId = allParams.id;
+    
 
     // access useDispatch from react-redux
     const dispatch = useDispatch();
@@ -18,12 +19,14 @@ function StudentReportPage() {
 
     // on page load fetch reports of student ID
     useEffect(() => {
-        dispatch({ type: 'FETCH_USER_REPORTS' })
+        console.log("on student report page", verification_string)
+        dispatch({ type: 'FETCH_SELECTED_STUDENT_REPORTS', payload: verification_string })
     }, [dispatch]);
 
     return (
         <div>
             {JSON.stringify(assessmentData)}
+            <ViewStudentReport assessmentData={assessmentData}/>
         </div>
     )
 }

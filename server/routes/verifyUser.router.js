@@ -87,7 +87,10 @@ const preventDuplicateEntryQuery = `SELECT now()::DATE - 40 > "assessments"."dat
 
 router.get('/startAssessment/:randomString', async (req, res) => {
   const verification_string = req.params.randomString;
-  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", "user".*, "user"."id" as "student_id", "demographics".* FROM "user", "demographics"
+  console.log("user object", req.user.role_id)
+  const studentInfoQuery = `SELECT now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent_recently", 
+  "user".*, "user"."id" as "student_id", "demographics".* 
+  FROM "user", "demographics"
   WHERE "user"."verification_string" = $1
   AND "user"."role_id" = 1
   AND "user"."demographics_id" = "demographics"."id";`;
@@ -97,9 +100,12 @@ router.get('/startAssessment/:randomString', async (req, res) => {
     console.log(studentInfo.rows)
     const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
     console.log(preventDuplicateEntryCheck.rows)
-    console.log()
+
     if(preventDuplicateEntryCheck.rows.length === 0){
       preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
+    }
+    if(req.user.role_id === TEACHER){
+      studentInfo.rows[0].email_sent_recently = true;
     }
     if(studentInfo.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
       console.log("email sent recently", studentInfo.rows[0].email_sent_recently)
@@ -146,6 +152,9 @@ router.post('/postassessment', async (req, res) => {
     const preventDuplicateEntryCheck = await pool.query(preventDuplicateEntryQuery, [studentId]);
     if(preventDuplicateEntryCheck.rows.length === 0){
       preventDuplicateEntryCheck.rows.push({no_assessment_taken_this_quarter: true})
+    }
+    if(req.user.role_id === TEACHER){ //if the user taking the assessment is a teacher, bypass the email check 
+      confirmEmailRecencyResponse.rows[0].email_sent_recently = true;
     }
     if(confirmEmailRecencyResponse.rows[0].email_sent_recently && preventDuplicateEntryCheck.rows[0].no_assessment_taken_this_quarter){
     const postAssessment = `INSERT INTO "assessments"("student_id","entered_by_id","grade","ask_help","confidence_adult",

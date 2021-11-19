@@ -67,13 +67,13 @@ function App() {
             <UserPage />
           </ProtectedRoute>
 
-          <ProtectedRoute
+          <Route
             // logged in shows student report else shows LoginPage
             exact
-            path="/studentreport"
+            path="/studentreport/:verification_string"
           >
             <StudentReportPage />
-          </ProtectedRoute>
+          </Route>
 
           <ProtectedRoute
             // logged in shows InfoPage else shows LoginPage
