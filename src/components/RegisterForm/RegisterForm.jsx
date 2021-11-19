@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Paper from '@mui/material/Paper';
 const { REQUESTING_ADMIN, REQUESTING_TEACHER } = require("../../modules/authLevels");
 
 
@@ -63,7 +64,11 @@ function RegisterForm() {
 
   return (
     <form className="formPanel" onSubmit={registerUser}>
-      <h2>Register User</h2>
+      <Typography
+        sx={{ fontWeight: 400, fontSize: 40, fontFamily: "roboto", paddingBottom: .5}}
+      >
+        Register
+      </Typography>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
@@ -71,6 +76,7 @@ function RegisterForm() {
       )}
       <div>
         <TextField
+          sx={{minWidth: 250}}
           type="text"
           name="username"
           required
@@ -81,8 +87,10 @@ function RegisterForm() {
           onChange={(event) => setUsername(event.target.value)}
         />
       </div>
+      <br/>
       <div>
         <TextField
+          sx={{minWidth: 250}}
           type="password"
           name="password"
           required
@@ -93,8 +101,10 @@ function RegisterForm() {
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
+      <br/>
       <div>
         <TextField
+          sx={{minWidth: 250}}
           type="first name"
           name="firstName"
           required
@@ -105,8 +115,10 @@ function RegisterForm() {
           onChange={(event) => setFirstName(event.target.value)}
         />
       </div>
+      <br/>
       <div>
         <TextField
+          sx={{minWidth: 250}}
           type="lastInitial"
           name="lastInitial"
           required
@@ -117,13 +129,14 @@ function RegisterForm() {
           onChange={(event) => setLastInitial(event.target.value)}
         />
       </div>
+      <br/>
       <RadioGroup row aria-label="role" name="row-radio-buttons-group">
         <FormControlLabel onClick={() => handleRadio(true)} checked={role} control={<Radio />} label="Teacher" />
         <FormControlLabel onClick={() => handleRadio(false)}  checked={!role} control={<Radio />} label="Admin" />
       </RadioGroup>
-      
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">School</InputLabel>
+      <br/>
+      <FormControl sx={{paddingBottom: 3}} fullWidth>
+        <InputLabel>School</InputLabel>
         <Select
           value={school}
           label="school"
@@ -138,6 +151,7 @@ function RegisterForm() {
         variant="contained"
         onHover={"contained"}
         onClick={(event) => registerUser(event)}
+        sx={{height: 50, width: 110}}
       >
         Register
       </Button>

@@ -111,6 +111,7 @@ router.post("/addstudent", rejectUnauthenticated, (req, res, next) => {
 
 router.get("/students", rejectUnauthenticated, async (req, res, next) => {
   console.log("in get students")
+  console.log(req.user.role_id)
   if (req.user.role_id === ADMIN) {
     console.log("level 3")
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
@@ -122,7 +123,7 @@ router.get("/students", rejectUnauthenticated, async (req, res, next) => {
     AND "demographics"."id" = "user"."demographics_id";`
     pool.query(allStudentsQuery)
     .then((result) => {
-      res.send(result.rows);
+      res.send({studentList: result.rows, teacherView: false});
     }).catch((error) => console.log("error getting students", error))
   } else if (req.user.role_id === TEACHER){
     console.log("level 2")
@@ -137,7 +138,7 @@ router.get("/students", rejectUnauthenticated, async (req, res, next) => {
     pool.query(schoolSpecificStudentsQuery, [req.user.school_id])
     .then((result) => { 
       console.log(result.rows);
-      res.send(result.rows);
+      res.send({studentList: result.rows, teacherView: true});
     }).catch((error) => console.log("error getting students", error))
   } else {
     console.log("get outta here")

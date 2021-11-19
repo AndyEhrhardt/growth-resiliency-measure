@@ -25,6 +25,8 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
 
     const addStudent = () => {
         alert('POST DEMOGRAPHICS');
+        dispatch({type: 'PUT_USER_DEMOGRAPHICS', payload: userStore});
+        setDemoPosted(true);
     };
     const handleHispLat = (event) => {
         console.log(event.target.value);
@@ -51,7 +53,6 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
         <div>
             <FormControl
                 className="formPanel"
-                onSubmit={addStudent}
                 className={classes.formControl}
             >
                 <Typography
@@ -189,7 +190,7 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
                             <br />
                             <Button
                                 variant="contained"
-                                onClick={() => addStudent}
+                                onClick={()=> addStudent()}
                                 sx={{ minWidth: 250, minHeight: 85 }}
                                 color={"success"}
                             >

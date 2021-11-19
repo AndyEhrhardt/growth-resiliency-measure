@@ -6,6 +6,7 @@ import districtSchool from './districtschool.reducer';
 import demographics from './demographics.reducer';
 import studentReport from './studentreport.reducer';
 import students from './students.reducer'
+import manageAccess from './manageaccess.reducer';
 import assessmentUser from './assessmentuser.reducer'
 
 // rootReducer is the primary reducer for our entire project
@@ -17,11 +18,12 @@ import assessmentUser from './assessmentuser.reducer'
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // will have an id and username if someone is logged in
-  overview,
+  overview, //overviewReducer and yearReducer
   districtSchool,
   demographics,
   studentReport,
   students,
+  manageAccess,
   assessmentUser,
 });
 
