@@ -66,7 +66,7 @@ function AssessmentFormPage({userStore}) {
         }
         dispatch({type: 'POST_ASSESSMENT', payload: {assessment: assessmentQ, student: student}});
         alert("Submit Application");
-        history.push(`/studentreport`)
+        history.push(`/studentreport/${student.verification_string}`)
     }
     
     return (

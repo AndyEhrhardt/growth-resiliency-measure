@@ -11,6 +11,7 @@ const { ADMIN, TEACHER, STUDENT } = require("../modules/authLevels");
 // logged in
 router.get('/', (req,res) => {
     console.log('in get user report router');
+    
     queryText = `SELECT "user"."id" AS "user_id",
     "user"."first_name",
     "user"."last_initial",
@@ -46,9 +47,11 @@ router.get('/', (req,res) => {
 });
 
 // this is for getting the student report by ID
-router.get('/:id', (req,res) => {
-    const studentId = req.params.id;
-    console.log('in get student report router');
+router.get('/:verification_string', (req,res) => {
+    const verification_string = req.params.verification_string;
+
+    console.log("in get student report ",verification_string);
+
     queryText = `SELECT "user"."id" AS "user_id",
     "user"."first_name",
     "user"."last_initial",
@@ -60,7 +63,6 @@ router.get('/:id', (req,res) => {
     "user"."role_id",
     "user"."active",
     "user"."assessment_completed",
-    "user"."email_sent",
     "assessments".*, 
     "role"."name" AS "entered_by",
     "user"."school_id",
@@ -79,8 +81,8 @@ router.get('/:id', (req,res) => {
     JOIN "demographics" ON "demographics"."id" = "user"."demographics_id"
     JOIN "gender" ON "gender"."id"="demographics"."gender_id"
     JOIN "race" ON "demographics"."race_id" = "race"."id"
-    JOIN "role" ON "role"."id"="user"."role_id" WHERE "student_id" = $1`;
-    pool.query(queryText, [studentId]).then(result => {res.send(result.rows);}).catch(error => {res.sendStatus(500);});
+    JOIN "role" ON "role"."id"="user"."role_id" WHERE "user"."verification_string" = $1`;
+    pool.query(queryText, [verification_string]).then(result => {res.send(result.rows);}).catch(error => {console.log(error)});
 });
 
 router.post('/', (req,res) => {

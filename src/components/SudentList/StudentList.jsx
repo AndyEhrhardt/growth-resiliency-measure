@@ -53,7 +53,7 @@ function StudentList() {
         { field: 'parent_email', headerName: `Parent's Email`, width: 200 },
         {
             field: 'view_report', headerName: `View Report`, width: 110, renderCell: (params) => {
-                return <Button onClick={(event) => viewReport(event)}>View</Button>
+                return <Button onClick={(event) => viewReport(params.row.verification_string)}>View</Button>
             }
         },
     ];
@@ -82,7 +82,7 @@ function StudentList() {
         { field: 'parent_email', headerName: `Parent's Email`, width: 200 },
         {
             field: 'view_report', headerName: `View Report`, width: 110, renderCell: (params) => {
-                return <Button onClick={(event) => viewReport(event)}>View</Button>
+                return <Button onClick={(event) => viewReport(params.row.verification_string)}>View</Button>
             }
         },
     ];
@@ -98,8 +98,9 @@ function StudentList() {
         history.push(`/assessment/${verification_string}`)
     }
 
-    const viewReport = (event) => {
-        history.push(`/studentreport`)
+    const viewReport = (verification_string) => {
+        console.log(verification_string)
+        history.push(`/studentreport/${verification_string}`)
     }
 
 
@@ -113,7 +114,9 @@ function StudentList() {
                 Add Student
             </Button>
             <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
-            <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail} setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment} setOpenSendAssessment={setOpenSendAssessment} />
+            <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail} 
+            setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment} 
+            setOpenSendAssessment={setOpenSendAssessment} />
             <DataGrid
                 rows={rows.studentList}
                 columns={rows.teacherView ? teacherColumns : adminColumns}
