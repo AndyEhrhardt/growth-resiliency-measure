@@ -106,7 +106,10 @@ function OverviewCharts() {
                   
                 </Stack>
             </Box>
-            {displayTimePicker || displayMainFilter &&
+            {displayMainFilter  &&
+                <DisplayRadarChart results={filter} />
+            }
+            {displayTimePicker &&
                 <DisplayRadarChart results={filter} />
             }
         </div>
