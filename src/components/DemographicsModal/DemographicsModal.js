@@ -50,7 +50,7 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     }
 
     return (
-        <div>
+        <div className={classes.demoContainer}>
             <FormControl
                 className="formPanel"
                 className={classes.formControl}
@@ -148,7 +148,7 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
                         </div>
 
 
-                        <div className={classes.splitInputWrap}>
+                        <div className={classes.splitInputWrap2}>
 
 
                             Does this student identify as Hispanic or Latino?

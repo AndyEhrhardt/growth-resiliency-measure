@@ -4,6 +4,7 @@ import Pagination from '../Pagination/Pagination';
 import { FormControl, FormLabel, Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import AssessmentFormPageStyles from './AssessmentFormPageStyles';
 
 function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +12,7 @@ function AssessmentFormPage({userStore}) {
     const dispatch = useDispatch();
     const student = useSelector((store) => store.assessmentUser);
     const history = useHistory();
+    const classes = AssessmentFormPageStyles();
 
     const [assessmentQ, setAssessmentQ] = useState({
         confidence_adult_start: {name: 'How would you rate the student’s self-confidence with adults at the beginning of the semester/quarter?', score: ''},
@@ -66,25 +68,23 @@ function AssessmentFormPage({userStore}) {
         }
         dispatch({type: 'POST_ASSESSMENT', payload: {assessment: assessmentQ, student: student}});
         alert("Submit Application");
-        history.push(`/studentreport/${student.verification_string}`)
+        history.push(`/studentreport/${student.verification_string}`);
     }
     
     return (
-        <>
-        <Container>
-            {/* <form onSubmit={(event) => handleSubmit(event)}> */}
-                <FormControl>
-                <FormLabel>Assessment for {userStore.first_name} {userStore.last_initial}</FormLabel>
-                {currentPosts.map((propertyName, i) => {
-                    const quesObj = assessmentQ[propertyName]; // This is the question object
-                    return (<AssessmentRadioChild key={i} quesObj={quesObj} updateQuestion={updateQuestion} propertyName={propertyName}/>);
-                })}
-                </FormControl>
-                <Pagination currentPage={currentPage} postsPerPage={postsPerPage} totalPosts={Object.keys(assessmentQ).length} changePage={changePage}/>
-                <Button onClick={(event) => handleSubmit(event)} name="submitButton" /* type="submit" */>Submit</Button>
-            {/* </form> */}
-        </Container> 
-        </>
+            <div className={classes.formWrap}>
+                {/* <form onSubmit={(event) => handleSubmit(event)}> */}
+                    <FormControl className={classes.form}>
+                    <FormLabel>Assessment for {userStore.first_name} {userStore.last_initial}</FormLabel>
+                    {currentPosts.map((propertyName, i) => {
+                        const quesObj = assessmentQ[propertyName]; // This is the question object
+                        return (<AssessmentRadioChild key={i} quesObj={quesObj} updateQuestion={updateQuestion} propertyName={propertyName}/>);
+                    })}
+                    </FormControl>
+                    <Pagination currentPage={currentPage} postsPerPage={postsPerPage} totalPosts={Object.keys(assessmentQ).length} changePage={changePage}/>
+                    <Button className={classes.submitButton} variant="contained" onClick={(event) => handleSubmit(event)} name="submitButton" /* type="submit" */>Submit</Button>
+                {/* </form> */}
+            </div> 
     )
 }
 
