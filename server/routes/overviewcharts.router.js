@@ -7,7 +7,7 @@ const { ADMIN, TEACHER } = require("../modules/authLevels");
 // all of the parameters that can be 
 // entered into queries
 // checks to make sure no malicious queries are entered
-const acceptedInputs = ["assessments", "demographics", "district", "role", "school", "user", "race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email",];
+const acceptedInputs = ["assessments", "demographics", "district", "role", "school", "user", "race", "gender", "q1", "q2", "q3", "q4", "student_id", "entered_by_id", "grade", "date", "ask_help", "confidence_adult", "succeed_pressure", "confidence_peer", "persistence", "express_adult", "express_peer", "iep", "hispanic_latino", "created_at", "name", "domain", "first_name", "last_initial", "school_id", "demographics_id", "active", "email_sent", "assessment_completed", "email_verified", "parent_email","school_name"];
 
 router.get('/range', (req, res) => {
     const filterBy = req.query.filterBy;

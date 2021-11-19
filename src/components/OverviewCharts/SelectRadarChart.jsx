@@ -64,7 +64,7 @@ function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, dem
                             <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='school_name' value={`${logs.school_name}.school_name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&
