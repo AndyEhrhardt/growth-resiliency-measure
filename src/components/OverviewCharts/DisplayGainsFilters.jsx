@@ -39,9 +39,12 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
     const [secondQuarterSelected, setSecondQuarterSelected] = useState();
     const adjustedFirstYear = firstYearSelected+1;
     const adjustedSecondYear = secondYearSelected+1;
+    const selectedDatesToDisplay = [firstQuarterSelected, ];
     // hooks for storing selected data filters
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
+    
+
 
     // object for quarter dates and selected yeaer
     // 2021-2021 year
@@ -102,7 +105,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='school_name' value={`${logs.school_name}.school_name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&
@@ -196,7 +199,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             Submit
                         </Button>
                     </div>
-                    <DisplayGainsChart filter={filter}/>
+                    
                 </>
             }
            

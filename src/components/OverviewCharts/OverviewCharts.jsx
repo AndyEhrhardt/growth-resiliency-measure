@@ -16,6 +16,7 @@ import Stack from '@mui/material/Stack';
 import DisplayGainsFilters from './DisplayGainsFilters';
 import SelectRadarChart from './SelectRadarChart';
 import SelectRadarWithTime from './SelectRadarWithTime';
+import DisplayGainsChart from './DisplayGainsChart';
 
 
 
@@ -106,9 +107,14 @@ function OverviewCharts() {
                   
                 </Stack>
             </Box>
-            {displayTimePicker || displayMainFilter &&
+            {displayMainFilter  &&
                 <DisplayRadarChart results={filter} />
             }
+            {displayTimePicker &&
+                <DisplayRadarChart results={filter} />
+            }
+            {displayGainsView && 
+            <DisplayGainsChart results={filter} />}
         </div>
     );
 }
