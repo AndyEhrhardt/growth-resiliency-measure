@@ -117,7 +117,7 @@ router.get("/students", rejectUnauthenticated, async (req, res, next) => {
     const allStudentsQuery = `SELECT "user"."id", concat("user"."first_name", ' ', "user"."last_initial") as "student_name", 
     "user"."parent_email", now()::DATE - 2 < "user"."date_assessment_email_sent" as "email_sent", 
     now()::DATE - 40 < "user"."last_assessment_taken" as "assessment_completed", 
-    "demographics"."grade"
+    "demographics"."grade", "user"."verification_string"
     FROM "user", "demographics"
     WHERE "user"."role_id" = 1
     AND "demographics"."id" = "user"."demographics_id";`

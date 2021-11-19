@@ -15,7 +15,6 @@ router.get('/', (req,res) => {
     queryText = `SELECT "user"."id" AS "user_id",
     "user"."first_name",
     "user"."last_initial",
-    "user"."username",
     "user"."demographics_id",
     "gender"."name" AS "gender",
     "race"."name" AS "race", 
@@ -52,10 +51,9 @@ router.get('/:verification_string', (req,res) => {
 
     console.log("in get student report ",verification_string);
 
-    queryText = `SELECT "user"."id" AS "user_id",
+    queryText = `SELECT
     "user"."first_name",
     "user"."last_initial",
-    "user"."username",
     "user"."demographics_id",
     "gender"."name" AS "gender", 
     "race"."name" AS "race", 
