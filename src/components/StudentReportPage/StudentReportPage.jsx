@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ViewStudentReport from './ViewStudentReport.jsx';
-
+import Typography from "@mui/material/Typography";
 
 function StudentReportPage() {
 
@@ -26,7 +26,16 @@ function StudentReportPage() {
     return (
         <div>
             {JSON.stringify(assessmentData)}
+            {assessmentData.length > 0 &&
+            <div>
+                <Typography
+                    sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", textAlign: 'center'}}
+                >
+                    Report for {assessmentData[0].first_name} {assessmentData[0].last_initial}
+                </Typography>
             <ViewStudentReport assessmentData={assessmentData}/>
+            </div>
+            }
         </div>
     )
 }
