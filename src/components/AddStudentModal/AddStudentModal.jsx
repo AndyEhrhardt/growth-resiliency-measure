@@ -30,7 +30,7 @@ function AddStudentModal(props) {
   const demographics = useSelector((store) => store.demographics);
   const dispatch = useDispatch();
   const classes = addStudentStyles();
-  
+
   useEffect(() => {
     dispatch({ type: 'FETCH_DISTRICT_SCHOOL' });
     dispatch({ type: 'FETCH_DEMOGRAPHICS' });
