@@ -5,6 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import SendAssessmentModal from '../SendAssessmentModal/SendAssessmentModal'
+import AddStudentModal from '../AddStudentModal/AddStudentModal'
 
 function StudentList() {
     const dispatch = useDispatch();
@@ -12,7 +13,8 @@ function StudentList() {
     const [openSendAssessment, setOpenSendAssessment] = useState(false);
     const [parentsEmail, setParentsEmail] = useState('');
     const [studentId, setStudentId] = useState(0);
-
+    const [openAddStudent, setOpenAddStudent] = useState(false);
+    const history = useHistory();
     const rows = useSelector((store) => store.students)
 
     useEffect(() => {
@@ -30,10 +32,12 @@ function StudentList() {
         { field: 'grade', headerName: 'Grade', width: 80 },
         {
             field: 'email_sent', headerName: 'Send Email', width: 110, renderCell: (params) => {
-                if (params.row.email_sent) {
+                if (params.row.assessment_completed) {
+                    return <Button disabled>Completed</Button>
+                } else if (params.row.email_sent){
                     return <Button disabled>Sent</Button>
                 } else {
-                    return <Button onClick={() => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
+                    return <Button onClick={(event) => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
                 }
             }
         },
@@ -42,14 +46,14 @@ function StudentList() {
                 if (params.row.assessment_completed) {
                     return <Button disabled>Completed</Button>
                 } else {
-                    return <Button value={params.row.id} onClick={(event) => takeAssessment(event)}>Take Assessment</Button>
+                    return <Button value={params.row.id} onClick={(event) => takeAssessment(params.row.verification_string)}>Take Assessment</Button>
                 }
             }
         },
         { field: 'parent_email', headerName: `Parent's Email`, width: 200 },
         {
-            field: 'view_assessment', headerName: `View Report`, width: 110, renderCell: (params) => {
-                return <Button onClick={(event) => takeAssessment(event)}>View</Button>
+            field: 'view_report', headerName: `View Report`, width: 110, renderCell: (params) => {
+                return <Button onClick={(event) => viewReport(event)}>View</Button>
             }
         },
     ];
@@ -62,7 +66,7 @@ function StudentList() {
                 if (params.row.email_sent) {
                     return <Button disabled>Sent</Button>
                 } else {
-                    return <Button onClick={() => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
+                    return <Button onClick={(event) => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
                 }
             }
         },
@@ -77,22 +81,38 @@ function StudentList() {
         },
         { field: 'parent_email', headerName: `Parent's Email`, width: 200 },
         {
-            field: 'view_assessment', headerName: `View Report`, width: 110, renderCell: (params) => {
-                return <Button onClick={(event) => takeAssessment(event)}>View</Button>
+            field: 'view_report', headerName: `View Report`, width: 110, renderCell: (params) => {
+                return <Button onClick={(event) => viewReport(event)}>View</Button>
             }
         },
     ];
 
-
-
-    const takeAssessment = (event) => {
-        console.log(event.target.id)
+    const handleAddStudentButtonClick = (event) => {
+        event.preventDefault();
+        setOpenAddStudent(true);
+        console.log("in handle open")
     }
 
+    const takeAssessment = (verification_string) => {
+        console.log(verification_string)
+        history.push(`/assessment/${verification_string}`)
+    }
+
+    const viewReport = (event) => {
+        history.push(`/studentreport`)
+    }
 
 
     return (
         <>
+            <Button
+                onClick={(event) => handleAddStudentButtonClick(event)}
+                variant="contained"
+                sx={{display: 'flex'}}
+            >
+                Add Student
+            </Button>
+            <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
             <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail} setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment} setOpenSendAssessment={setOpenSendAssessment} />
             <DataGrid
                 rows={rows.studentList}
