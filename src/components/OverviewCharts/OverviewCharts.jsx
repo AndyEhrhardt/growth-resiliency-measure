@@ -67,6 +67,8 @@ function OverviewCharts() {
         setDisplayTimePicker(false);
         setDisplayGainsView(false);
     }
+// ref for displaying PDF 
+const ref = React.createRef();
 
     return (
         <div>

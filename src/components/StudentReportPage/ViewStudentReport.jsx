@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
+import moment from 'moment';
+import Pdf from "react-to-pdf";
 
-function ViewStudentReport( {assessmentData} ) {
-        // graph will start at 0
+function ViewStudentReport({ assessmentData }) {
+    // graph will start at 0
     // end at 5 and have
     // step size of 1
     const options = {
@@ -18,11 +20,9 @@ function ViewStudentReport( {assessmentData} ) {
         }
     };
 
-    let results = [];
-    const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
+  
+    const lineColors = ['#3B4ACD']
 
-    console.log('ASSESSMENT DATA', assessmentData)
-    
     // empty array to hold values for graph display
     // keys are assessment questions
     let keys = [];
@@ -34,47 +34,53 @@ function ViewStudentReport( {assessmentData} ) {
     // graph data is what will be rendered on the chart
     let graphData = [];
 
-    // for items in the overview reducer
-    // get the parameter labels and the assessment questions
-    // add to keys and parameterLabel arrays
-    for (let i = 0; i < assessmentData.length; i++) {
+    let studentName = `${assessmentData[0].first_name} ${assessmentData[0].last_initial}   ${moment(assessmentData[0].date).format('MMM Do YYYY')}`;
+    let labels = ["Ask For Help", "Confidence Towards Adults", "Confidence Towards Peers", "Succeed Pressure", "Persistence", "Express Adult", "Express Peer"]
+    // // for items in the overview reducer
+    // // get the parameter labels and the assessment questions
+    // // add to keys and parameterLabel arrays
+    for (let i = 0; i < labels.length; i++) {
         // parameterLabel.push(results[i].name);
-        keys.push(Object.keys(results[i]).slice(1));
+        keys.push(labels[i]);
     }
     // for every item in assessment questions
     // get the average results and add to dataPoints array
-    for (let i = 0; i < keys.length; i++) {
-        dataPoints.push(Object.values(results[i]).slice(1));
+    for (let i = 0; i < assessmentData.length; i++) {
+        dataPoints.push(Object.values(assessmentData[i]).slice(3));
     }
 
-    // for every parameter label
-    // display label and results
-    // colors are retrieved from lineColors array
+    // // for every parameter label
+    // // display label and results
+    // // colors are retrieved from lineColors array
     for (let i = 0; i < assessmentData.length; i++) {
         graphData.push({
-            label: parameterLabel[i],
+            label: studentName,
             data: dataPoints[i],
             backgroundColor: 'rgba(0, 0, 0, 0)',
             borderColor: lineColors[i],
             borderWidth: 2,
         })
     }
-    console.log('parameter label', parameterLabel);
-    console.log('data points', dataPoints);
-    console.log('keys', keys)
-    
+
     // data is what will be displayed on
     // radar graph
     const data = {
-        labels: keys[0],
+        labels: labels,
         datasets: graphData,
     };
-    
-    return(
+
+    // ref for displaying PDF 
+      const ref = React.createRef();
+
+    return (
         <>
-          <div className="chart-container">
-            <Radar data={data}  options={options} />
-            </div>
+    
+      <div ref={ref} className="chart-container">
+        <Radar data={data} options={options} />
+      </div> <br />
+      <Pdf targetRef={ref} filename={`${assessmentData[0].first_name}_${assessmentData[0].last_initial}_resiliency`}>
+        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+      </Pdf>
         </>
     );
 }
