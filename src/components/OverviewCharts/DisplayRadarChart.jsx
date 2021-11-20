@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
-import Pdf from "react-to-pdf";
+import Pdf from 'react-to-pdf';
 
 function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
 

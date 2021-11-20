@@ -17,7 +17,7 @@ import DisplayGainsFilters from './DisplayGainsFilters';
 import SelectRadarChart from './SelectRadarChart';
 import SelectRadarWithTime from './SelectRadarWithTime';
 import DisplayGainsChart from './DisplayGainsChart';
-
+import Pdf from "react-to-pdf";
 
 
 function OverviewCharts() {
