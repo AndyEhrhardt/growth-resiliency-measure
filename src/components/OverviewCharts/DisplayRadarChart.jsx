@@ -109,9 +109,9 @@ const ref = React.createRef();
              <div ref={ref} className="chart-container">
             <Line data={lineChartData}  options={options} />
             </div>
-            <Pdf targetRef={ref} filename={`resiliency_gains_chart`}>
+            {/* <Pdf targetRef={ref} filename={`resiliency_gains_chart`}>
             {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-          </Pdf>
+            </Pdf> */}
           </>
             }
             </>

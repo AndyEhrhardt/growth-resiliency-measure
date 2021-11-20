@@ -56,9 +56,9 @@ function DisplayGainsChart({ results }) {
         <div ref={ref} className="chart-container">
             <Line data={data} />
         </div>
-        <Pdf targetRef={ref} filename={`resilience_gains_chart`}>
+        {/* <Pdf targetRef={ref} filename={`resilience_gains_chart`}>
         {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf>
+      </Pdf> */}
       </>
     );
 }
