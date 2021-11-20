@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
 import moment from 'moment';
-import { Page, Text, View, Document, StyleSheet, PDFViewer, Link, Image, PDFDownloadLink } from '@react-pdf/renderer';
+import Pdf from "react-to-pdf";
 
 function ViewStudentReport({ assessmentData }) {
     // graph will start at 0
@@ -20,10 +20,8 @@ function ViewStudentReport({ assessmentData }) {
         }
     };
 
-    let results = [];
-    const lineColors = ['#E42828', '#38C62B', '#DC8221', '#3B4ACD']
-
-    console.log('ASSESSMENT DATA', assessmentData)
+  
+    const lineColors = ['#3B4ACD']
 
     // empty array to hold values for graph display
     // keys are assessment questions
@@ -63,9 +61,6 @@ function ViewStudentReport({ assessmentData }) {
             borderWidth: 2,
         })
     }
-    console.log('parameter label', parameterLabel);
-    console.log('data points', dataPoints);
-    console.log('keys', keys)
 
     // data is what will be displayed on
     // radar graph
@@ -74,73 +69,18 @@ function ViewStudentReport({ assessmentData }) {
         datasets: graphData,
     };
 
-
-
-    const styles = StyleSheet.create({
-        container: {
-          flexDirection: 'row',
-          borderBottomWidth: 2,
-          borderBottomColor: '#112131',
-          borderBottomStyle: 'solid',
-          alignItems: 'stretch',
-        },
-        detailColumn: {
-          flexDirection: 'column',
-          flexGrow: 9,
-          textTransform: 'uppercase',
-        },
-        linkColumn: {
-          flexDirection: 'column',
-          flexGrow: 2,
-          alignSelf: 'flex-end',
-          justifySelf: 'flex-end',
-        },
-        name: {
-          fontSize: 24,
-          fontFamily: 'Lato Bold',
-        },
-        subtitle: {
-          fontSize: 10,
-          justifySelf: 'flex-end',
-          fontFamily: 'Lato',
-        },
-        link: {
-          fontFamily: 'Lato',
-          fontSize: 10,
-          color: 'black',
-          textDecoration: 'none',
-          alignSelf: 'flex-end',
-          justifySelf: 'flex-end',
-        },
-      });
-
-      const MyDocument = () => (
-        <Document title={`Report for ${assessmentData[0].first_name} ${assessmentData[0].last_initial}  Taken: ${moment(assessmentData[0].date).format('MMM Do YYYY')}`}>
-        
-          <Page size="A4" style={styles.page}>
-          <View style={styles.section}>
-              <Text>Report</Text>
-            </View>
-            <View style={styles.section}>
-           <Radar data={data} options={options} />  
-            </View>
-            <View>
-              <Image src="https://images.unsplash.com/photo-1636202493079-22e07050b2ac?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80"/>
-                </View>
-          </Page>
-        </Document>
-      );
+    // ref for displaying PDF 
+      const ref = React.createRef();
 
     return (
         <>
-            <div className="chart-container">
-                <Radar data={data} options={options} />
-            </div>
-            <PDFDownloadLink document={<MyDocument />} fileName="resiliency_report.pdf">
-      {({ blob, url, loading, error }) =>
-        loading ? 'Loading document...' : 'Download PDF'
-      }
-    </PDFDownloadLink>
+    
+      <div ref={ref} className="chart-container">
+        <Radar data={data} options={options} />
+      </div> <br />
+      <Pdf targetRef={ref} filename={`${assessmentData[0].first_name}_${assessmentData[0].last_initial}_resiliency`}>
+        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+      </Pdf>
         </>
     );
 }
