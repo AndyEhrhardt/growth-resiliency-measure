@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
 import moment from 'moment';
 import Pdf from "react-to-pdf";
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ChartLegend from '../ChartLegend/ChartLegend'
 
 function ViewStudentReport({ assessmentData }) {
     // graph will start at 0
@@ -20,7 +24,7 @@ function ViewStudentReport({ assessmentData }) {
         }
     };
 
-  
+
     const lineColors = ['#3B4ACD']
 
     // empty array to hold values for graph display
@@ -35,7 +39,7 @@ function ViewStudentReport({ assessmentData }) {
     let graphData = [];
 
     let studentName = `${assessmentData[0].first_name} ${assessmentData[0].last_initial}   ${moment(assessmentData[0].date).format('MMM Do YYYY')}`;
-    let labels = ["Ask For Help", "Confidence Towards Adults", "Confidence Towards Peers", "Succeed Pressure", "Persistence", "Express Adult", "Express Peer"]
+    let labels = ["Ask For Help", "Self-Confidence w/Adults", "Self-Confidence w/Peers", "Success Under Pressure", "Persistence", "Self-Expression w/Adult", "Self-Expression w/Peer"]
     // // for items in the overview reducer
     // // get the parameter labels and the assessment questions
     // // add to keys and parameterLabel arrays
@@ -70,17 +74,35 @@ function ViewStudentReport({ assessmentData }) {
     };
 
     // ref for displaying PDF 
-      const ref = React.createRef();
+    const ref = React.createRef();
+
+    const pdfOptions = {
+        orientation: 'landscape',
+        unit: 'px',
+        format: [800, 350]
+    };
+
 
     return (
         <>
-    
-      <div ref={ref} className="chart-container">
-        <Radar data={data} options={options} />
-      </div> <br />
-      <Pdf targetRef={ref} filename={`${assessmentData[0].first_name}_${assessmentData[0].last_initial}_resiliency`}>
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf>
+            <div ref={ref} >
+                
+                <Typography
+                    sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", textAlign: 'center' }}
+                >
+                    Report for {assessmentData[0].first_name} {assessmentData[0].last_initial}
+                </Typography>
+                <div className="chart-and-legend-container">
+                    <ChartLegend/>
+                    <div className="chart-container">
+                        <Radar data={data} options={options} sx={{minWidth: 500}}/>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <Pdf options={pdfOptions} targetRef={ref} filename={`${assessmentData[0].first_name}_${assessmentData[0].last_initial}_resiliency`}>
+                {({ toPdf }) => <Button onClick={toPdf}>Generate Pdf</Button>}
+            </Pdf>
         </>
     );
 }
