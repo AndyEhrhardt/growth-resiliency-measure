@@ -102,7 +102,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             defaultValue='name'
 
                         >
-                            <MenuItem value={defaultSelection}>Display All</MenuItem>
+                      
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
                                     <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
