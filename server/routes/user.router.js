@@ -142,7 +142,7 @@ router.get("/students", rejectUnauthenticated, async (req, res, next) => {
       res.send({studentList: result.rows, teacherView: true});
     }).catch((error) => console.log("error getting students", error))
   } else {
-    console.log("get outta here")
+    console.log("user not authorized");
   }
 })
 
