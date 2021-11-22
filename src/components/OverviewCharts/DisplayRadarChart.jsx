@@ -16,11 +16,19 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
                 stepSize: 1,
                 min: 0,
                 max: 5
-            }
-        }
+            },
+        },
+        
     };
 
     const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
+    let newLabels = [ "Ask For Help",
+    "Self-confidence w/Adults",
+     "Self-Confidence w/Peers", 
+    "Success Under Pressure", 
+    "Persistence", 
+    "Self-Expression w/Adult", 
+    "Self-Expression w/Peer"];
     
     // empty array to hold values for graph display
     // keys are assessment questions
@@ -32,6 +40,10 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
     let dataPoints = [];
     // graph data is what will be rendered on the chart
     let graphData = [];
+
+    // remove first item of results array
+  
+
 
     // for items in the overview reducer
     // get the parameter labels and the assessment questions
@@ -60,7 +72,8 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
     }
     console.log('parameter label', parameterLabel);
     console.log('data points', dataPoints);
-    console.log('keys', keys)
+    console.log('keys', keys);
+    console.log('results are', results);
     
 
     // line chart data
@@ -89,7 +102,7 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
     // data is what will be displayed on
     // radar graph
     const data = {
-        labels: keys[0],
+        labels: newLabels,
         datasets: graphData,
     };
 
@@ -101,17 +114,14 @@ const ref = React.createRef();
              <div ref={ref} className="chart-container">
             <Radar data={data}  options={options} />
             </div>
-            <Pdf targetRef={ref} filename='resiliency_radar_chart'>
+            {/* <Pdf targetRef={ref} filename='resiliency_radar_chart'>
         {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf>
+      </Pdf> */}
             {applyDateFilter &&
             <>
              <div ref={ref} className="chart-container">
             <Line data={lineChartData}  options={options} />
             </div>
-            {/* <Pdf targetRef={ref} filename={`resiliency_gains_chart`}>
-            {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-            </Pdf> */}
           </>
             }
             </>
