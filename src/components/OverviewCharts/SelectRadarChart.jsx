@@ -9,7 +9,7 @@ import DisplayRadarChart from './DisplayRadarChart';
 
 function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, demographics, filter }) {
 
-    // for parameter only 
+    // component for filter by parameter only 
     // dispatch type 'FETCH_PARAMETER_RESULTS'
     // payload: parameter
     // send in format
@@ -30,6 +30,9 @@ function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, dem
 }
     return (
         <>
+        {/* If display main filter is selected this component displays
+         menu items are populated based on which option
+        is chosen from the first select */}
             {displayMainFilter &&
                 <>
                 <h3>Display Data on Radar Chart</h3>

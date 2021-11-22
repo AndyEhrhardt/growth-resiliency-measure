@@ -101,17 +101,14 @@ const ref = React.createRef();
              <div ref={ref} className="chart-container">
             <Radar data={data}  options={options} />
             </div>
-            <Pdf targetRef={ref} filename='resiliency_radar_chart'>
+            {/* <Pdf targetRef={ref} filename='resiliency_radar_chart'>
         {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf>
+      </Pdf> */}
             {applyDateFilter &&
             <>
              <div ref={ref} className="chart-container">
             <Line data={lineChartData}  options={options} />
             </div>
-            {/* <Pdf targetRef={ref} filename={`resiliency_gains_chart`}>
-            {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-            </Pdf> */}
           </>
             }
             </>

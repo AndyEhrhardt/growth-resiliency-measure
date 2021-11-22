@@ -26,7 +26,7 @@ function DisplayGainsChart({ results }) {
     // [0][1] shows nothing 
 
     if (typeof results != 'undefined' && labels.length > 0) {
-        console.log('dapoint one', dataPointOne);
+        console.log('data point one', dataPointOne);
         console.log('data point two', dataPointTwo)
         for (let i = 0; i < labels[0].length; i++) {
             lineDataSets.push({
@@ -56,9 +56,6 @@ function DisplayGainsChart({ results }) {
         <div ref={ref} className="chart-container">
             <Line data={data} />
         </div>
-        {/* <Pdf targetRef={ref} filename={`resilience_gains_chart`}>
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf> */}
       </>
     );
 }

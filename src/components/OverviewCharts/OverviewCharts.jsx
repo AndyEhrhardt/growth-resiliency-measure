@@ -1,17 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DisplayRadarChart from './DisplayRadarChart';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import moment from 'moment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DateRangePicker from '@mui/lab/DateRangePicker';
-import DateFnsAdapter from '@mui/lab/AdapterDateFns';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import DisplayGainsFilters from './DisplayGainsFilters';
 import SelectRadarChart from './SelectRadarChart';
@@ -41,14 +32,13 @@ function OverviewCharts() {
 
     // hooks to hold the selections to display
     const [filterValue, setFilterValue] = useState('');
-    const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
-    const defaultFilter = 'school';
-
-    const [applyDateFilter, setApplyDateFilter] = useState(false);
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
     const [displayMainFilter, setDisplayMainFilter] = useState(true);
+
+    // functions to change state of 
+    // components to render on selection
 
     const changeTimeRangeDisplay = () => {
         setDisplayTimePicker(!displayTimePicker);
