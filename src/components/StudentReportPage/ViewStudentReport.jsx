@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
+import moment from 'moment';
+import Pdf from "react-to-pdf";
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ChartLegend from '../ChartLegend/ChartLegend'
 
-function ViewStudentReport( {assessmentData} ) {
-        // graph will start at 0
+function ViewStudentReport({ assessmentData }) {
+    // graph will start at 0
     // end at 5 and have
     // step size of 1
     const options = {
@@ -18,11 +24,9 @@ function ViewStudentReport( {assessmentData} ) {
         }
     };
 
-    let results = [];
-    const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
 
-    console.log('ASSESSMENT DATA', assessmentData)
-    
+    const lineColors = ['#3B4ACD']
+
     // empty array to hold values for graph display
     // keys are assessment questions
     let keys = [];
@@ -34,47 +38,71 @@ function ViewStudentReport( {assessmentData} ) {
     // graph data is what will be rendered on the chart
     let graphData = [];
 
-    // for items in the overview reducer
-    // get the parameter labels and the assessment questions
-    // add to keys and parameterLabel arrays
-    for (let i = 0; i < assessmentData.length; i++) {
+    let studentName = `${assessmentData[0].first_name} ${assessmentData[0].last_initial}   ${moment(assessmentData[0].date).format('MMM Do YYYY')}`;
+    let labels = ["Ask For Help", "Self-Confidence w/Adults", "Self-Confidence w/Peers", "Success Under Pressure", "Persistence", "Self-Expression w/Adult", "Self-Expression w/Peer"]
+    // // for items in the overview reducer
+    // // get the parameter labels and the assessment questions
+    // // add to keys and parameterLabel arrays
+    for (let i = 0; i < labels.length; i++) {
         // parameterLabel.push(results[i].name);
-        keys.push(Object.keys(results[i]).slice(1));
+        keys.push(labels[i]);
     }
     // for every item in assessment questions
     // get the average results and add to dataPoints array
-    for (let i = 0; i < keys.length; i++) {
-        dataPoints.push(Object.values(results[i]).slice(1));
+    for (let i = 0; i < assessmentData.length; i++) {
+        dataPoints.push(Object.values(assessmentData[i]).slice(3));
     }
 
-    // for every parameter label
-    // display label and results
-    // colors are retrieved from lineColors array
+    // // for every parameter label
+    // // display label and results
+    // // colors are retrieved from lineColors array
     for (let i = 0; i < assessmentData.length; i++) {
         graphData.push({
-            label: parameterLabel[i],
+            label: studentName,
             data: dataPoints[i],
             backgroundColor: 'rgba(0, 0, 0, 0)',
             borderColor: lineColors[i],
             borderWidth: 2,
         })
     }
-    console.log('parameter label', parameterLabel);
-    console.log('data points', dataPoints);
-    console.log('keys', keys)
-    
+
     // data is what will be displayed on
     // radar graph
     const data = {
-        labels: keys[0],
+        labels: labels,
         datasets: graphData,
     };
-    
-    return(
+
+    // ref for displaying PDF 
+    const ref = React.createRef();
+
+    const pdfOptions = {
+        orientation: 'landscape',
+        unit: 'px',
+        format: [800, 350]
+    };
+
+
+    return (
         <>
-          <div className="chart-container">
-            <Radar data={data}  options={options} />
+            <div ref={ref} >
+                
+                <Typography
+                    sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", textAlign: 'center' }}
+                >
+                    Report for {assessmentData[0].first_name} {assessmentData[0].last_initial}
+                </Typography>
+                <div className="chart-and-legend-container">
+                    <ChartLegend/>
+                    <div className="chart-container">
+                        <Radar data={data} options={options} sx={{minWidth: 500}}/>
+                    </div>
+                </div>
+                <br />
             </div>
+            <Pdf options={pdfOptions} targetRef={ref} filename={`${assessmentData[0].first_name}_${assessmentData[0].last_initial}_resiliency`}>
+                {({ toPdf }) => <Button onClick={toPdf}>Generate Pdf</Button>}
+            </Pdf>
         </>
     );
 }

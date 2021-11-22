@@ -19,8 +19,8 @@ function AddStudentModal(props) {
   const [lastInitial, setLastInitial] = useState("H");
   const [race, setRace] = useState('4');
   const [gender, setGender] = useState('2');
-  const [latinX, setLatinX] = useState(true);
-  const [iep, setIep] = useState(true);
+  const [latinX, setLatinX] = useState(false);
+  const [iep, setIep] = useState(false);
   const [clickedOnce, setClickedOnce] = useState(true);
   const [clickedOnce2, setClickedOnce2] = useState(true);
   const [email, setEmail] = useState("growthresiliency1234@gmail.com");

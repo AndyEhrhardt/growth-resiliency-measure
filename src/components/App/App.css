@@ -112,10 +112,23 @@ input {
 }
 
 .chart-container {
-  position: relative;
-  margin: auto;
-  height: 46vh; 
-  width: 66vw;
+  height: 500px; 
+  min-width: 600px;
   background-color: white;
-  border: 3px solid black;
+}
+
+.chart-and-legend-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+  min-height: 500px; 
+  width: 100%;
+  background-color: white;
+  text-align: center;
+}
+
+.legend-container{
+  height: fit-content; 
+  width: 320px;
 }

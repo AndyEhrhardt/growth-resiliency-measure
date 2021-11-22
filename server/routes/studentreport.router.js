@@ -51,35 +51,7 @@ router.get('/:verification_string', (req,res) => {
 
     console.log("in get student report ",verification_string);
 
-    queryText = `SELECT
-    "user"."first_name",
-    "user"."last_initial",
-    "user"."demographics_id",
-    "gender"."name" AS "gender", 
-    "race"."name" AS "race", 
-    "demographics"."hispanic_latino", 
-    "user"."role_id",
-    "user"."active",
-    "user"."assessment_completed",
-    "assessments".*, 
-    "role"."name" AS "entered_by",
-    "user"."school_id",
-    "school"."name" AS "school_name", 
-    "school"."district_id",
-    "district"."name" AS "district_name",
-    "school"."q1",
-    "school"."q2",
-    "school"."q3",
-    "school"."q4"
-    FROM "assessments"
-    JOIN
-    "user" ON "user"."id" = "assessments"."student_id"
-    JOIN "school" ON "school"."id"="user"."school_id" 
-    JOIN "district" ON "school"."district_id" = "district"."id"
-    JOIN "demographics" ON "demographics"."id" = "user"."demographics_id"
-    JOIN "gender" ON "gender"."id"="demographics"."gender_id"
-    JOIN "race" ON "demographics"."race_id" = "race"."id"
-    JOIN "role" ON "role"."id"="user"."role_id" WHERE "user"."verification_string" = $1`;
+    queryText = `  SELECT "user"."first_name", "user"."last_initial", "assessments"."date", "assessments"."ask_help" AS "ask_help", "assessments"."confidence_adult" AS "confidence_adult", "assessments"."confidence_peer" AS "confidence_peer", "assessments"."succeed_pressure" AS "succeed_pressure", "assessments"."persistence" AS "persistence", "assessments"."express_adult" AS "express_adult", "assessments"."express_peer" AS "express_peer" FROM "assessments" JOIN "user" ON "assessments"."student_id"="user"."id" WHERE "user"."verification_string" = $1 ORDER BY "assessments"."date" ASC limit 1;`;
     pool.query(queryText, [verification_string]).then(result => {res.send(result.rows);}).catch(error => {console.log(error)});
 });
 

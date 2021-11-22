@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
+import Pdf from 'react-to-pdf';
 
 function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
 
@@ -92,15 +93,27 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
         datasets: graphData,
     };
 
+// ref for displaying PDF 
+const ref = React.createRef();
+
     return (
         <>
-            <div className="chart-container">
+             <div ref={ref} className="chart-container">
             <Radar data={data}  options={options} />
             </div>
+            <Pdf targetRef={ref} filename='resiliency_radar_chart'>
+        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+      </Pdf>
             {applyDateFilter &&
-            <div >
+            <>
+             <div ref={ref} className="chart-container">
             <Line data={lineChartData}  options={options} />
-            </div>}
+            </div>
+            {/* <Pdf targetRef={ref} filename={`resiliency_gains_chart`}>
+            {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+            </Pdf> */}
+          </>
+            }
             </>
     );
 }

@@ -2,7 +2,7 @@ import { CollectionsOutlined } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
-
+import Pdf from "react-to-pdf";
 
 function DisplayGainsChart({ results }) {
 
@@ -14,16 +14,16 @@ function DisplayGainsChart({ results }) {
     const lineDataSets = [];
 
     if (typeof results != 'undefined' && results.length > 0) {
-        for (let i = 0; i < results[0].length; i++ ) {
+        for (let i = 0; i < results[0].length; i++) {
             labels.push(Object.keys(results[0][i]).slice(1));
             dataPointOne.push(Object.values(results[0][i]).slice(1));
             dataPointTwo.push(Object.values(results[1][i]).slice(1));
         }
     }
 
-    
-// [0][0] shows first [0][i]
-// [0][1] shows nothing 
+
+    // [0][0] shows first [0][i]
+    // [0][1] shows nothing 
 
     if (typeof results != 'undefined' && labels.length > 0) {
         console.log('dapoint one', dataPointOne);
@@ -48,12 +48,18 @@ function DisplayGainsChart({ results }) {
     };
 
     console.log('WHAT IS OUR CHART DATA', data)
-
+    // ref for displaying PDF 
+    const ref = React.createRef();
 
     return (
-        <div className="chart-container">
+        <>
+        <div ref={ref} className="chart-container">
             <Line data={data} />
         </div>
+        {/* <Pdf targetRef={ref} filename={`resilience_gains_chart`}>
+        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
+      </Pdf> */}
+      </>
     );
 }
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ViewStudentReport from './ViewStudentReport.jsx';
-
+import Typography from "@mui/material/Typography";
 
 function StudentReportPage() {
 
@@ -26,7 +26,12 @@ function StudentReportPage() {
     return (
         <div>
             {JSON.stringify(assessmentData)}
+            {assessmentData.length > 0 &&
+            <div>
+                
             <ViewStudentReport assessmentData={assessmentData}/>
+            </div>
+            }
         </div>
     )
 }
