@@ -8,3 +8,11 @@ ul > li {
 .highLight {
     border: 2px solid blue;
 }
+
+nav {
+    text-align: center;
+}
+
+ul {
+    padding: 0;
+}

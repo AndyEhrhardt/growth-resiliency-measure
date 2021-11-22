@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import demographicsModalStyles from './DemographicsModalStyle.js';
+import swal from 'sweetalert';
 
 function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     const errors = useSelector((store) => store.errors);
@@ -24,7 +25,12 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     }, [dispatch]);
 
     const addStudent = () => {
-        alert('POST DEMOGRAPHICS');
+        swal({
+            title: "Success!",
+            text: "Demographics Updated!",
+            icon: "success",
+            button: "OK",
+          });
         dispatch({type: 'PUT_USER_DEMOGRAPHICS', payload: userStore});
         setDemoPosted(true);
     };

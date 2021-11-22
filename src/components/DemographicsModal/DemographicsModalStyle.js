@@ -28,6 +28,7 @@ const demographicsModalStyles = makeStyles(() => ({
     },
     demoContainer: {
         display: 'block',
+        zoom: '125%'
     }
 }));
 

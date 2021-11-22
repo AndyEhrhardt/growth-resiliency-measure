@@ -5,6 +5,7 @@ import { FormControl, FormLabel, Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import AssessmentFormPageStyles from './AssessmentFormPageStyles';
+import swal from 'sweetalert';
 
 function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -62,12 +63,22 @@ function AssessmentFormPage({userStore}) {
         for (let value of Object.entries(assessmentQ)) {
             //console.log(value[1].score);
             if (!value[1].score) {
-                alert('Please answer all questions')
+                swal({
+                    title: "Uh Oh!",
+                    text: "Please Answer All Questions",
+                    icon: "info",
+                    button: "Got it",
+                  });
                 return;
             }
         }
         dispatch({type: 'POST_ASSESSMENT', payload: {assessment: assessmentQ, student: student}});
-        alert("Submit Application");
+        swal({
+            title: "Thank you!",
+            text: "Assessment Submitted!",
+            icon: "success",
+            button: "OK",
+          });
         history.push(`/studentreport/${student.verification_string}`);
     }
     
