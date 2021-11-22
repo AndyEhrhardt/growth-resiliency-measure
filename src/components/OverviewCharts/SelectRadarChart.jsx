@@ -46,28 +46,28 @@ function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, dem
                             onChange={event => setFilterValue(event.target.value)}
                             width='50%'
                         >
-                            <MenuItem value={'school'}>School</MenuItem>
-                            <MenuItem value={'district'}>District</MenuItem>
-                            <MenuItem value={'race'}>Race</MenuItem>
-                            <MenuItem value={'gender'}>Gender</MenuItem>
+                            <MenuItem key="school" value={'school'}>School</MenuItem>
+                            <MenuItem key="district" value={'district'}>District</MenuItem>
+                            <MenuItem key="race" value={'race'}>Race</MenuItem>
+                            <MenuItem key="gender" value={'gender'}>Gender</MenuItem>
                         </Select>
                     </FormControl>
 
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
-                        <InputLabel id="demo-simple-select-label">Choose</InputLabel>
+                        <InputLabel id="select-label">Choose</InputLabel>
                         <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
+                            labelId="select-label"
+                            id="simple-select"
                             label="Filter By"
                             onChange={event => setSearchBy(event.target.value)}
                             width='20%'
                             defaultValue='name'
 
                         >
-                            <MenuItem value={defaultSelection}>Display All</MenuItem>
+                            <MenuItem key="display_all" value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem data='name' key={logs.id} value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&

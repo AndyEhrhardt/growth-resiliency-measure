@@ -49,6 +49,7 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');    
     const [dateRange, setDateRange] = useState([null, null]);
+    const [applyDateFilter, setApplyDateFilter] = useState(false)
 
     // when the date input changes
     // apply get the date range from the user input
@@ -56,6 +57,7 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
         setDateRange(dateRange);
         setApplyDateFilter(true);
     };
+    
 
     return (
         <>
@@ -96,7 +98,7 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
                             <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem key={logs.id} data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&

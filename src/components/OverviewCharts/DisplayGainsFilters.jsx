@@ -28,7 +28,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
         let endFirstSelectedQuarter = firstQuarterSelected.split('.')[1];
         let beginSecondSelectedQuarter = secondQuarterSelected.split('.')[0];
         let endSecondSelectedQuarter = secondQuarterSelected.split('.')[1];
-        dispatch({ type: 'GET_GAINS_BY_QUARTER', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], beginQ1: beginFirstSelectedQuarter, endQ1: endFirstSelectedQuarter, beginQ2: beginSecondSelectedQuarter, endQ2: endSecondSelectedQuarter } });
+        dispatch({ type: 'GET_GAINS_BY_QUARTER', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], beginQ1: beginFirstSelectedQuarter, endQ1: endFirstSelectedQuarter, beginQ2: beginSecondSelectedQuarter, endQ2: endSecondSelectedQuarter, firstYearSelected: firstYearSelected, secondYearSelected: secondYearSelected } });
     }
 
     // hooks for storing selected dates
@@ -111,7 +111,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem key={logs.id} data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&
