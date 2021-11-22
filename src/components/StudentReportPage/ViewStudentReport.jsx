@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
 import moment from 'moment';
 import Pdf from "react-to-pdf";
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ChartLegend from '../ChartLegend/ChartLegend'

@@ -32,8 +32,10 @@ function* getGainsByQuarter(action){
   const filterBy = action.payload.filterBy; // i.e. race
   const searchOn = action.payload.searchOn; // i.e. name
   const searchParameter = action.payload.searchParameter;
+  const firstYearSelected = action.payload.firstYearSelected;
+  const secondYearSelected = action.payload.secondYearSelected;
   console.log('in get gains saga', beginQ1)
-  const gainsByQuarter = yield axios.get(`/api/overviewcharts/gains/?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}&q1Start=${beginQ1}&q1End=${endQ1}&q2Start=${beginQ2}&q2End=${endQ2}`);
+  const gainsByQuarter = yield axios.get(`/api/overviewcharts/gains/?filterBy=${filterBy}&searchOn=${searchOn}&searchParameter=${searchParameter}&q1Start=${beginQ1}&q1End=${endQ1}&q2Start=${beginQ2}&q2End=${endQ2}&firstYearSelected=${firstYearSelected}&secondYearSelected=${secondYearSelected}`);
   console.log('get result', getGainsByQuarter.data);
   yield put({ type: 'SET_OVERVIEW', payload: gainsByQuarter.data });
 }
