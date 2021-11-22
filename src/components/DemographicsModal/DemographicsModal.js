@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import demographicsModalStyles from './DemographicsModalStyle.js';
+import swal from 'sweetalert';
 
 function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     const errors = useSelector((store) => store.errors);
@@ -24,7 +25,12 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     }, [dispatch]);
 
     const addStudent = () => {
-        alert('POST DEMOGRAPHICS');
+        swal({
+            title: "Success!",
+            text: "Demographics Updated!",
+            icon: "success",
+            button: "OK",
+          });
         dispatch({type: 'PUT_USER_DEMOGRAPHICS', payload: userStore});
         setDemoPosted(true);
     };
@@ -50,7 +56,7 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
     }
 
     return (
-        <div>
+        <div className={classes.demoContainer}>
             <FormControl
                 className="formPanel"
                 className={classes.formControl}
@@ -148,7 +154,7 @@ function AddStudentModal({ userStore, demoPosted, setDemoPosted }) {
                         </div>
 
 
-                        <div className={classes.splitInputWrap}>
+                        <div className={classes.splitInputWrap2}>
 
 
                             Does this student identify as Hispanic or Latino?
