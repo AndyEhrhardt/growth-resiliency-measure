@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import DisplayRadarChart from './DisplayRadarChart';
 
-function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, demographics, filter }) {
+function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, demographics, filter, }) {
 
     // component for filter by parameter only 
     // dispatch type 'FETCH_PARAMETER_RESULTS'

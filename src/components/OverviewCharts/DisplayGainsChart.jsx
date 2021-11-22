@@ -25,12 +25,20 @@ function DisplayGainsChart({ results }) {
     // [0][0] shows first [0][i]
     // [0][1] shows nothing 
 
+    let newLabels = [ "Ask For Help",
+    "Self-confidence w/Adults",
+     "Self-Confidence w/Peers", 
+    "Success Under Pressure", 
+    "Persistence", 
+    "Self-Expression w/Adult", 
+    "Self-Expression w/Peer"];
+
     if (typeof results != 'undefined' && labels.length > 0) {
         console.log('data point one', dataPointOne);
         console.log('data point two', dataPointTwo)
         for (let i = 0; i < labels[0].length; i++) {
             lineDataSets.push({
-                label: labels[0][i],
+                label: newLabels[i],
                 data: [parseInt(dataPointOne[0][i]), parseInt(dataPointTwo[0][i])],
                 borderColor: lineColors[i],
             })
@@ -47,6 +55,13 @@ function DisplayGainsChart({ results }) {
         datasets: lineDataSets
     };
 
+    const options = {
+        title: {
+            display: true,
+            text: 'Chart.js Horizontal Bar Chart',
+        }
+    };
+
     console.log('WHAT IS OUR CHART DATA', data)
     // ref for displaying PDF 
     const ref = React.createRef();
@@ -54,7 +69,7 @@ function DisplayGainsChart({ results }) {
     return (
         <>
         <div ref={ref} className="chart-container">
-            <Line data={data} />
+            <Line data={data} options={options} />
         </div>
       </>
     );
