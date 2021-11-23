@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import AssessmentFormPageStyles from './AssessmentFormPageStyles';
 import swal from 'sweetalert';
 
+
 function AssessmentFormPage({userStore}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(2);

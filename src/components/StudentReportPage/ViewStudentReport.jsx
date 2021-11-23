@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Radar, Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import Pdf from "react-to-pdf";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import ChartLegend from '../ChartLegend/ChartLegend'
+import ChartLegend from '../ChartLegend/ChartLegend';
 
-function ViewStudentReport({ assessmentData }) {
+function ViewStudentReport({ assessmentData, assessmentStart }) {
     // graph will start at 0
     // end at 5 and have
     // step size of 1
@@ -23,8 +24,12 @@ function ViewStudentReport({ assessmentData }) {
         }
     };
 
+ console.log('assessment start', assessmentStart);
 
-    const lineColors = ['#3B4ACD']
+    console.log('assessment data', assessmentData);
+
+
+    const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
 
     // empty array to hold values for graph display
     // keys are assessment questions
@@ -36,6 +41,8 @@ function ViewStudentReport({ assessmentData }) {
     let dataPoints = [];
     // graph data is what will be rendered on the chart
     let graphData = [];
+    // assessment start data
+    let assessmentStartData = [];
 
     let studentName = `${assessmentData[0].first_name} ${assessmentData[0].last_initial}   ${moment(assessmentData[0].date).format('MMM Do YYYY')}`;
     let labels = ["Ask For Help", "Self-Confidence w/Adults", "Self-Confidence w/Peers", "Success Under Pressure", "Persistence", "Self-Expression w/Adult", "Self-Expression w/Peer"]
@@ -50,6 +57,7 @@ function ViewStudentReport({ assessmentData }) {
     // get the average results and add to dataPoints array
     for (let i = 0; i < assessmentData.length; i++) {
         dataPoints.push(Object.values(assessmentData[i]).slice(3));
+        assessmentStartData.push(Object.values(assessmentStart[i]).slice(3));
     }
 
     // // for every parameter label
@@ -57,13 +65,22 @@ function ViewStudentReport({ assessmentData }) {
     // // colors are retrieved from lineColors array
     for (let i = 0; i < assessmentData.length; i++) {
         graphData.push({
-            label: studentName,
+            label: 'Current',
             data: dataPoints[i],
             backgroundColor: 'rgba(0, 0, 0, 0)',
-            borderColor: lineColors[i],
+            borderColor: lineColors[1],
+            borderWidth: 2,
+        },
+        {
+            label: 'Previous',
+            data: assessmentStartData[i],
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: lineColors[2],
             borderWidth: 2,
         })
     }
+
+    
 
     // data is what will be displayed on
     // radar graph
@@ -81,6 +98,7 @@ function ViewStudentReport({ assessmentData }) {
         format: [800, 350]
     };
 
+    
 
     return (
         <>

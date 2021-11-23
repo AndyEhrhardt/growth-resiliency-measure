@@ -45,13 +45,25 @@ router.get('/', (req,res) => {
     pool.query(queryText, [req.user.id]).then(result => {res.send(result.rows);}).catch(error => {res.sendStatus(500);});
 });
 
+// this is for getting the current assessment start perception by ID
+router.get('/perception/:verification_string', (req,res) => {
+    console.log('in get perception router');
+    const verification_string = req.params.verification_string;
+    console.log("in get student report ",verification_string);
+    queryText = `  SELECT "user"."first_name", "user"."last_initial", "assessments"."date", "assessments"."ask_help" AS "ask_help", "assessments"."confidence_adult" AS "confidence_adult", "assessments"."confidence_peer" AS "confidence_peer", "assessments"."succeed_pressure" AS "succeed_pressure", "assessments"."persistence" AS "persistence", "assessments"."express_adult" AS "express_adult", "assessments"."express_peer" AS "express_peer" FROM "assessments" JOIN "user" ON "assessments"."student_id"="user"."id" WHERE ("user"."verification_string" = $1 AND "assessments"."current" = false) ORDER BY "assessments"."date" ASC limit 1;`;
+    pool.query(queryText, [verification_string]).then(result => 
+        { console.log('results of perception get', result.rows);
+            res.send(result.rows);}).catch(error => {console.log(error)});
+});
+
+
 // this is for getting the student report by ID
 router.get('/:verification_string', (req,res) => {
     const verification_string = req.params.verification_string;
 
     console.log("in get student report ",verification_string);
 
-    queryText = `  SELECT "user"."first_name", "user"."last_initial", "assessments"."date", "assessments"."ask_help" AS "ask_help", "assessments"."confidence_adult" AS "confidence_adult", "assessments"."confidence_peer" AS "confidence_peer", "assessments"."succeed_pressure" AS "succeed_pressure", "assessments"."persistence" AS "persistence", "assessments"."express_adult" AS "express_adult", "assessments"."express_peer" AS "express_peer" FROM "assessments" JOIN "user" ON "assessments"."student_id"="user"."id" WHERE "user"."verification_string" = $1 ORDER BY "assessments"."date" ASC limit 1;`;
+    queryText = `  SELECT "user"."first_name", "user"."last_initial", "assessments"."date", "assessments"."ask_help" AS "ask_help", "assessments"."confidence_adult" AS "confidence_adult", "assessments"."confidence_peer" AS "confidence_peer", "assessments"."succeed_pressure" AS "succeed_pressure", "assessments"."persistence" AS "persistence", "assessments"."express_adult" AS "express_adult", "assessments"."express_peer" AS "express_peer" FROM "assessments" JOIN "user" ON "assessments"."student_id"="user"."id" WHERE ("user"."verification_string" = $1 AND "assessments"."current" = true) ORDER BY "assessments"."date" ASC limit 1;`;
     pool.query(queryText, [verification_string]).then(result => {res.send(result.rows);}).catch(error => {console.log(error)});
 });
 

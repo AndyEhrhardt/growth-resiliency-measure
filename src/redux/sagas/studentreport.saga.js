@@ -16,6 +16,18 @@ function* getReport(action) {
   console.log('results from get', studentReport.data);
 
   yield put({ type: 'SET_STUDENT_REPORT', payload: studentReport.data });
+  
+}
+
+function* getAssessmentPerceptionStart(action) {
+  console.log("in get perception report");
+  console.log(action.payload)
+  console.log('verification string', action.payload);
+  const verification_string = action.payload;
+  const studentReport = yield axios.get(`/api/studentreport/perception/${verification_string}`);
+  console.log('results from perception get', studentReport.data);
+
+  yield put({ type: 'SET_ASSESSMENT_PERCEPTION_START', payload: studentReport.data });
 }
 
 function* addReport(action) {
@@ -28,7 +40,8 @@ function* addReport(action) {
 function* studentReportSaga() {
   yield takeLatest('FETCH_SELECTED_STUDENT_REPORTS', getReport);
   yield takeLatest('ADD_REPORT', addReport);
-  yield takeLatest('FETCH_USER_REPORTS', fetchLoggedInUserReports)
+  yield takeLatest('FETCH_USER_REPORTS', fetchLoggedInUserReports);
+  yield takeLatest('FETCH_ASSESSMENT_PERCEPTION_START', getAssessmentPerceptionStart);
 }
 
 export default studentReportSaga;

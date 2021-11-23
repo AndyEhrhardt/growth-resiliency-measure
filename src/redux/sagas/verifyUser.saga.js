@@ -30,7 +30,10 @@ function* postAssessment(action){
 
 
     yield axios.post(`/api/verifyUser/postassessment`, action.payload);
-
+    console.log(action.payload.student)
+    console.log(action.payload.student.verification_string)
+    yield put({type: 'FETCH_ASSESSMENT_PERCEPTION_START', payload: action.payload.student.verification_string})
+    yield put({type: 'FETCH_SELECTED_STUDENT_REPORTS', payload: action.payload.student.verification_string})
   } catch(error) {
       console.log("Error posting assessment", error);
   }

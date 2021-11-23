@@ -7,7 +7,8 @@ import demographics from './demographics.reducer';
 import studentReport from './studentreport.reducer';
 import students from './students.reducer'
 import manageAccess from './manageaccess.reducer';
-import assessmentUser from './assessmentuser.reducer'
+import assessmentUser from './assessmentuser.reducer';
+import assessmentStartPerception from './assessmentstartperception.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   students,
   manageAccess,
   assessmentUser,
+  assessmentStartPerception,
 });
 
 export default rootReducer;
