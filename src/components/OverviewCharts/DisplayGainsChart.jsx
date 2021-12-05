@@ -1,30 +1,26 @@
-import { CollectionsOutlined } from '@mui/icons-material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { useDispatch, useSelector } from 'react-redux';
-import Pdf from "react-to-pdf";
 
 function DisplayGainsChart({ results }) {
-
+    // line colors for chart
     const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD']
-
+    // arrays to hold chart data
     const labels = [];
     const dataPointOne = [];
     const dataPointTwo = [];
     const lineDataSets = [];
 
+    // if there are results from the redux store
+    // populate the arrays with the data
     if (typeof results != 'undefined' && results.length > 0) {
         for (let i = 0; i < results[0].length; i++) {
             labels.push(Object.keys(results[0][i]).slice(1));
             dataPointOne.push(Object.values(results[0][i]).slice(1));
             dataPointTwo.push(Object.values(results[1][i]).slice(1));
         }
-    }
+    } 
 
-
-    // [0][0] shows first [0][i]
-    // [0][1] shows nothing 
-
+    // labels to be used for the chart
     let newLabels = [ "Ask For Help",
     "Self-confidence w/Adults",
      "Self-Confidence w/Peers", 
@@ -33,9 +29,9 @@ function DisplayGainsChart({ results }) {
     "Self-Expression w/Adult", 
     "Self-Expression w/Peer"];
 
+      // if there are results from the redux store
+    // populate the arrays with the data
     if (typeof results != 'undefined' && labels.length > 0) {
-        console.log('data point one', dataPointOne);
-        console.log('data point two', dataPointTwo)
         for (let i = 0; i < labels[0].length; i++) {
             lineDataSets.push({
                 label: newLabels[i],
@@ -46,23 +42,21 @@ function DisplayGainsChart({ results }) {
         }
     }
 
-    console.log('labels FROM LOOP are', labels);
-    console.log('dataset IS', dataPointOne);
-    console.log('WHAT IS in the store', results);
-    console.log('WHAT IS THE FIRST ITEM IN FILTER', results[0]);
+    // third and fourth item in results array
+    // contain the chart labels
     const data = {
         labels: [results[2], results[3]],
         datasets: lineDataSets
     };
 
+    // display title
     const options = {
         title: {
             display: true,
-            text: 'Chart.js Horizontal Bar Chart',
+            text: 'Resiliency Gain Chart',
         }
     };
 
-    console.log('WHAT IS OUR CHART DATA', data)
     // ref for displaying PDF 
     const ref = React.createRef();
 
