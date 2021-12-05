@@ -15,16 +15,16 @@ import Fade from "@mui/material/Fade";
 import addStudentStyles from './addStudentStyles'
 
 function AddStudentModal(props) {
-  const [firstName, setFirstName] = useState("Tim");
-  const [lastInitial, setLastInitial] = useState("T");
-  const [race, setRace] = useState('4');
-  const [gender, setGender] = useState('2');
+  const [firstName, setFirstName] = useState("");
+  const [lastInitial, setLastInitial] = useState("");
+  const [race, setRace] = useState('');
+  const [gender, setGender] = useState('');
   const [latinX, setLatinX] = useState(false);
   const [iep, setIep] = useState(false);
-  const [clickedOnce, setClickedOnce] = useState(true);
-  const [clickedOnce2, setClickedOnce2] = useState(true);
-  const [email, setEmail] = useState("growthresiliency1234@gmail.com");
-  const [grade, setGrade] = useState("8");
+  const [clickedOnce, setClickedOnce] = useState(false);
+  const [clickedOnce2, setClickedOnce2] = useState(false);
+  const [email, setEmail] = useState("");
+  const [grade, setGrade] = useState("");
   const errors = useSelector((store) => store.errors);
 
   const demographics = useSelector((store) => store.demographics);

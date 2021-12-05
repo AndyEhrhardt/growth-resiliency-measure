@@ -1,19 +1,19 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
+const sgTransport = require('nodemailer-sendgrid-transport');
+ 
 //function to send confirmation email
 //takes an email and random string
 const sendMail = (email, ranStr, verify) => {
-    const Transport = nodemailer.createTransport({
-        service: "Gmail",
+    const Transport = nodemailer.createTransport(sgTransport({
         auth: {
-            user: "anthonyvlynch5@gmail.com",
-            pass: "nubgxjoqemedtziw"
-        }
-    });
+            api_key: process.env.APIKEY,
+        },
+    }));
     let mailOptions;
-    let sender = "Anthony Lynch";
     if (verify){
     mailOptions = {
-        from: sender,
+        from: process.env.EMAIL_USER,
         to: email,
         subject: "Email confirmation",
         html: `Press <a href="http://localhost:3000/#/verify/${ranStr}" target="_blank"> here </a> to verify your email!`,
@@ -27,7 +27,7 @@ const sendMail = (email, ranStr, verify) => {
     });
     } else {
         mailOptions = {
-            from: sender,
+            from: process.env.EMAIL_USER,
             to: email,
             subject: "Growth Resiliency Assessment",
             html: `Press <a href="http://localhost:3000/#/assessment/${ranStr}" target="_blank"> here </a> to take the assessment`,
