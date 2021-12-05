@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 
 function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, filter }) {
     // for search of quarter send selected parameter
-    // dispatch type FETCH_PARAMETER_QUARTER
+    // dispatch type GET_GAINS_BY_QUARTER
     // payload: parameter, quarter
     // formatted as above and the quarter 
     // should be sent in format of 
