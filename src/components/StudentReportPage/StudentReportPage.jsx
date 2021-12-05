@@ -18,7 +18,6 @@ function StudentReportPage() {
 
     // on page load fetch reports of student ID
     useEffect(() => {
-        console.log("on student report page", verification_string)
         dispatch({ type: 'FETCH_SELECTED_STUDENT_REPORTS', payload: verification_string })
     }, [dispatch]);
 
