@@ -13,9 +13,11 @@ The 'Add Student' modal used by teachers to add new students.
 ![Admin Landing Page](./Imgs/Admin_Landing.png)
 Admins given access by another admin will see a list of all students enrolled in all districts. Admins can also add students, send assessments, and view assessment data.
 ![Admin Manage Acccess Page](./Imgs/Admin_Access_Page.png)
-The manage access component allows a logged-in admin to view 
+The manage access component allows a logged-in admin to view admins and teachers that have been given access. In addition, admins can give (or deny) access to new admins and teachers requesting access.
 ![Admin Manage Schools Page](./Imgs/Admin_manage_schools.png)
+This component allows admins to add new schools to an existing district.
 ![Admin Chart Overview Page](./Imgs/Admin_Overview_Charts.png)
+This component allows admins to analyze submitted assessment data. 
 ## Prerequisites
 - A copy of this repository.
 - An Internet Browser, such as [Google Chrome](https://www.google.com/chrome/).
@@ -58,5 +60,7 @@ To keep your application secure, replace the SERVER_SESSION_SECRET ('ABC') with 
 - PostgreSQL
 - Material-UI
 ## Acknowledgement
+Acknowledgement section here.
 ## Support
+Support section here.
  
