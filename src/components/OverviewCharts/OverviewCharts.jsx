@@ -33,18 +33,12 @@ function OverviewCharts() {
     // hooks to hold the selections to display
     const [filterValue, setFilterValue] = useState('');
     const defaultSelection = 'name';
-    const [searchBy, setSearchBy] = useState('name');
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
     const [displayMainFilter, setDisplayMainFilter] = useState(true);
-    const defaultFilter = 'school';
-
-    const [applyDateFilter, setApplyDateFilter] = useState(false);
-
 
     // functions to change state of 
     // components to render on selection
-
     const changeTimeRangeDisplay = () => {
         setDisplayTimePicker(!displayTimePicker);
         setDisplayGainsView(false);

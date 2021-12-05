@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 
 function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, filter }) {
     // for search of quarter send selected parameter
-    // dispatch type FETCH_PARAMETER_QUARTER
+    // dispatch type GET_GAINS_BY_QUARTER
     // payload: parameter, quarter
     // formatted as above and the quarter 
     // should be sent in format of 
@@ -41,7 +41,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
     // hooks for storing selected data filters
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
-
 
     // years need to be adjusted for quarters
     // two and three because they 
@@ -76,7 +75,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
         is chosen from the first select */}
             {displayGainsView &&
                 <>
-
                     <h3>Display Gains Data on Line Chart</h3>
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
                         {/* Select which main filter to display */}
@@ -95,7 +93,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             <MenuItem value={'gender'}>Gender</MenuItem>
                         </Select>
                     </FormControl>
-
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
                         {/* Select item to filter on based on table data */}
                         <InputLabel id="demo-simple-select-label">Choose</InputLabel>
@@ -106,9 +103,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             onChange={event => setSearchBy(event.target.value)}
                             width='20%'
                             defaultValue='name'
-
                         >
-                            <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
                                     <MenuItem key={logs.id} data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
@@ -138,7 +133,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
 
                             <InputLabel id="demo-simple-select-label">Year:</InputLabel>
                             <Select
-
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Year"
@@ -154,7 +148,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                         <FormControl sx={{ m: 1, minWidth: 100 }}>
                             <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
                             <Select
-
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Quarter"
@@ -172,7 +165,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             {/* Select second year and quarter */}
                             <InputLabel id="demo-simple-select-label">Year:</InputLabel>
                             <Select
-
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Year"
@@ -188,7 +180,6 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                         <FormControl sx={{ m: 1, minWidth: 100 }}>
                             <InputLabel id="demo-simple-select-label">Quarter:</InputLabel>
                             <Select
-
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 label="Quarter"
@@ -205,10 +196,8 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             Submit
                         </Button>
                     </div>
-
                 </>
             }
-
         </>
     )
 }
