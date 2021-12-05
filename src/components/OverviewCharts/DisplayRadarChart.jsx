@@ -21,6 +21,7 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
         
     };
 
+    // line colors and labels for the chart
     const lineColors = ['#4A8BD4', '#E42828', '#38C62B', '#DC8221', '#3B4ACD' ]
     let newLabels = [ "Ask For Help",
     "Self-confidence w/Adults",
@@ -40,10 +41,6 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
     let dataPoints = [];
     // graph data is what will be rendered on the chart
     let graphData = [];
-
-    // remove first item of results array
-  
-
 
     // for items in the overview reducer
     // get the parameter labels and the assessment questions
@@ -70,18 +67,13 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
             borderWidth: 2,
         })
     }
-    console.log('parameter label', parameterLabel);
-    console.log('data points', dataPoints);
-    console.log('keys', keys);
-    console.log('results are', results);
-    
 
-    // line chart data
+    // array to hold line chart data
     const lineData = [];
 
+    // for every search parameter
+    // add the data points and labels for the line chart
     for (let i = 0; i < dataPoints.length; i++) {
-        console.log('line data', lineData);
-        console.log('keys in loop,', keys[i]);
         lineData.push({
             label: keys[i],
             data: dataPoints[i],
@@ -90,14 +82,12 @@ function DisplayRadarChart({ results, dateRange, applyDateFilter }) {
             borderWidth: 2,
         })
     }
-//  labels: ['November', 'January'], {data: [1,2], label: ask_help}
 
+    // information for the line chart to display
     const lineChartData = {
-       
         labels: dateRange,
         datasets: lineData,
     }
-
 
     // data is what will be displayed on
     // radar graph
@@ -114,9 +104,6 @@ const ref = React.createRef();
              <div ref={ref} className="chart-container">
             <Radar data={data}  options={options} />
             </div>
-            {/* <Pdf targetRef={ref} filename='resiliency_radar_chart'>
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf> */}
             {applyDateFilter &&
             <>
              <div ref={ref} className="chart-container">
