@@ -1,24 +1,21 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import DisplayRadarChart from './DisplayRadarChart';
 
-function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, demographics, filter, }) {
+function SelectRadarChart({ displayMainFilter, defaultSelection, schoolInfo, demographics }) {
 
-    // component for filter by parameter only 
-    // dispatch type 'FETCH_PARAMETER_RESULTS'
-    // payload: parameter
-    // send in format
-    //  payload: {filterBy : "race", searchOn: "name" }
-
+    // hooks for search and filter selections
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
+    // dispatch component from react-redux to access sagas
     const dispatch = useDispatch();
 
+    // dispatch search by 'name' if display all is selected
+    // otherwise get parameter selected
     const getInfo = () => {
         if (searchBy === 'name') {
         dispatch({ type: 'FETCH_PARAMETER_RESULTS', payload: { filterBy: filterValue, searchOn: searchBy } });
