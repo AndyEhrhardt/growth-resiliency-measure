@@ -134,8 +134,7 @@ router.get('/type', (req, res) => {
     console.log('in router get type', req.query);
     const filterBy = req.query.filterBy;
     const searchOn = req.query.searchOn;
-    const allowedRole = req.user.role_id === TEACHER || req.user.role_id === ADMIN;
-    if(allowedRole && acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn)){
+    if(req.user.role_id === ADMIN && acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn)){
     queryText = `SELECT "${filterBy}"."${searchOn}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
     FROM "assessments"
     JOIN "user" on "assessments"."student_id" = "user"."id"
@@ -170,7 +169,7 @@ router.get('/specific', (req, res) => {
     const filterBy = req.query.filterBy;
     const searchOn = req.query.searchOn;
     const searchParameter = req.query.searchParameter;
-    if (acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchParameter)) {
+    if (req.user.role_id === ADMIN && acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchParameter)) {
         queryText = `SELECT "${filterBy}"."${searchParameter}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
     FROM "assessments"
     JOIN "user" on "assessments"."student_id" = "user"."id"
@@ -205,7 +204,7 @@ router.get('/specificWithDate', (req, res) => {
     const searchParameter = req.query.searchParameter;
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    if (acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchParameter)) {
+    if (req.user.role_id === ADMIN && acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchParameter)) {
         queryText = `SELECT "${filterBy}"."${searchParameter}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
     FROM "assessments"
     JOIN "user" on "assessments"."student_id" = "user"."id"
@@ -250,7 +249,7 @@ router.get('/gains', async (req, res) => {
     const q2End = req.query.q2End;
     console.log('in get gains router', req.query);
     // check that the queries are of accepted type
-    if (filterBy) {
+    if (filterBy && req.user.role_id === ADMIN && acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchParameter)) {
         try {
            
             const queryText = `SELECT "${filterBy}"."${searchParameter}", AVG("assessments"."ask_help") AS "ask_help", AVG("assessments"."confidence_adult") AS "confidence_adult", AVG("assessments"."confidence_peer") AS "confidence_peer", AVG("assessments"."succeed_pressure") AS "succeed_pressure", AVG("assessments"."persistence") AS "persistence", AVG("assessments"."express_adult") AS "express_adult", AVG("assessments"."express_peer") AS "express_peer" 
