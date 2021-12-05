@@ -29,12 +29,27 @@ function StudentList() {
     }
     const teacherColumns = [
         { field: 'student_name', headerName: 'Name', width: 120 },
-        { field: 'grade', headerName: 'Grade', width: 80 },
+        {
+            field: 'grade', headerName: 'Grade', width: 120, renderCell: (params) => {
+                switch (params.row.grade) {
+                    case 0:
+                        return <>Kindergarten</>;
+                    case 1:
+                        return <>1st</>;
+                    case 2:
+                        return <>2nd</>;
+                    case 3:
+                        return <>3rd</>;
+                    default:
+                        return <>{params.row.grade}th</>;
+                }
+            }
+        },
         {
             field: 'email_sent', headerName: 'Send Email', width: 110, renderCell: (params) => {
                 if (params.row.assessment_completed) {
                     return <Button disabled>Completed</Button>
-                } else if (params.row.email_sent){
+                } else if (params.row.email_sent) {
                     return <Button disabled>Sent</Button>
                 } else {
                     return <Button onClick={(event) => sendEmail(params.row.parent_email, params.row.id)}>Send Email</Button>
@@ -57,10 +72,26 @@ function StudentList() {
             }
         },
     ];
-
+    //Kindergarten
     const adminColumns = [
         { field: 'student_name', headerName: 'Name', width: 120 },
-        { field: 'grade', headerName: 'Grade', width: 80 },
+        {
+            field: 'grade', headerName: 'Grade', width: 110, renderCell: (params) => {
+
+                switch (params.row.grade) {
+                    case 0:
+                        return <>Kindergarten</>;
+                    case 1:
+                        return <>1st</>;
+                    case 2:
+                        return <>2nd</>;
+                    case 3:
+                        return <>3rd</>;
+                    default:
+                        return <>{params.row.grade}th</>;
+                }
+            }
+        },
         {
             field: 'email_sent', headerName: 'Send Email', width: 110, renderCell: (params) => {
                 if (params.row.email_sent) {
@@ -109,14 +140,14 @@ function StudentList() {
             <Button
                 onClick={(event) => handleAddStudentButtonClick(event)}
                 variant="contained"
-                sx={{display: 'flex'}}
+                sx={{ display: 'flex' }}
             >
                 Add Student
             </Button>
             <AddStudentModal openAddStudent={openAddStudent} setOpenAddStudent={setOpenAddStudent} />
-            <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail} 
-            setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment} 
-            setOpenSendAssessment={setOpenSendAssessment} />
+            <SendAssessmentModal studentId={studentId} parentsEmail={parentsEmail}
+                setParentsEmail={setParentsEmail} openSendAssessment={openSendAssessment}
+                setOpenSendAssessment={setOpenSendAssessment} />
             <DataGrid
                 rows={rows.studentList}
                 columns={rows.teacherView ? teacherColumns : adminColumns}

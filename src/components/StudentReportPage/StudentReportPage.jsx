@@ -10,7 +10,6 @@ function StudentReportPage() {
     const {verification_string} = useParams();
     // selects the id from the parameters
     
-
     // access useDispatch from react-redux
     const dispatch = useDispatch();
 
@@ -25,14 +24,8 @@ function StudentReportPage() {
 
     return (
         <div>
-            {JSON.stringify(assessmentData)}
             {assessmentData.length > 0 &&
             <div>
-                <Typography
-                    sx={{ fontWeight: 400, fontSize: 30, fontFamily: "roboto", textAlign: 'center'}}
-                >
-                    Report for {assessmentData[0].first_name} {assessmentData[0].last_initial}
-                </Typography>
             <ViewStudentReport assessmentData={assessmentData}/>
             </div>
             }

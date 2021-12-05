@@ -12,7 +12,7 @@ function AssessmentRadioChild({quesObj, propertyName, updateQuestion}) {
         <>
             <Box>
                 <p>{quesObj.name}</p>
-                <RadioGroup row aria-label="Question" value={quesObj.score} onChange={(event) => handleValueChange(event)}>
+                <RadioGroup row style={{justifyContent: 'center'}} aria-label="Question" value={quesObj.score} onChange={(event) => handleValueChange(event)}>
                     <FormControlLabel value="1" control={<Radio/>} label="1" labelPlacement="top"/>
                     <FormControlLabel value="2" control={<Radio/>} label="2" labelPlacement="top"/>
                     <FormControlLabel value="3" control={<Radio/>} label="3" labelPlacement="top"/>

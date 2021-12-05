@@ -90,6 +90,8 @@ router.get('/quarter', rejectUnauthenticated, (req, res) => {
     const searchOn = req.query.searchOn;
     const quarterStart = req.query.quarterStart;
     const quarterEnd = req.query.quarterEnd;
+    const firstYearSelected = req.query.firstYearSelected;
+    const secondYearSelected = req.query.secondYearSelected;
     const inputsValid =  acceptedInputs.includes(filterBy) && acceptedInputs.includes(searchOn) && acceptedInputs.includes(quarterStart) && acceptedInputs.includes(quarterEnd);
     console.log("USER OBJECT ", req.user);
     // check that the queries are of accepted type
@@ -109,9 +111,9 @@ router.get('/quarter', rejectUnauthenticated, (req, res) => {
     JOIN "demographics" ON "user"."demographics_id" = "demographics"."id"
     JOIN "gender" ON "gender"."id" = "demographics"."gender_id"
     JOIN "race" ON "race"."id" = "demographics"."race_id" 
-    WHERE ("assessments"."date" >= "school"."${quarterStart}" AND "assessments"."date" <= "school"."${quarterEnd}" AND "assessments"."current" = TRUE)
+    WHERE EXTRACT(MONTH FROM "assessments"."date") >= EXTRACT(MONTH FROM "school"."${quarterStart}") AND EXTRACT(DAY FROM "assessments"."date") >= EXTRACT(DAY FROM "school"."${quarterStart}") AND EXTRACT(MONTH FROM "assessments"."date") <= EXTRACT(MONTH FROM "school"."${quarterEnd}") AND EXTRACT(DAY FROM "assessments"."date") <= EXTRACT(DAY FROM "school"."${quarterEnd}") AND "assessments"."current" = TRUE  AND EXTRACT(YEAR FROM "assessments"."date") = $1 AND EXTRACT(YEAR FROM "assessments"."date") = $2))
     GROUP BY "${filterBy}"."${searchOn}";`;
-        pool.query(queryText).then(results => {
+        pool.query(queryText, [firstYearSelected, secondYearSelected] ).then(results => {
             res.send(results.rows);
             console.log('results', results.rows);
         }).catch(error => {

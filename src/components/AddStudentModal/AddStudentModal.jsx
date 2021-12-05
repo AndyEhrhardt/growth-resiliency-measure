@@ -15,12 +15,12 @@ import Fade from "@mui/material/Fade";
 import addStudentStyles from './addStudentStyles'
 
 function AddStudentModal(props) {
-  const [firstName, setFirstName] = useState("Anwar");
-  const [lastInitial, setLastInitial] = useState("H");
+  const [firstName, setFirstName] = useState("Tim");
+  const [lastInitial, setLastInitial] = useState("T");
   const [race, setRace] = useState('4');
   const [gender, setGender] = useState('2');
-  const [latinX, setLatinX] = useState(true);
-  const [iep, setIep] = useState(true);
+  const [latinX, setLatinX] = useState(false);
+  const [iep, setIep] = useState(false);
   const [clickedOnce, setClickedOnce] = useState(true);
   const [clickedOnce2, setClickedOnce2] = useState(true);
   const [email, setEmail] = useState("growthresiliency1234@gmail.com");
@@ -114,7 +114,6 @@ function AddStudentModal(props) {
       sx={{ fontWeight: 400, fontSize: 15, fontFamily: "roboto" }}
       component={'span'}
     >
-
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
@@ -198,11 +197,7 @@ function AddStudentModal(props) {
         </Select>
       </FormControl>
       </div>
-
-
       <div className={classes.splitInputWrap}>
-
-
       Does this student identify as Hispanic or Latino?
       <RadioGroup row aria-label="role" name="row-radio-buttons-group">
         <FormControlLabel onClick={() => handleHisp(true)} checked={clickedOnce ? latinX : false} control={<Radio />} label="Yes" />

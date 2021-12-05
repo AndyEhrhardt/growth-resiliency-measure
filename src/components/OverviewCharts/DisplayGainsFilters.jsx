@@ -1,12 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect, useState, Fragment } from 'react';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import DisplayGainsChart from './DisplayGainsChart';
 
 function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, demographics, filter }) {
     // for search of quarter send selected parameter
@@ -16,20 +14,21 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
     // should be sent in format of 
     // i.e. payload: {filterBy : "race", searchOn: "name", quarter: 1} 
 
+    // get all years with assessment data
     const assessmentYears = useSelector(store => store.overview.yearReducer);
+    // use to access sagas
     const dispatch = useDispatch();
 
+    // get all of the date information from inputs
+    // and split to get first date and second date
+    // then dispatch relevant info to gains saga
     const getGainsInfo = () => {
         let test = searchBy.split('.');
         let beginFirstSelectedQuarter = firstQuarterSelected.split('.')[0];
         let endFirstSelectedQuarter = firstQuarterSelected.split('.')[1];
         let beginSecondSelectedQuarter = secondQuarterSelected.split('.')[0];
         let endSecondSelectedQuarter = secondQuarterSelected.split('.')[1];
-        console.log('start 1st q selected', beginFirstSelectedQuarter);
-        console.log('end 1st q selected', endFirstSelectedQuarter);
-        console.log('start 2nd q selected', beginSecondSelectedQuarter);
-        console.log('end 2nd q selected', endSecondSelectedQuarter);
-        dispatch({ type: 'GET_GAINS_BY_QUARTER', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], beginQ1: beginFirstSelectedQuarter, endQ1: endFirstSelectedQuarter, beginQ2: beginSecondSelectedQuarter, endQ2: endSecondSelectedQuarter } });
+        dispatch({ type: 'GET_GAINS_BY_QUARTER', payload: { filterBy: filterValue, searchOn: test[0], searchParameter: test[1], beginQ1: beginFirstSelectedQuarter, endQ1: endFirstSelectedQuarter, beginQ2: beginSecondSelectedQuarter, endQ2: endSecondSelectedQuarter, firstYearSelected: firstYearSelected, secondYearSelected: secondYearSelected } });
     }
 
     // hooks for storing selected dates
@@ -37,22 +36,25 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
     const [secondYearSelected, setSecondYearSelected] = useState();
     const [firstQuarterSelected, setFirstQuarterSelected] = useState();
     const [secondQuarterSelected, setSecondQuarterSelected] = useState();
-    const adjustedFirstYear = firstYearSelected+1;
-    const adjustedSecondYear = secondYearSelected+1;
-    const selectedDatesToDisplay = [firstQuarterSelected, ];
+    const adjustedFirstYear = firstYearSelected + 1;
+    const adjustedSecondYear = secondYearSelected + 1;
     // hooks for storing selected data filters
     const [filterValue, setFilterValue] = useState('');
     const [searchBy, setSearchBy] = useState('name');
-    
 
 
-    // object for quarter dates and selected yeaer
+    // years need to be adjusted for quarters
+    // two and three because they 
+    // begin in the year after the first quarter
+    // quarter dates and selected year
     // 2021-2021 year
     // q1 is assumed to be 09/01-10/31
     // q2 is assumed to be 11/01-01/31
     // q3 is assumed to be 02/01-04/30
     // q4 is assumed to be 04/31-08/31
 
+    // objects to get the dates of the 
+    // quarter selected and input selected year
     const firstDates = {
         q1: `${firstYearSelected}/09/01.${firstYearSelected}/10/31`,
         q2: `${firstYearSelected}/11/01.${adjustedFirstYear}/01/31`,
@@ -69,8 +71,12 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
 
     return (
         <>
+            {/* If radar chart with time is selected this component displays
+         menu items are populated based on which option
+        is chosen from the first select */}
             {displayGainsView &&
                 <>
+
                     <h3>Display Gains Data on Line Chart</h3>
                     <FormControl sx={{ m: 1, minWidth: 100 }}>
                         {/* Select which main filter to display */}
@@ -105,7 +111,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                       
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem key={logs.id} data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&
@@ -140,7 +146,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                                 width='50%'
                             >
                                 {assessmentYears.map((logs) => (
-                                    <MenuItem value={logs.date_part}> {logs.date_part}-{logs.date_part+1}</MenuItem>
+                                    <MenuItem value={logs.date_part}> {logs.date_part}-{logs.date_part + 1}</MenuItem>
                                 ))
                                 }
                             </Select>
@@ -174,7 +180,7 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                                 width='50%'
                             >
                                 {assessmentYears.map((logs) => (
-                                    <MenuItem value={logs.date_part}> {logs.date_part}-{logs.date_part+1}</MenuItem>
+                                    <MenuItem value={logs.date_part}> {logs.date_part}-{logs.date_part + 1}</MenuItem>
                                 ))
                                 }
                             </Select>
@@ -199,10 +205,10 @@ function DisplayGainsFilters({ displayGainsView, defaultSelection, schoolInfo, d
                             Submit
                         </Button>
                     </div>
-                    
+
                 </>
             }
-           
+
         </>
     )
 }

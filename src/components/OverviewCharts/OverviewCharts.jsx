@@ -1,24 +1,15 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DisplayRadarChart from './DisplayRadarChart';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import moment from 'moment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DateRangePicker from '@mui/lab/DateRangePicker';
-import DateFnsAdapter from '@mui/lab/AdapterDateFns';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import DisplayGainsFilters from './DisplayGainsFilters';
 import SelectRadarChart from './SelectRadarChart';
 import SelectRadarWithTime from './SelectRadarWithTime';
 import DisplayGainsChart from './DisplayGainsChart';
-
-
+import Pdf from "react-to-pdf";
+import ChartLegend from '../ChartLegend/ChartLegend'
 
 function OverviewCharts() {
 
@@ -41,14 +32,18 @@ function OverviewCharts() {
 
     // hooks to hold the selections to display
     const [filterValue, setFilterValue] = useState('');
-    const [searchBy, setSearchBy] = useState('name');
     const defaultSelection = 'name';
-    const defaultFilter = 'school';
-
-    const [applyDateFilter, setApplyDateFilter] = useState(false);
+    const [searchBy, setSearchBy] = useState('name');
     const [displayTimePicker, setDisplayTimePicker] = useState(false);
     const [displayGainsView, setDisplayGainsView] = useState(false);
     const [displayMainFilter, setDisplayMainFilter] = useState(true);
+    const defaultFilter = 'school';
+
+    const [applyDateFilter, setApplyDateFilter] = useState(false);
+
+
+    // functions to change state of 
+    // components to render on selection
 
     const changeTimeRangeDisplay = () => {
         setDisplayTimePicker(!displayTimePicker);
@@ -67,9 +62,13 @@ function OverviewCharts() {
         setDisplayTimePicker(false);
         setDisplayGainsView(false);
     }
-// ref for displaying PDF 
-const ref = React.createRef();
-
+    // ref for displaying PDF 
+    const ref = React.createRef();
+    const pdfOptions = {
+        orientation: 'landscape',
+        unit: 'px',
+        format: [800, 350]
+    };
     return (
         <div>
             <Box sx={{ minWidth: 120 }}>
@@ -95,28 +94,36 @@ const ref = React.createRef();
                     filterValue={filterValue}
                 />
                 <Stack direction="row">
-                
-                        <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
-                            Select Radar Chart
-                        </Button>
-                    
+
+                    <Button variant="outlined" onClick={changeMainFilterDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
+                        Select Radar Chart
+                    </Button>
+
                     <Button variant="outlined" onClick={changeTimeRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Radar Chart With Time
                     </Button>
                     <Button variant="outlined" onClick={changeQuarterRangeDisplay} sx={{ m: 1, minWidth: 120, height: 30, mt: 2 }} >
                         Select Gains Over Time
                     </Button>
-                  
+
                 </Stack>
             </Box>
-            {displayMainFilter  &&
-                <DisplayRadarChart results={filter} />
-            }
-            {displayTimePicker &&
-                <DisplayRadarChart results={filter} />
-            }
-            {displayGainsView && 
-            <DisplayGainsChart results={filter} />}
+            <div ref={ref} className="chart-and-legend-container">
+                <ChartLegend />
+                <div className="chart-container">
+                    {displayMainFilter &&
+                        <DisplayRadarChart results={filter} />
+                    }
+                    {displayTimePicker &&
+                        <DisplayRadarChart results={filter} />
+                    }
+                    {displayGainsView &&
+                        <DisplayGainsChart results={filter} />}
+                </div>
+            </div>
+            <Pdf options={pdfOptions} targetRef={ref} filename={"Chart PDF"}>
+                {({ toPdf }) => <Button onClick={toPdf}>Generate Pdf</Button>}
+            </Pdf>
         </div>
     );
 }

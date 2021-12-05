@@ -1,5 +1,5 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import moment from 'moment';
 
 function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, demographics, filter}) {
-        // for search of time range send selected parameter
+    // component for search of time range send selected parameter
     // dispatch type FETCH_PARAMETER_RANGE
     // payload: parameter, quarter
     // formatted as above and the time range
@@ -22,6 +22,8 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
 
 
     const fetchInfo = () => {
+        // if a date range and 'display all'
+        // options are selected dispatch date and filter values
         if (applyDateFilter && searchBy === "name") {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
@@ -30,6 +32,8 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
                 type: 'FETCH_PARAMETER_RANGE', payload: { filterBy: filterValue, searchOn: searchBy, startDate: beginDate, endDate: endingDate }
             })
         }
+        // if something besides 'display all' is chosen
+        // and a date range is applied dispatch date and search parameters
         else if (searchBy !== 'name' && applyDateFilter) {
             let beginDate = moment(dateRange[0]).format("YYYY MM DD");
             let endingDate = moment(dateRange[1]).format("YYYY MM DD");
@@ -38,22 +42,28 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
         }
     }
 
+    // dispatch lets us access sagas
     const dispatch = useDispatch();
-    const [filterValue, setFilterValue] = useState('');
-    const [searchBy, setSearchBy] = useState('name');
-    const [dateFilter, setDateFilter] = useState('');
-    const [applyDateFilter, setApplyDateFilter] = useState('');
-    
-    const [dateRange, setDateRange] = useState([null, null]);
 
+    // hooks for setting search values
+    const [filterValue, setFilterValue] = useState('');
+    const [searchBy, setSearchBy] = useState('name');    
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [applyDateFilter, setApplyDateFilter] = useState(false)
+
+    // when the date input changes
+    // apply get the date range from the user input
     const handleChange = (dateRange) => {
         setDateRange(dateRange);
         setApplyDateFilter(true);
     };
+    
 
     return (
         <>
-       
+        {/* If radar chart with time is selected this component displays
+         menu items are populated based on which option
+        is chosen from the first select */}
             {displayTimePicker &&
                 <>
                  <h3>Display Data in Time Range on Radar Chart</h3>
@@ -88,7 +98,7 @@ function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, d
                             <MenuItem value={defaultSelection}>Display All</MenuItem>
                             {filterValue == 'school' &&
                                 schoolInfo.map((logs) => (
-                                    <MenuItem data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
+                                    <MenuItem key={logs.id} data='name' value={`${logs.school_name}.name`}>{logs.school_name}</MenuItem>
                                 ))
                             }
                             {filterValue == 'gender' &&
