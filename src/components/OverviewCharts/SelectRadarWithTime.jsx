@@ -13,13 +13,6 @@ import Box from '@mui/material/Box';
 import moment from 'moment';
 
 function SelectRadarWithTime({displayTimePicker, defaultSelection, schoolInfo, demographics, filter}) {
-    // component for search of time range send selected parameter
-    // dispatch type FETCH_PARAMETER_RANGE
-    // payload: parameter, quarter
-    // formatted as above and the time range
-    // should be sent in format of 
-    // payload: {filterBy : "race", searchOn: "name", startDate: "2020-5-2", endDate: "2021-11-12"} 
-
 
     const fetchInfo = () => {
         // if a date range and 'display all'
